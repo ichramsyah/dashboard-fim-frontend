@@ -58,7 +58,7 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                 )}
               </div>
               <button onClick={handleRestartIncron} className="bg-gray-9 text-white px-4 py-2 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-2 duration-300">
-                <FiRefreshCw /> <span>Refresh</span>
+                <FiRefreshCw /> <span>Restart</span>
               </button>
             </div>
           </div>

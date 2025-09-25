@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTrash } from 'react-icons/fa';
@@ -29,14 +29,22 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo | null>(null);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
 
-  const fetchLogs = (page = 1, query = '') => {
+  const fetchLogs = (page = 1, query = '', status = 'all') => {
     setIsLoading(true);
     const params = new URLSearchParams();
     params.append('page', String(page));
     if (query) {
       params.append('search', query);
     }
+    // === TAMBAHKAN LOGIKA INI ===
+    if (status && status !== 'all') {
+      params.append('status', status);
+    }
+    // ============================
 
     const apiUrl = `http://localhost:5000/api/logs/?${params.toString()}`;
 
@@ -95,18 +103,49 @@ export default function Home() {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      fetchLogs(currentPage, searchQuery);
+      fetchLogs(currentPage, searchQuery, statusFilter); // Kirim statusFilter ke fetchLogs
     }, 500);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [searchQuery, currentPage]);
+  }, [searchQuery, currentPage, statusFilter]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
+
+  const handleFilterChange = (newStatus: string) => {
+    setStatusFilter(newStatus);
+    setCurrentPage(1); // Reset ke halaman pertama
+  };
+
+  // Definisikan filter untuk UI
+  const filters = [
+    { label: 'Semua', value: 'all' },
+    { label: 'Normal', value: 'normal' },
+    { label: 'Mencurigakan', value: 'mencurigakan' },
+    { label: 'Bahaya', value: 'bahaya' },
+  ];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+        setIsFilterOpen(false);
+      }
+    };
+    // Tambahkan event listener saat dropdown terbuka
+    if (isFilterOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    // Hapus event listener saat komponen unmount atau dropdown tertutup
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isFilterOpen]);
+
+  const activeFilterLabel = filters.find((f) => f.value === statusFilter)?.label;
 
   return (
     <main className="min-h-screen">
@@ -124,9 +163,29 @@ export default function Home() {
               className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
              hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
             />
-            <button className="bg-white px-4 py-2 rounded-sm text-gray-8 flex items-center hover:bg-gray-100 transition-colors" title="Filter">
-              <FaSlidersH size={16} className="mr-2 text-gray-5" /> <span> Filter</span>
-            </button>
+            <div ref={filterRef} className="relative">
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg border text-gray-700 flex items-center hover:bg-gray-100 transition-colors" title="Filter">
+                <FaSlidersH size={16} className="mr-2 text-gray-500" />
+                <span>{activeFilterLabel}</span>
+              </button>
+
+              {/* Menu Dropdown */}
+              {isFilterOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10 border">
+                  <div className="py-1">
+                    {filters.map((filter) => (
+                      <button
+                        key={filter.value}
+                        onClick={() => handleFilterChange(filter.value)}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
