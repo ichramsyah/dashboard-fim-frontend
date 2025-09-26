@@ -54,7 +54,10 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
                     <span className="text-green-500 text-2xl">●</span>
                   </div>
                 ) : (
-                  <p className="text-red-600 font-semibold">Tidak Aktif!</p>
+                  <div className="flex items-center">
+                    <h2 className="font-bold text-gray-700 pr-1">Tidak Aktif</h2>
+                    <span className="text-red-500 text-2xl">●</span>
+                  </div>
                 )}
               </div>
               <button onClick={handleRestartIncron} className="bg-gray-9 text-white px-4 py-2 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-2 duration-300">

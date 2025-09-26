@@ -146,7 +146,7 @@ export default function Home() {
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
-          <h1 className="text-[25px] font-semibold">Log Aktivitas</h1>
+          <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas</h1>
           <div className="flex relative items-center gap-3">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input
@@ -165,13 +165,13 @@ export default function Home() {
 
               {/* Menu Dropdown */}
               {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10 border">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
                   <div className="py-1">
                     {filters.map((filter) => (
                       <button
                         key={filter.value}
                         onClick={() => handleFilterChange(filter.value)}
-                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
                       >
                         {filter.label}
                       </button>
