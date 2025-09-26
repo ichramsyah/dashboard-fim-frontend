@@ -40,11 +40,9 @@ export default function Home() {
     if (query) {
       params.append('search', query);
     }
-    // === TAMBAHKAN LOGIKA INI ===
     if (status && status !== 'all') {
       params.append('status', status);
     }
-    // ============================
 
     const apiUrl = `http://localhost:5000/api/logs/?${params.toString()}`;
 
@@ -103,7 +101,7 @@ export default function Home() {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      fetchLogs(currentPage, searchQuery, statusFilter); // Kirim statusFilter ke fetchLogs
+      fetchLogs(currentPage, searchQuery, statusFilter);
     }, 500);
 
     return () => {
@@ -118,10 +116,9 @@ export default function Home() {
 
   const handleFilterChange = (newStatus: string) => {
     setStatusFilter(newStatus);
-    setCurrentPage(1); // Reset ke halaman pertama
+    setCurrentPage(1);
   };
 
-  // Definisikan filter untuk UI
   const filters = [
     { label: 'Semua', value: 'all' },
     { label: 'Normal', value: 'normal' },
@@ -135,11 +132,9 @@ export default function Home() {
         setIsFilterOpen(false);
       }
     };
-    // Tambahkan event listener saat dropdown terbuka
     if (isFilterOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    // Hapus event listener saat komponen unmount atau dropdown tertutup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -150,7 +145,6 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl px-4">
-        {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md">{error}</p>}
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
           <h1 className="text-[25px] font-semibold">Log Aktivitas</h1>
           <div className="flex relative items-center gap-3">
@@ -192,7 +186,7 @@ export default function Home() {
         <div className="overflow-x-auto bg-white rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <CgSpinner className="animate-spin text-blue-500" size={40} />
+              <CgSpinner className="animate-spin text-gray-500" size={40} />
             </div>
           ) : error ? (
             <p className="text-center text-red-600 p-8">{error}</p>
