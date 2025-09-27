@@ -1,20 +1,26 @@
 // src/components/Layout.tsx
 
 'use client';
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const [isSidebarOpen, setSidebarOpen] = useState(isDesktop);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    setSidebarOpen(isDesktop);
+  }, [isDesktop]);
 
   return (
     <div className="bg-neutral-2/70 min-h-screen">
