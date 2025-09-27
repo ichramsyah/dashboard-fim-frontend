@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSearch, FiRotateCcw, FiTrash2 } from 'react-icons/fi';
+import { FiSearch, FiRotateCcw, FiTrash2, FiCheckSquare } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import Pagination from '../components/Pagination';
 import { FaSliders } from 'react-icons/fa6';
+import { FaPen, FaTimes } from 'react-icons/fa';
 
 interface LogEntry {
   id: string;
@@ -33,6 +34,50 @@ export default function TrashPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
+  // ==================
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const handleSelectLog = (logId: string) => {
+    setSelectedIds(
+      (prev) =>
+        prev.includes(logId)
+          ? prev.filter((id) => id !== logId) // Uncheck
+          : [...prev, logId] // Check
+    );
+  };
+
+  const toggleSelectMode = () => {
+    setIsSelectMode(!isSelectMode);
+    setSelectedIds([]); // Kosongkan pilihan saat mode berubah
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIds.length === trashLogs.length) {
+      setSelectedIds([]); // Uncheck all
+    } else {
+      setSelectedIds(trashLogs.map((log) => log.id)); // Check all on current page
+    }
+  };
+
+  const handleMultiplePermanentDelete = () => {
+    if (!window.confirm(`Anda yakin ingin menghapus permanen ${selectedIds.length} log ini? Aksi ini tidak bisa dibatalkan.`)) {
+      return;
+    }
+    fetch(API_BASE, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: selectedIds }), // Kirim array 'ids'
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Gagal menghapus log secara massal');
+        fetchTrashLogs(currentPage, searchQuery, statusFilter); // Refresh data
+        setSelectedIds([]); // Kosongkan seleksi
+      })
+      .catch((error) => alert(`Error: ${error.message}`));
+  };
+
+  // ==================
   const API_BASE = 'http://localhost:5000/api/trash/';
 
   const fetchTrashLogs = (page = 1, query = '', status = 'all') => {
@@ -163,10 +208,36 @@ export default function TrashPage() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search..."
-                className="w-full md:w-64 py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
-             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
+                className="w-full md:w-64 py-1.5 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
+             hover:border-gray-4/60 focus:border-gray-4/60 focus:outline-none transition-colors"
               />
             </div>
+
+            {isSelectMode && selectedIds.length > 0 && (
+              <>
+                <button onClick={handleMultiplePermanentDelete} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                  <FiTrash2 />
+                  <span>Hapus ({selectedIds.length})</span>
+                </button>
+              </>
+            )}
+
+            <button onClick={toggleSelectMode} className={`px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-8 text-gray-1 hover:bg-gray-8' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
+              <span>
+                {isSelectMode ? (
+                  <div className="flex items-center gap-1.5">
+                    <FaTimes />
+                    <span>Batal</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5">
+                    <FiCheckSquare />
+                    <span>Pilih</span>
+                  </div>
+                )}
+              </span>
+            </button>
+
             <div ref={filterRef} className="relative">
               <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors text-[15px]" title="Filter">
                 <FaSliders size={16} className="mr-2 text-gray-500" />
@@ -191,7 +262,6 @@ export default function TrashPage() {
             <div className="relative">
               <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
                 <FiTrash2 size={16} />
-                <span className="hidden md:inline">Kosongkan</span>
               </button>
             </div>
           </div>
@@ -209,6 +279,14 @@ export default function TrashPage() {
             <table className="min-w-full text-sm">
               <thead className="bg-white hidden md:table-header-group">
                 <tr>
+                  {/*  */}
+
+                  {isSelectMode && ( // Tampilkan header checkbox jika mode pilih aktif
+                    <th className="p-4 w-12 text-center">
+                      <input type="checkbox" className="rounded" checked={trashLogs.length > 0 && selectedIds.length === trashLogs.length} onChange={handleSelectAll} disabled={trashLogs.length === 0} />
+                    </th>
+                  )}
+                  {/*  */}
                   <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
@@ -220,7 +298,16 @@ export default function TrashPage() {
               </thead>
               <tbody className="divide-y divide-gray-200 responsive-table">
                 {trashLogs.map((log) => (
-                  <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none">
+                  <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
+                    {/*  */}
+
+                    {isSelectMode && ( // Tampilkan sel checkbox jika mode pilih aktif
+                      <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
+                        <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
+                      </td>
+                    )}
+
+                    {/*  */}
                     <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
                       <span className="text-xs text-gray-800">{log.tanggal}</span>
                     </td>
