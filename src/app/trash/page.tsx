@@ -209,7 +209,8 @@ export default function TrashPage() {
             <table className="min-w-full text-sm">
               <thead className="bg-white hidden md:table-header-group">
                 <tr>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Tanggal & Jam</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Nama File</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Path Lengkap</th>
@@ -221,10 +222,10 @@ export default function TrashPage() {
                 {trashLogs.map((log) => (
                   <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none">
                     <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-gray-800">{log.tanggal}</span>
-                        <span className="text-gray-500 text-xs">{log.jam}</span>
-                      </div>
+                      <span className="text-xs text-gray-800">{log.tanggal}</span>
+                    </td>
+                    <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                      <span className="text-gray-500 text-xs">{log.jam}</span>
                     </td>
                     <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${log.tag.includes('BAHAYA') || log.tag.includes('MENCURIGAKAN') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>{log.metode}</span>
@@ -235,7 +236,7 @@ export default function TrashPage() {
                     <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none break-all">
                       {log.path_lengkap}
                     </td>
-                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none text-gray-700">
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
                       {log.tag || '-'}
                     </td>
                     <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">
