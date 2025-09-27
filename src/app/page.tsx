@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSearch } from 'react-icons/fi';
+import { FiSearch, FiTrash2 } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTrash } from 'react-icons/fa';
 import Pagination from './components/Pagination';
@@ -32,6 +32,38 @@ export default function Home() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const handleSelectLog = (logId: string) => {
+    setSelectedIds((prev) => (prev.includes(logId) ? prev.filter((id) => id !== logId) : [...prev, logId]));
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIds.length === logs.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(logs.map((log) => log.id));
+    }
+  };
+
+  const handleMultipleMoveToTrash = () => {
+    if (!window.confirm(`Anda yakin ingin memindahkan ${selectedIds.length} log ini ke tempat sampah?`)) {
+      return;
+    }
+
+    const apiUrl = 'http://localhost:5000/api/logs/';
+    fetch(apiUrl, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: selectedIds }),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Gagal memindahkan log');
+        fetchLogs(currentPage, searchQuery, statusFilter);
+        setSelectedIds([]);
+      })
+      .catch((error) => alert(`Error: ${error.message}`));
+  };
 
   const fetchLogs = (page = 1, query = '', status = 'all') => {
     setIsLoading(true);
@@ -148,16 +180,25 @@ export default function Home() {
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
           <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas</h1>
-          <div className="flex relative items-center gap-3">
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Search..."
-              className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
+
+          <div className="flex  items-center gap-3">
+            {selectedIds.length > 0 && (
+              <button onClick={handleMultipleMoveToTrash} className="bg-red-500 text-white px-3 py-2.5 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                <FiTrash2 />
+                <span>Pindahkan ({selectedIds.length})</span>
+              </button>
+            )}
+            <div className="relative">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
              hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
-            />
+              />
+            </div>
             <div ref={filterRef} className="relative">
               <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors " title="Filter">
                 <FaSlidersH size={16} className="mr-2 text-gray-500" />
@@ -197,6 +238,9 @@ export default function Home() {
             <table className="min-w-full text-sm">
               <thead className="bg-white hidden md:table-header-group">
                 <tr>
+                  <th className="p-4 w-12 text-center">
+                    <input type="checkbox" className="rounded" checked={logs.length > 0 && selectedIds.length === logs.length} onChange={handleSelectAll} />
+                  </th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
@@ -208,7 +252,11 @@ export default function Home() {
               </thead>
               <tbody className="divide-y divide-gray-200 responsive-table">
                 {logs.map((log) => (
-                  <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none">
+                  <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
+                    <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
+                      <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
+                    </td>
+
                     {/* Tanggal */}
                     <td data-label="Tanggal:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
                       <div className="flex flex-col">
