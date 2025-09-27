@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FiSearch, FiTrash2 } from 'react-icons/fi';
+import { FiCheckSquare, FiSearch, FiTrash2 } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
-import { FaSlidersH, FaTrash } from 'react-icons/fa';
+import { FaSlidersH, FaTimes, FaTrash } from 'react-icons/fa';
 import Pagination from './components/Pagination';
 
 interface LogEntry {
@@ -33,6 +33,12 @@ export default function Home() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isSelectMode, setIsSelectMode] = useState(false);
+
+  const toggleSelectMode = () => {
+    setIsSelectMode(!isSelectMode);
+    setSelectedIds([]);
+  };
 
   const handleSelectLog = (logId: string) => {
     setSelectedIds((prev) => (prev.includes(logId) ? prev.filter((id) => id !== logId) : [...prev, logId]));
@@ -181,13 +187,28 @@ export default function Home() {
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
           <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas</h1>
 
-          <div className="flex  items-center gap-3">
-            {selectedIds.length > 0 && (
+          <div className="flex items-center gap-3">
+            {isSelectMode && selectedIds.length > 0 && (
               <button onClick={handleMultipleMoveToTrash} className="bg-red-500 text-white px-3 py-2.5 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
                 <FiTrash2 />
                 <span>Pindahkan ({selectedIds.length})</span>
               </button>
             )}
+
+            <button onClick={toggleSelectMode} className={`px-3 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-9 text-white hover:bg-gray-800' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
+              {isSelectMode ? (
+                <div className="flex items-center gap-1.5">
+                  <FaTimes />
+                  <span>Batal</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5">
+                  <FiCheckSquare />
+                  <span>Pilih</span>
+                </div>
+              )}
+            </button>
+
             <div className="relative">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
@@ -238,9 +259,12 @@ export default function Home() {
             <table className="min-w-full text-sm">
               <thead className="bg-white hidden md:table-header-group">
                 <tr>
-                  <th className="p-4 w-12 text-center">
-                    <input type="checkbox" className="rounded" checked={logs.length > 0 && selectedIds.length === logs.length} onChange={handleSelectAll} />
-                  </th>
+                  {isSelectMode && (
+                    <th className="p-4 w-12 text-center">
+                      <input type="checkbox" className="rounded" checked={logs.length > 0 && selectedIds.length === logs.length} onChange={handleSelectAll} />
+                    </th>
+                  )}
+
                   <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
@@ -253,9 +277,15 @@ export default function Home() {
               <tbody className="divide-y divide-gray-200 responsive-table">
                 {logs.map((log) => (
                   <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
-                    <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
-                      <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
-                    </td>
+                    {/*  */}
+
+                    {isSelectMode && ( // <-- Tambahkan kondisi di sini
+                      <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
+                        <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
+                      </td>
+                    )}
+
+                    {/*  */}
 
                     {/* Tanggal */}
                     <td data-label="Tanggal:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
