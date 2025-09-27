@@ -154,29 +154,32 @@ export default function TrashPage() {
         <div className="mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold">Tempat Sampah</h1>
-            <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-1.5 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
-              <FiTrash2 />
-              <span>Kosongkan</span>
-            </button>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative flex-grow">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input type="text" value={searchQuery} onChange={handleSearchChange} placeholder="Search..." className="w-full md:w-64 py-2 pl-12 pr-4 bg-white rounded-lg border focus:border-blue-500 focus:outline-none transition-colors" />
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={19} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                className="w-full md:w-64 py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
+              />
             </div>
             <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg border text-gray-700 flex items-center hover:bg-gray-100 transition-colors" title="Filter">
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors text-[15px]" title="Filter">
                 <FaSliders size={16} className="mr-2 text-gray-500" />
                 <span>{activeFilterLabel}</span>
               </button>
               {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10 border">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
                   <div className="py-1">
                     {filters.map((filter) => (
                       <button
                         key={filter.value}
                         onClick={() => handleFilterChange(filter.value)}
-                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
                       >
                         {filter.label}
                       </button>
@@ -185,14 +188,20 @@ export default function TrashPage() {
                 </div>
               )}
             </div>
+            <div className="relative">
+              <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                <FiTrash2 size={16} />
+                <span className="hidden md:inline">Kosongkan</span>
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Tabel  */}
-        <div className="overflow-x-auto bg-white rounded-lg shadow">
+        <div className="overflow-x-auto bg-white rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <CgSpinner className="animate-spin text-blue-500" size={40} />
+              <CgSpinner className="animate-spin text-gray-500" size={40} />
             </div>
           ) : trashLogs.length === 0 ? (
             <p className="text-center text-gray-500 p-8">Tempat sampah kosong atau tidak ada hasil yang cocok.</p>
@@ -226,12 +235,12 @@ export default function TrashPage() {
                     <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none break-all">
                       {log.path_lengkap}
                     </td>
-                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none text-gray-700">
                       {log.tag || '-'}
                     </td>
                     <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">
                       <div className="space-x-2 flex">
-                        <button onClick={() => handleRestore(log.id)} className="bg-green-500 p-2 rounded-md text-white hover:bg-green-600 transition-colors" title="Pulihkan">
+                        <button onClick={() => handleRestore(log.id)} className="bg-blue-600 p-2 rounded-md text-white hover:bg-blue-700 transition-colors" title="Pulihkan">
                           <FiRotateCcw size={14} />
                         </button>
                         <button onClick={() => handlePermanentDelete(log.id)} className="bg-red-500 p-2 rounded-md text-white hover:bg-red-600 transition-colors" title="Hapus Permanen">
@@ -246,6 +255,7 @@ export default function TrashPage() {
           )}
         </div>
 
+        {/* Pagination */}
         {paginationInfo && paginationInfo.total_pages > 0 && (
           <Pagination currentPage={paginationInfo.current_page} totalPages={paginationInfo.total_pages} onPageChange={handlePageChange} totalCount={paginationInfo.count} itemsPerPage={trashLogs.length} />
         )}
