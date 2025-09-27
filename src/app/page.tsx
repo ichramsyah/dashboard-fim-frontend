@@ -117,6 +117,7 @@ export default function Home() {
   const handleFilterChange = (newStatus: string) => {
     setStatusFilter(newStatus);
     setCurrentPage(1);
+    setIsFilterOpen(false);
   };
 
   const filters = [
@@ -158,7 +159,7 @@ export default function Home() {
              hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
             />
             <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg border text-gray-700 flex items-center hover:bg-gray-100 transition-colors" title="Filter">
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors " title="Filter">
                 <FaSlidersH size={16} className="mr-2 text-gray-500" />
                 <span>{activeFilterLabel}</span>
               </button>
@@ -201,6 +202,7 @@ export default function Home() {
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Nama File</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Path Lengkap</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Kondisi</th>
                   <th className="p-4 text-center text-gray-600 font-semibold"></th>
                 </tr>
               </thead>
@@ -228,8 +230,12 @@ export default function Home() {
                       {log.nama_file}
                     </td>
                     {/* Path Lengkap */}
-                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none break-all">
                       {log.path_lengkap}
+                    </td>
+                    {/* Kondisi */}
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                      {log.tag}
                     </td>
                     {/* Aksi */}
                     <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">
