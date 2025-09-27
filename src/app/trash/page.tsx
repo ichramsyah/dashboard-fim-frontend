@@ -1,13 +1,11 @@
-// src/app/trash/page.tsx (LENGKAP & DIPERBARUI)
-
 'use client';
 
-import React, { useState, useEffect } from 'react';
-// Impor ikon
-import { FiSearch } from 'react-icons/fi';
+import React, { useState, useEffect, useRef } from 'react';
+import { FiSearch, FiRotateCcw, FiTrash2 } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
+import Pagination from '../components/Pagination';
+import { FaSliders } from 'react-icons/fa6';
 
-// Interface untuk Log
 interface LogEntry {
   id: string;
   tanggal: string;
@@ -18,7 +16,6 @@ interface LogEntry {
   tag: string;
 }
 
-// Interface untuk informasi pagination
 interface PaginationInfo {
   count: number;
   total_pages: number;
@@ -29,21 +26,24 @@ export default function TrashPage() {
   const [trashLogs, setTrashLogs] = useState<LogEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  // === STATE BARU untuk Search & Pagination ===
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo | null>(null);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
 
   const API_BASE = 'http://localhost:5000/api/trash/';
 
-  // === FUNGSI FETCH LOGS YANG DIPERBARUI ===
-  const fetchTrashLogs = (page = 1, query = '') => {
+  const fetchTrashLogs = (page = 1, query = '', status = 'all') => {
     setIsLoading(true);
     const params = new URLSearchParams();
     params.append('page', String(page));
     if (query) {
       params.append('search', query);
+    }
+    if (status && status !== 'all') {
+      params.append('status', status);
     }
 
     fetch(`${API_BASE}?${params.toString()}`)
@@ -68,16 +68,27 @@ export default function TrashPage() {
       .finally(() => setIsLoading(false));
   };
 
-  // === useEffect DIPERBARUI untuk menangani debounce search ===
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+        setIsFilterOpen(false);
+      }
+    };
+    if (isFilterOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isFilterOpen]);
+
   useEffect(() => {
     const handler = setTimeout(() => {
-      fetchTrashLogs(currentPage, searchQuery);
-    }, 500); // Tunda 500ms
-
+      fetchTrashLogs(currentPage, searchQuery, statusFilter);
+    }, 500);
     return () => clearTimeout(handler);
-  }, [searchQuery, currentPage]);
+  }, [searchQuery, currentPage, statusFilter]);
 
-  // === FUNGSI-FUNGSI AKSI ===
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= (paginationInfo?.total_pages || 1)) {
       setCurrentPage(newPage);
@@ -86,14 +97,19 @@ export default function TrashPage() {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset ke halaman 1 saat mencari
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (newStatus: string) => {
+    setStatusFilter(newStatus);
+    setCurrentPage(1);
+    setIsFilterOpen(false);
   };
 
   const handleRestore = async (logId: string) => {
     try {
       const res = await fetch(`${API_BASE}${logId}/restore/`, { method: 'POST' });
       if (!res.ok) throw new Error('Gagal memulihkan file');
-      // Muat ulang data setelah berhasil
       fetchTrashLogs(currentPage, searchQuery);
     } catch (err: any) {
       alert(err.message);
@@ -105,7 +121,6 @@ export default function TrashPage() {
     try {
       const res = await fetch(`${API_BASE}${logId}/`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Gagal menghapus permanen');
-      // Muat ulang data setelah berhasil
       fetchTrashLogs(currentPage, searchQuery);
     } catch (err: any) {
       alert(err.message);
@@ -117,97 +132,135 @@ export default function TrashPage() {
     try {
       const res = await fetch(API_BASE, { method: 'DELETE' });
       if (!res.ok) throw new Error('Gagal mengosongkan tempat sampah');
-      // Muat ulang data setelah berhasil
-      fetchTrashLogs(1, ''); // Reset ke halaman 1
+      fetchTrashLogs(1, '');
     } catch (err: any) {
       alert(err.message);
     }
   };
+  const filters = [
+    { label: 'Semua', value: 'all' },
+    { label: 'Normal', value: 'normal' },
+    { label: 'Mencurigakan', value: 'mencurigakan' },
+    { label: 'Bahaya', value: 'bahaya' },
+  ];
+  const activeFilterLabel = filters.find((f) => f.value === statusFilter)?.label;
 
   return (
-    <div>
-      <div className="flex flex-col md:flex-row justify-end items-center mb-6 gap-4">
-        <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full md:w-auto">
-          Kosongkan Sampah
-        </button>
-      </div>
+    <main className="min-h-screen">
+      <div className="container mx-auto max-w-7xl px-4">
+        {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</p>}
 
-      {/* === KOMPONEN SEARCH BAR === */}
-      <div className="mb-6 relative">
-        <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-        <input type="text" value={searchQuery} onChange={handleSearchChange} placeholder="Cari di tempat sampah..." className="w-full py-3 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-
-      {/* === KONTEN UTAMA (TABEL) === */}
-      <div className="overflow-x-auto bg-white shadow rounded-md">
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <CgSpinner className="animate-spin text-blue-500" size={40} />
+        {/* Konten */}
+        <div className="mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold">Tempat Sampah</h1>
           </div>
-        ) : error ? (
-          <p className="text-center text-red-500 p-8">{error}</p>
-        ) : trashLogs.length === 0 ? (
-          <p className="text-center text-gray-500 p-8">Tempat sampah kosong.</p>
-        ) : (
-          <table className="w-full border-collapse">
-            <thead className="bg-gray-100 text-left">
-              <tr>
-                <th className="p-3">Tanggal</th>
-                <th className="p-3">Jam</th>
-                <th className="p-3">Metode</th>
-                <th className="p-3">Nama File</th>
-                <th className="p-3">Path</th>
-                <th className="p-3">Tag</th>
-                <th className="p-3">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {trashLogs.map((log) => (
-                <tr key={log.id} className="border-t">
-                  <td className="p-3">{log.tanggal}</td>
-                  <td className="p-3">{log.jam}</td>
-                  <td className="p-3">{log.metode}</td>
-                  <td className="p-3">{log.nama_file}</td>
-                  <td className="p-3">{log.path_lengkap}</td>
-                  <td className="p-3">{log.tag}</td>
-                  <td className="p-3 space-x-2">
-                    <button onClick={() => handleRestore(log.id)} className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600">
-                      Pulihkan
-                    </button>
-                    <button onClick={() => handlePermanentDelete(log.id)} className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600">
-                      Hapus Permanen
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-
-      {/* === KOMPONEN PAGINATION === */}
-      {!isLoading && paginationInfo && paginationInfo.total_pages > 1 && (
-        <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-          <p className="text-sm text-gray-600">
-            Menampilkan <span className="font-semibold">{trashLogs.length}</span> dari <span className="font-semibold">{paginationInfo.count}</span> hasil
-          </p>
-          <div className="flex items-center gap-2">
-            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="px-4 py-2 bg-white border border-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-50 transition-colors">
-              Sebelumnya
-            </button>
-            <span className="text-gray-700 font-medium">
-              {paginationInfo.current_page} / {paginationInfo.total_pages}
-            </span>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === paginationInfo.total_pages}
-              className="px-4 py-2 bg-white border border-gray-300 rounded-md disabled:opacity-50 hover:bg-gray-50 transition-colors"
-            >
-              Berikutnya
-            </button>
+          <div className="flex items-center gap-3">
+            <div className="relative flex-grow">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={19} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                className="w-full md:w-64 py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
+              />
+            </div>
+            <div ref={filterRef} className="relative">
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors text-[15px]" title="Filter">
+                <FaSliders size={16} className="mr-2 text-gray-500" />
+                <span>{activeFilterLabel}</span>
+              </button>
+              {isFilterOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
+                  <div className="py-1">
+                    {filters.map((filter) => (
+                      <button
+                        key={filter.value}
+                        onClick={() => handleFilterChange(filter.value)}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="relative">
+              <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                <FiTrash2 size={16} />
+                <span className="hidden md:inline">Kosongkan</span>
+              </button>
+            </div>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Tabel  */}
+        <div className="overflow-x-auto bg-white rounded-lg">
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <CgSpinner className="animate-spin text-gray-500" size={40} />
+            </div>
+          ) : trashLogs.length === 0 ? (
+            <p className="text-center text-gray-500 p-8">Tempat sampah kosong atau tidak ada hasil yang cocok.</p>
+          ) : (
+            <table className="min-w-full text-sm">
+              <thead className="bg-white hidden md:table-header-group">
+                <tr>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Nama File</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Path Lengkap</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Kondisi</th>
+                  <th className="p-4 text-center text-gray-600 font-semibold">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 responsive-table">
+                {trashLogs.map((log) => (
+                  <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none">
+                    <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                      <span className="text-xs text-gray-800">{log.tanggal}</span>
+                    </td>
+                    <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                      <span className="text-gray-500 text-xs">{log.jam}</span>
+                    </td>
+                    <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${log.tag.includes('BAHAYA') || log.tag.includes('MENCURIGAKAN') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>{log.metode}</span>
+                    </td>
+                    <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                      {log.nama_file}
+                    </td>
+                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none break-all">
+                      {log.path_lengkap}
+                    </td>
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                      {log.tag || '-'}
+                    </td>
+                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">
+                      <div className="space-x-2 flex">
+                        <button onClick={() => handleRestore(log.id)} className="bg-blue-600 p-2 rounded-md text-white hover:bg-blue-700 transition-colors" title="Pulihkan">
+                          <FiRotateCcw size={14} />
+                        </button>
+                        <button onClick={() => handlePermanentDelete(log.id)} className="bg-red-500 p-2 rounded-md text-white hover:bg-red-600 transition-colors" title="Hapus Permanen">
+                          <FiTrash2 size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        {/* Pagination */}
+        {paginationInfo && paginationInfo.total_pages > 0 && (
+          <Pagination currentPage={paginationInfo.current_page} totalPages={paginationInfo.total_pages} onPageChange={handlePageChange} totalCount={paginationInfo.count} itemsPerPage={trashLogs.length} />
+        )}
+      </div>
+    </main>
   );
 }

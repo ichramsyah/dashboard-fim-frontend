@@ -40,11 +40,9 @@ export default function Home() {
     if (query) {
       params.append('search', query);
     }
-    // === TAMBAHKAN LOGIKA INI ===
     if (status && status !== 'all') {
       params.append('status', status);
     }
-    // ============================
 
     const apiUrl = `http://localhost:5000/api/logs/?${params.toString()}`;
 
@@ -103,7 +101,7 @@ export default function Home() {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      fetchLogs(currentPage, searchQuery, statusFilter); // Kirim statusFilter ke fetchLogs
+      fetchLogs(currentPage, searchQuery, statusFilter);
     }, 500);
 
     return () => {
@@ -118,10 +116,10 @@ export default function Home() {
 
   const handleFilterChange = (newStatus: string) => {
     setStatusFilter(newStatus);
-    setCurrentPage(1); // Reset ke halaman pertama
+    setCurrentPage(1);
+    setIsFilterOpen(false);
   };
 
-  // Definisikan filter untuk UI
   const filters = [
     { label: 'Semua', value: 'all' },
     { label: 'Normal', value: 'normal' },
@@ -135,11 +133,9 @@ export default function Home() {
         setIsFilterOpen(false);
       }
     };
-    // Tambahkan event listener saat dropdown terbuka
     if (isFilterOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    // Hapus event listener saat komponen unmount atau dropdown tertutup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -150,9 +146,8 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl px-4">
-        {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md">{error}</p>}
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
-          <h1 className="text-[25px] font-semibold">Log Aktivitas</h1>
+          <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas</h1>
           <div className="flex relative items-center gap-3">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input
@@ -164,20 +159,20 @@ export default function Home() {
              hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
             />
             <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg border text-gray-700 flex items-center hover:bg-gray-100 transition-colors" title="Filter">
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors " title="Filter">
                 <FaSlidersH size={16} className="mr-2 text-gray-500" />
                 <span>{activeFilterLabel}</span>
               </button>
 
               {/* Menu Dropdown */}
               {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10 border">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
                   <div className="py-1">
                     {filters.map((filter) => (
                       <button
                         key={filter.value}
                         onClick={() => handleFilterChange(filter.value)}
-                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
                       >
                         {filter.label}
                       </button>
@@ -192,7 +187,7 @@ export default function Home() {
         <div className="overflow-x-auto bg-white rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <CgSpinner className="animate-spin text-blue-500" size={40} />
+              <CgSpinner className="animate-spin text-gray-500" size={40} />
             </div>
           ) : error ? (
             <p className="text-center text-red-600 p-8">{error}</p>
@@ -207,6 +202,7 @@ export default function Home() {
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Nama File</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Path Lengkap</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Kondisi</th>
                   <th className="p-4 text-center text-gray-600 font-semibold"></th>
                 </tr>
               </thead>
@@ -234,8 +230,12 @@ export default function Home() {
                       {log.nama_file}
                     </td>
                     {/* Path Lengkap */}
-                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none break-all">
                       {log.path_lengkap}
+                    </td>
+                    {/* Kondisi */}
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                      {log.tag}
                     </td>
                     {/* Aksi */}
                     <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">

@@ -10,55 +10,51 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange, totalCount, itemsPerPage }) => {
-  // --- LOGIKA BARU YANG LEBIH ROBUST ---
   const getPageNumbers = () => {
-    // Jika total halaman sedikit, tampilkan semua
-    if (totalPages <= 5) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
+    const pages: (string | number)[] = [];
+    const maxPagesToShow = 3; // Jumlah maksimal angka halaman yang tampil
+    const endPage = totalPages;
 
-    const pages = new Set<number | string>();
-    pages.add(1); // Selalu tampilkan halaman pertama
-
-    // Tentukan "jendela" halaman di sekitar halaman saat ini
-    let start = Math.max(2, currentPage - 1);
-    let end = Math.min(totalPages - 1, currentPage + 1);
-
-    // Sesuaikan jendela jika terlalu dekat ke awal atau akhir
-    if (currentPage <= 3) {
-      start = 2;
-      end = 4;
-    } else if (currentPage >= totalPages - 2) {
-      start = totalPages - 3;
-      end = totalPages - 1;
-    }
-
-    // Tambahkan halaman dalam jendela
-    for (let i = start; i <= end; i++) {
-      pages.add(i);
-    }
-
-    pages.add(totalPages); // Selalu tampilkan halaman terakhir
-
-    // Konversi Set ke Array dan tambahkan elipsis jika ada celah
-    const pageArray = Array.from(pages).sort((a, b) => (a as number) - (b as number));
-    const finalPages: (number | string)[] = [];
-
-    let lastPage: number | null = null;
-    for (const page of pageArray) {
-      if (lastPage !== null && (page as number) - lastPage > 1) {
-        finalPages.push('...');
+    // Tampilkan 1, 2, 3 jika halaman saat ini berada di awal
+    if (currentPage <= 2) {
+      for (let i = 1; i <= Math.min(maxPagesToShow, endPage); i++) {
+        pages.push(i);
       }
-      finalPages.push(page);
-      lastPage = page as number;
+      if (endPage > maxPagesToShow + 1) {
+        pages.push('...');
+      }
+      if (endPage > maxPagesToShow) {
+        pages.push(endPage);
+      }
     }
-
-    return finalPages;
+    // Tampilkan halaman terakhir jika halaman saat ini berada di akhir
+    else if (currentPage >= endPage - 1) {
+      pages.push(1);
+      pages.push('...');
+      for (let i = endPage - (maxPagesToShow - 1); i <= endPage; i++) {
+        pages.push(i);
+      }
+    }
+    // Tampilkan halaman di sekitar halaman saat ini
+    else {
+      pages.push(1);
+      pages.push('...');
+      pages.push(currentPage - 1);
+      pages.push(currentPage);
+      pages.push(currentPage + 1);
+      if (currentPage + 2 < endPage) {
+        pages.push('...');
+      }
+      if (currentPage + 1 < endPage) {
+        pages.push(endPage);
+      }
+    }
+    return pages;
   };
 
   const pageNumbers = getPageNumbers();
 
-  if (totalPages <= 1) return null; // Sembunyikan pagination jika hanya ada 1 halaman
+  if (totalPages <= 1) return null;
 
   return (
     <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
@@ -68,12 +64,11 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
       <nav aria-label="Pagination">
         <ul className="flex items-center -space-x-px h-10 text-base">
-          {/* Tombol Sebelumnya (diganti dari "Pertama") */}
           <li>
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              className="flex items-center justify-center px-2 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
             >
               <FaChevronLeft />
             </button>
@@ -81,8 +76,6 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
           {pageNumbers.map((page, index) => (
             <li key={`page-${page}-${index}`}>
-              {' '}
-              {/* Key yang lebih stabil */}
               {typeof page === 'number' ? (
                 <button
                   onClick={() => onPageChange(page)}
