@@ -33,30 +33,23 @@ export default function TrashPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
-
-  // ==================
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const handleSelectLog = (logId: string) => {
-    setSelectedIds(
-      (prev) =>
-        prev.includes(logId)
-          ? prev.filter((id) => id !== logId) // Uncheck
-          : [...prev, logId] // Check
-    );
+    setSelectedIds((prev) => (prev.includes(logId) ? prev.filter((id) => id !== logId) : [...prev, logId]));
   };
 
   const toggleSelectMode = () => {
     setIsSelectMode(!isSelectMode);
-    setSelectedIds([]); // Kosongkan pilihan saat mode berubah
+    setSelectedIds([]);
   };
 
   const handleSelectAll = () => {
     if (selectedIds.length === trashLogs.length) {
-      setSelectedIds([]); // Uncheck all
+      setSelectedIds([]);
     } else {
-      setSelectedIds(trashLogs.map((log) => log.id)); // Check all on current page
+      setSelectedIds(trashLogs.map((log) => log.id));
     }
   };
 
@@ -67,17 +60,16 @@ export default function TrashPage() {
     fetch(API_BASE, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: selectedIds }), // Kirim array 'ids'
+      body: JSON.stringify({ ids: selectedIds }),
     })
       .then((response) => {
         if (!response.ok) throw new Error('Gagal menghapus log secara massal');
-        fetchTrashLogs(currentPage, searchQuery, statusFilter); // Refresh data
-        setSelectedIds([]); // Kosongkan seleksi
+        fetchTrashLogs(currentPage, searchQuery, statusFilter);
+        setSelectedIds([]);
       })
       .catch((error) => alert(`Error: ${error.message}`));
   };
 
-  // ==================
   const API_BASE = 'http://localhost:5000/api/trash/';
 
   const fetchTrashLogs = (page = 1, query = '', status = 'all') => {
@@ -279,14 +271,11 @@ export default function TrashPage() {
             <table className="min-w-full text-sm">
               <thead className="bg-white hidden md:table-header-group">
                 <tr>
-                  {/*  */}
-
-                  {isSelectMode && ( // Tampilkan header checkbox jika mode pilih aktif
+                  {isSelectMode && (
                     <th className="p-4 w-12 text-center">
                       <input type="checkbox" className="rounded" checked={trashLogs.length > 0 && selectedIds.length === trashLogs.length} onChange={handleSelectAll} disabled={trashLogs.length === 0} />
                     </th>
                   )}
-                  {/*  */}
                   <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
@@ -301,13 +290,11 @@ export default function TrashPage() {
                   <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
                     {/*  */}
 
-                    {isSelectMode && ( // Tampilkan sel checkbox jika mode pilih aktif
+                    {isSelectMode && (
                       <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
                         <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
                       </td>
                     )}
-
-                    {/*  */}
                     <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
                       <span className="text-xs text-gray-800">{log.tanggal}</span>
                     </td>
