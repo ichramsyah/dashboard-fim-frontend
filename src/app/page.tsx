@@ -186,45 +186,46 @@ export default function Home() {
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
           <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas</h1>
-
-          <div className="relative">
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder="Search..."
-              className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <div className="relative">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search..."
+                className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
              hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
-            />
-          </div>
+              />
+            </div>
 
-          <div className="flex items-center gap-3">
-            {isSelectMode && selectedIds.length > 0 && (
-              <button onClick={handleMultipleMoveToTrash} className="bg-red-500 text-white px-3 py-2.5 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
-                <FiTrash2 />
-                <span>Pindahkan ({selectedIds.length})</span>
-              </button>
-            )}
-
-            <button onClick={toggleSelectMode} className={`px-3 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-9 text-white hover:bg-gray-800' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
-              {isSelectMode ? (
-                <div className="flex items-center gap-1.5">
-                  <FaTimes />
-                  <span>Batal</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-1.5">
-                  <FiCheckSquare />
-                  <span>Pilih</span>
-                </div>
+            <div className="flex items-center gap-3">
+              {isSelectMode && selectedIds.length > 0 && (
+                <button onClick={handleMultipleMoveToTrash} className="bg-red-500 text-white px-3 py-2.5 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                  <FiTrash2 />
+                  <span>Pindahkan ({selectedIds.length})</span>
+                </button>
               )}
-            </button>
+
+              <button onClick={toggleSelectMode} className={`px-3 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-9 text-white hover:bg-gray-800' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
+                {isSelectMode ? (
+                  <div className="flex items-center gap-1.5">
+                    <FaTimes />
+                    <span>Batal</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5">
+                    <FiCheckSquare />
+                    <span>Pilih</span>
+                  </div>
+                )}
+              </button>
+            </div>
 
             <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors " title="Filter">
-                <FaSlidersH size={16} className="mr-2 text-gray-500" />
-                <span>{activeFilterLabel}</span>
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2.5 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors " title="Filter">
+                <FaSlidersH size={14} className="mr-2 text-gray-500" />
+                <span className="text-sm">{activeFilterLabel}</span>
               </button>
 
               {/* Menu Dropdown */}
