@@ -193,6 +193,7 @@ export default function TrashPage() {
             <h1 className="text-2xl font-bold">Tempat Sampah</h1>
           </div>
           <div className="flex md:flex-row flex-col md:items-center items-start gap-3">
+            {/* Search Bar */}
             <div className="relative flex-grow">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={19} />
               <input
@@ -200,7 +201,7 @@ export default function TrashPage() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search..."
-                className="w-full md:w-64 py-1.5 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
+                className="w-66 md:w-64 py-1.5 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
              hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
               />
             </div>
@@ -237,7 +238,7 @@ export default function TrashPage() {
             <div className="flex items-center gap-2">
               <div ref={filterRef} className="relative">
                 <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-100 transition-colors" title="Filter">
-                  <FaSliders size={15} className="mr-2 text-gray-500" />
+                  <FaSliders size={14} className="mr-2 text-gray-700" />
                   <span className="text-sm text-gray-700">{activeFilterLabel}</span>
                 </button>
                 {isFilterOpen && (
