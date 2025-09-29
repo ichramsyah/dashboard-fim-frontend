@@ -14,10 +14,17 @@ const navItems = [
 interface SidebarProps {
   isOpen: boolean;
   toggle: () => void;
+  isMobile: boolean;
 }
 
-export default function Sidebar({ isOpen, toggle }: SidebarProps) {
+export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
   const pathname = usePathname();
+
+  const handleLinkClick = () => {
+    if (isMobile && isOpen) {
+      toggle();
+    }
+  };
 
   return (
     <aside
@@ -46,6 +53,7 @@ export default function Sidebar({ isOpen, toggle }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
+              onClick={handleLinkClick}
               className={`
                 flex items-center mx-4 py-2.5 rounded-md transition-all duration-300
                 ${isOpen ? 'px-4' : ' justify-center'}

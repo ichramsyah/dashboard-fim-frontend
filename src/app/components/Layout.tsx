@@ -24,7 +24,7 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="bg-neutral-2/70 min-h-screen">
-      <Sidebar isOpen={isSidebarOpen} toggle={toggleSidebar} />
+      <Sidebar isOpen={isSidebarOpen} toggle={toggleSidebar} isMobile={!isDesktop} />
 
       {isSidebarOpen && (
         <div
