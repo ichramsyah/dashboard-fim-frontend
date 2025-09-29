@@ -33,30 +33,23 @@ export default function TrashPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
-
-  // ==================
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const handleSelectLog = (logId: string) => {
-    setSelectedIds(
-      (prev) =>
-        prev.includes(logId)
-          ? prev.filter((id) => id !== logId) // Uncheck
-          : [...prev, logId] // Check
-    );
+    setSelectedIds((prev) => (prev.includes(logId) ? prev.filter((id) => id !== logId) : [...prev, logId]));
   };
 
   const toggleSelectMode = () => {
     setIsSelectMode(!isSelectMode);
-    setSelectedIds([]); // Kosongkan pilihan saat mode berubah
+    setSelectedIds([]);
   };
 
   const handleSelectAll = () => {
     if (selectedIds.length === trashLogs.length) {
-      setSelectedIds([]); // Uncheck all
+      setSelectedIds([]);
     } else {
-      setSelectedIds(trashLogs.map((log) => log.id)); // Check all on current page
+      setSelectedIds(trashLogs.map((log) => log.id));
     }
   };
 
@@ -67,17 +60,16 @@ export default function TrashPage() {
     fetch(API_BASE, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: selectedIds }), // Kirim array 'ids'
+      body: JSON.stringify({ ids: selectedIds }),
     })
       .then((response) => {
         if (!response.ok) throw new Error('Gagal menghapus log secara massal');
-        fetchTrashLogs(currentPage, searchQuery, statusFilter); // Refresh data
-        setSelectedIds([]); // Kosongkan seleksi
+        fetchTrashLogs(currentPage, searchQuery, statusFilter);
+        setSelectedIds([]);
       })
       .catch((error) => alert(`Error: ${error.message}`));
   };
 
-  // ==================
   const API_BASE = 'http://localhost:5000/api/trash/';
 
   const fetchTrashLogs = (page = 1, query = '', status = 'all') => {
@@ -200,8 +192,9 @@ export default function TrashPage() {
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold">Tempat Sampah</h1>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="relative flex-grow">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            {/* Search Bar */}
+            <div className="relative">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={19} />
               <input
                 type="text"
@@ -209,66 +202,72 @@ export default function TrashPage() {
                 onChange={handleSearchChange}
                 placeholder="Search..."
                 className="w-full md:w-64 py-1.5 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
-             hover:border-gray-4/60 focus:border-gray-4/60 focus:outline-none transition-colors"
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
               />
             </div>
 
-            {isSelectMode && selectedIds.length > 0 && (
-              <>
-                <button onClick={handleMultiplePermanentDelete} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
-                  <FiTrash2 />
-                  <span>Hapus ({selectedIds.length})</span>
-                </button>
-              </>
-            )}
+            {/*  Multiple Actions */}
+            <div className="flex items-center gap-2">
+              {isSelectMode && selectedIds.length > 0 && (
+                <>
+                  <button onClick={handleMultiplePermanentDelete} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                    <FiTrash2 />
+                    <span>Pindahkan ({selectedIds.length})</span>
+                  </button>
+                </>
+              )}
 
-            <button onClick={toggleSelectMode} className={`px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-8 text-gray-1 hover:bg-gray-8' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
-              <span>
-                {isSelectMode ? (
-                  <div className="flex items-center gap-1.5">
-                    <FaTimes />
-                    <span>Batal</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1.5">
-                    <FiCheckSquare />
-                    <span>Pilih</span>
+              <button onClick={toggleSelectMode} className={`px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-8 text-gray-1 hover:bg-gray-8' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
+                <span>
+                  {isSelectMode ? (
+                    <div className="flex items-center gap-1.5">
+                      <FaTimes />
+                      <span>Batal</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <FiCheckSquare />
+                      <span>Pilih</span>
+                    </div>
+                  )}
+                </span>
+              </button>
+            </div>
+
+            {/* Filter & delete */}
+            <div className="flex items-center gap-2">
+              <div ref={filterRef} className="relative">
+                <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-100 transition-colors" title="Filter">
+                  <FaSliders size={14} className="mr-2 text-gray-700" />
+                  <span className="text-sm text-gray-700">{activeFilterLabel}</span>
+                </button>
+                {isFilterOpen && (
+                  <div className="absolute md:right-0 right-[-90px] mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
+                    <div className="py-1">
+                      {filters.map((filter) => (
+                        <button
+                          key={filter.value}
+                          onClick={() => handleFilterChange(filter.value)}
+                          className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </span>
-            </button>
-
-            <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors text-[15px]" title="Filter">
-                <FaSliders size={16} className="mr-2 text-gray-500" />
-                <span>{activeFilterLabel}</span>
-              </button>
-              {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
-                  <div className="py-1">
-                    {filters.map((filter) => (
-                      <button
-                        key={filter.value}
-                        onClick={() => handleFilterChange(filter.value)}
-                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
-                      >
-                        {filter.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="relative">
-              <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
-                <FiTrash2 size={16} />
-              </button>
+              </div>
+              <div className="relative">
+                <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Tabel  */}
-        <div className="overflow-x-auto bg-white rounded-lg">
+        <div className="overflow-x-auto md:bg-white bg-transparent  rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <CgSpinner className="animate-spin text-gray-500" size={40} />
@@ -279,14 +278,11 @@ export default function TrashPage() {
             <table className="min-w-full text-sm">
               <thead className="bg-white hidden md:table-header-group">
                 <tr>
-                  {/*  */}
-
-                  {isSelectMode && ( // Tampilkan header checkbox jika mode pilih aktif
+                  {isSelectMode && (
                     <th className="p-4 w-12 text-center">
                       <input type="checkbox" className="rounded" checked={trashLogs.length > 0 && selectedIds.length === trashLogs.length} onChange={handleSelectAll} disabled={trashLogs.length === 0} />
                     </th>
                   )}
-                  {/*  */}
                   <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
@@ -296,42 +292,40 @@ export default function TrashPage() {
                   <th className="p-4 text-center text-gray-600 font-semibold">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 responsive-table">
+              <tbody className="divide-y divide-gray-200 md:divide-y-0">
                 {trashLogs.map((log) => (
-                  <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
+                  <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border border-none rounded-lg md:rounded-none bg-white ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
                     {/*  */}
 
-                    {isSelectMode && ( // Tampilkan sel checkbox jika mode pilih aktif
-                      <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
+                    {isSelectMode && (
+                      <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-none">
                         <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
                       </td>
                     )}
-
-                    {/*  */}
-                    <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                    <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
                       <span className="text-xs text-gray-800">{log.tanggal}</span>
                     </td>
-                    <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                    <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
                       <span className="text-gray-500 text-xs">{log.jam}</span>
                     </td>
-                    <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                    <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${log.tag.includes('BAHAYA') || log.tag.includes('MENCURIGAKAN') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>{log.metode}</span>
                     </td>
-                    <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                    <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-none">
                       {log.nama_file}
                     </td>
-                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none break-all">
+                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-none break-all">
                       {log.path_lengkap}
                     </td>
-                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-none">
                       {log.tag || '-'}
                     </td>
-                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">
+                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center border-none">
                       <div className="space-x-2 flex">
-                        <button onClick={() => handleRestore(log.id)} className="bg-blue-600 p-2 rounded-md text-white hover:bg-blue-700 transition-colors" title="Pulihkan">
+                        <button onClick={() => handleRestore(log.id)} className="bg-green-500 md:px-2 md:py-2 px-5 py-2 rounded-md text-white hover:bg-green-600 transition-colors" title="Pulihkan">
                           <FiRotateCcw size={14} />
                         </button>
-                        <button onClick={() => handlePermanentDelete(log.id)} className="bg-red-500 p-2 rounded-md text-white hover:bg-red-600 transition-colors" title="Hapus Permanen">
+                        <button onClick={() => handlePermanentDelete(log.id)} className="bg-red-500 md:px-2 md:py-2 px-5 py-2 rounded-md text-white hover:bg-red-600 transition-colors" title="Hapus Permanen">
                           <FiTrash2 size={14} />
                         </button>
                       </div>

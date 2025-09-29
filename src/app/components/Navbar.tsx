@@ -1,4 +1,4 @@
-// src/components/Navbar.tsx (atau rename jadi Header.tsx)
+// src/components/Navbar.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,9 +6,11 @@ import { FiMenu, FiRefreshCw } from 'react-icons/fi';
 
 interface NavbarProps {
   toggleSidebar: () => void;
+  isSidebarOpen: boolean; // Prop baru
+  isMobile: boolean; // Prop baru
 }
 
-export default function Navbar({ toggleSidebar }: NavbarProps) {
+export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: NavbarProps) {
   const [incronStatus, setIncronStatus] = useState<boolean | null>(null);
 
   const checkIncronStatus = () => {
@@ -36,7 +38,13 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
   }, []);
 
   return (
-    <header className="bg-whitee sticky top-0 z-20">
+    <header
+      className={`
+        sticky top-0 z-20 
+        transition-colors duration-300
+        ${isSidebarOpen && isMobile ? 'opacity-80' : 'bg-whitee'}
+      `}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto px-4 md:px-1 py-4 flex items-center justify-between">
           <button onClick={toggleSidebar} className="text-gray-700 md:hidden">
