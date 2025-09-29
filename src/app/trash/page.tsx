@@ -192,7 +192,7 @@ export default function TrashPage() {
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-bold">Tempat Sampah</h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex md:flex-row flex-col md:items-center items-start gap-3">
             <div className="relative flex-grow">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={19} />
               <input
@@ -201,60 +201,66 @@ export default function TrashPage() {
                 onChange={handleSearchChange}
                 placeholder="Search..."
                 className="w-full md:w-64 py-1.5 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
-             hover:border-gray-4/60 focus:border-gray-4/60 focus:outline-none transition-colors"
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
               />
             </div>
 
-            {isSelectMode && selectedIds.length > 0 && (
-              <>
-                <button onClick={handleMultiplePermanentDelete} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
-                  <FiTrash2 />
-                  <span>Hapus ({selectedIds.length})</span>
-                </button>
-              </>
-            )}
+            {/*  Multiple Actions */}
+            <div className="flex items-center gap-2">
+              {isSelectMode && selectedIds.length > 0 && (
+                <>
+                  <button onClick={handleMultiplePermanentDelete} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                    <FiTrash2 />
+                    <span>Pindahkan ({selectedIds.length})</span>
+                  </button>
+                </>
+              )}
 
-            <button onClick={toggleSelectMode} className={`px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-8 text-gray-1 hover:bg-gray-8' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
-              <span>
-                {isSelectMode ? (
-                  <div className="flex items-center gap-1.5">
-                    <FaTimes />
-                    <span>Batal</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1.5">
-                    <FiCheckSquare />
-                    <span>Pilih</span>
+              <button onClick={toggleSelectMode} className={`px-3 py-2 rounded-md text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-8 text-gray-1 hover:bg-gray-8' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
+                <span>
+                  {isSelectMode ? (
+                    <div className="flex items-center gap-1.5">
+                      <FaTimes />
+                      <span>Batal</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <FiCheckSquare />
+                      <span>Pilih</span>
+                    </div>
+                  )}
+                </span>
+              </button>
+            </div>
+
+            {/* Filter & delete */}
+            <div className="flex items-center gap-2">
+              <div ref={filterRef} className="relative">
+                <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-100 transition-colors" title="Filter">
+                  <FaSliders size={15} className="mr-2 text-gray-500" />
+                  <span className="text-sm text-gray-700">{activeFilterLabel}</span>
+                </button>
+                {isFilterOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
+                    <div className="py-1">
+                      {filters.map((filter) => (
+                        <button
+                          key={filter.value}
+                          onClick={() => handleFilterChange(filter.value)}
+                          className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
+                        >
+                          {filter.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </span>
-            </button>
-
-            <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors text-[15px]" title="Filter">
-                <FaSliders size={16} className="mr-2 text-gray-500" />
-                <span>{activeFilterLabel}</span>
-              </button>
-              {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
-                  <div className="py-1">
-                    {filters.map((filter) => (
-                      <button
-                        key={filter.value}
-                        onClick={() => handleFilterChange(filter.value)}
-                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
-                      >
-                        {filter.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="relative">
-              <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
-                <FiTrash2 size={16} />
-              </button>
+              </div>
+              <div className="relative">
+                <button onClick={handleEmptyTrash} className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -315,7 +321,7 @@ export default function TrashPage() {
                     </td>
                     <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">
                       <div className="space-x-2 flex">
-                        <button onClick={() => handleRestore(log.id)} className="bg-blue-600 p-2 rounded-md text-white hover:bg-blue-700 transition-colors" title="Pulihkan">
+                        <button onClick={() => handleRestore(log.id)} className="bg-green-500 p-2 rounded-md text-white hover:bg-green-600 transition-colors" title="Pulihkan">
                           <FiRotateCcw size={14} />
                         </button>
                         <button onClick={() => handlePermanentDelete(log.id)} className="bg-red-500 p-2 rounded-md text-white hover:bg-red-600 transition-colors" title="Hapus Permanen">
