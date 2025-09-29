@@ -248,7 +248,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="overflow-x-auto bg-white rounded-lg">
+        <div className="overflow-x-auto md:bg-white bg-transparent rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <CgSpinner className="animate-spin text-gray-500" size={40} />
@@ -259,7 +259,7 @@ export default function Home() {
             <p className="text-center text-gray-500 p-8">Tidak ada log yang ditemukan.</p>
           ) : (
             <table className="min-w-full text-sm">
-              <thead className="bg-white hidden md:table-header-group">
+              <thead className="hidden md:table-header-group">
                 <tr>
                   {isSelectMode && (
                     <th className="p-4 w-12 text-center">
@@ -276,41 +276,41 @@ export default function Home() {
                   <th className="p-4 text-center text-gray-600 font-semibold"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 responsive-table">
+              <tbody className="divide-y divide-gray-200">
                 {logs.map((log) => (
-                  <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
+                  <tr key={log.id} className={`block md:table-row mb-6 md:mb-0 border-none rounded-lg md:rounded-none bg-white ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
                     {isSelectMode && (
-                      <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
+                      <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left ">
                         <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
                       </td>
                     )}
 
                     {/* Tanggal */}
-                    <td data-label="Tanggal:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                    <td data-label="Tanggal:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
                         <span className="text-[12px] text-gray-8">{log.tanggal}</span>
                       </div>
                     </td>
                     {/* Jam */}
-                    <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                    <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
                         <span className="text-gray-500 text-xs">{log.jam}</span>
                       </div>
                     </td>
                     {/* Metode */}
-                    <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                    <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${log.tag.includes('BAHAYA') || log.tag.includes('MENCURIGAKAN') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>{log.metode}</span>
                     </td>
                     {/* Nama File */}
-                    <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                    <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
                       {log.nama_file}
                     </td>
                     {/* Path Lengkap */}
-                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none break-all">
+                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700  break-all">
                       {log.path_lengkap}
                     </td>
                     {/* Kondisi */}
-                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
                       {log.tag}
                     </td>
                     {/* Aksi */}
