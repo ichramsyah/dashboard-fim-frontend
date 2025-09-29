@@ -187,6 +187,18 @@ export default function Home() {
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
           <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas</h1>
 
+          <div className="relative">
+            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search..."
+              className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
+            />
+          </div>
+
           <div className="flex items-center gap-3">
             {isSelectMode && selectedIds.length > 0 && (
               <button onClick={handleMultipleMoveToTrash} className="bg-red-500 text-white px-3 py-2.5 rounded-lg hover:bg-red-600 text-sm flex items-center gap-2">
@@ -209,17 +221,6 @@ export default function Home() {
               )}
             </button>
 
-            <div className="relative">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                placeholder="Search..."
-                className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
-             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
-              />
-            </div>
             <div ref={filterRef} className="relative">
               <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors " title="Filter">
                 <FaSlidersH size={16} className="mr-2 text-gray-500" />
@@ -277,15 +278,11 @@ export default function Home() {
               <tbody className="divide-y divide-gray-200 responsive-table">
                 {logs.map((log) => (
                   <tr key={log.id} className={`block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
-                    {/*  */}
-
-                    {isSelectMode && ( // <-- Tambahkan kondisi di sini
+                    {isSelectMode && (
                       <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left border-b md:border-none">
                         <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
                       </td>
                     )}
-
-                    {/*  */}
 
                     {/* Tanggal */}
                     <td data-label="Tanggal:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
