@@ -2,8 +2,8 @@
 
 'use client';
 import React, { useState, ReactNode, useEffect } from 'react';
-import Sidebar from './Sidebar';
-import Navbar from './Navbar';
+import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar';
 import { useMediaQuery } from '../hooks/useMediaQuery';
 
 interface LayoutProps {

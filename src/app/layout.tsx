@@ -1,7 +1,6 @@
 // src/app/layout.tsx
 import type { Metadata } from 'next';
 import './globals.css';
-import Layout from './components/Layout';
 import localFont from 'next/font/local';
 
 const nexaFont = localFont({
@@ -22,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={nexaFont.variable}>
-        <Layout>{children}</Layout>
-      </body>
+      <body className={nexaFont.variable}>{children}</body>
     </html>
   );
 }
