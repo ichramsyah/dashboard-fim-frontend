@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiRotateCcw, FiTrash2, FiCheckSquare } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
-import Pagination from '../components/Pagination';
+import Pagination from '../../components/Pagination';
 import { FaSliders } from 'react-icons/fa6';
 import { FaPen, FaTimes } from 'react-icons/fa';
 

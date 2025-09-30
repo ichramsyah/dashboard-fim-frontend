@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiCheckSquare, FiSearch, FiTrash2 } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTimes, FaTrash } from 'react-icons/fa';
-import Pagination from './components/Pagination';
+import Pagination from '../components/Pagination';
 
 interface LogEntry {
   id: string;
@@ -230,7 +230,7 @@ export default function Home() {
 
               {/* Menu Dropdown */}
               {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
+                <div className="absolute md:right-0 sm:right-[-90px] mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
                   <div className="py-1">
                     {filters.map((filter) => (
                       <button
