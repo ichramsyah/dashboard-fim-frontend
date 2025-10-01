@@ -1,57 +1,45 @@
-// src/components/Layout.tsx
+// src/app/(dashboard)/layout.tsx
 
-'use client';
-import React, { useState, ReactNode, useEffect } from 'react';
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
-import { useMediaQuery } from '../hooks/useMediaQuery';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-interface LayoutProps {
-  children: ReactNode;
+// 1. Import komponen client yang baru saja kita buat
+import DashboardClientLayout from '../components/DashboardClientLayout'; // Sesuaikan path jika perlu
+
+// Fungsi untuk cek autentikasi di server
+async function checkAuthentication() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token');
+
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const res = await fetch('http://localhost:5000/api/check-auth/', {
+      // Ganti dengan URL backend Anda
+      headers: {
+        Cookie: `token=${token.value}`,
+      },
+      cache: 'no-store',
+    });
+    return res.ok;
+  } catch (error) {
+    console.error('Authentication check failed:', error);
+    return false;
+  }
 }
 
-export default function Layout({ children }: LayoutProps) {
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-  const [isSidebarOpen, setSidebarOpen] = useState(isDesktop);
+// Ini adalah Server Component (Layout Shell)
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  // 2. Lakukan pengecekan sebelum me-render apapun
+  const isAuthenticated = await checkAuthentication();
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
+  // Jika tidak terautentikasi, lempar ke halaman login
+  if (!isAuthenticated) {
+    redirect('/login');
+  }
 
-  useEffect(() => {
-    setSidebarOpen(isDesktop);
-  }, [isDesktop]);
-
-  return (
-    <div className="bg-neutral-2/70 min-h-screen">
-      <Sidebar isOpen={isSidebarOpen} toggle={toggleSidebar} isMobile={!isDesktop} />
-
-      {isSidebarOpen && (
-        <div
-          onClick={toggleSidebar}
-          className="
-            fixed inset-0 bg-black/20 bg-opacity-50 z-20
-            md:hidden
-          "
-        ></div>
-      )}
-
-      <div
-        className={`
-          relative h-screen flex flex-col
-          transition-all duration-300 ease-in-out
-          ${isSidebarOpen ? 'md:ml-64' : 'md:ml-20'}
-        `}
-      >
-        <Navbar
-          toggleSidebar={toggleSidebar}
-          isSidebarOpen={isSidebarOpen} // <-- TAMBAHKAN INI
-          isMobile={!isDesktop}
-        />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          <div className="max-w-7xl mx-auto w-full">{children}</div>
-        </main>
-      </div>
-    </div>
-  );
+  // 3. Jika berhasil, render Client Layout dan teruskan children
+  return <DashboardClientLayout>{children}</DashboardClientLayout>;
 }

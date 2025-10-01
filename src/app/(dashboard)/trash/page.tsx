@@ -6,6 +6,7 @@ import { CgSpinner } from 'react-icons/cg';
 import Pagination from '../../components/Pagination';
 import { FaSliders } from 'react-icons/fa6';
 import { FaPen, FaTimes } from 'react-icons/fa';
+import api from '../../lib/api';
 
 interface LogEntry {
   id: string;
@@ -53,41 +54,35 @@ export default function TrashPage() {
     }
   };
 
-  const handleMultiplePermanentDelete = () => {
+  const handleMultiplePermanentDelete = async () => {
+    // Tambahkan async
     if (!window.confirm(`Anda yakin ingin menghapus permanen ${selectedIds.length} log ini? Aksi ini tidak bisa dibatalkan.`)) {
       return;
     }
-    fetch(API_BASE, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: selectedIds }),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Gagal menghapus log secara massal');
-        fetchTrashLogs(currentPage, searchQuery, statusFilter);
-        setSelectedIds([]);
-      })
-      .catch((error) => alert(`Error: ${error.message}`));
+
+    try {
+      await api('trash/', {
+        method: 'DELETE',
+        // 'headers' tidak perlu lagi, sudah diurus oleh wrapper
+        body: JSON.stringify({ ids: selectedIds }),
+      });
+
+      // Jika berhasil, kode di bawah ini akan dijalankan
+      fetchTrashLogs(currentPage, searchQuery, statusFilter);
+      setSelectedIds([]);
+    } catch (error: any) {
+      // Jika gagal, error dari wrapper akan ditangkap di sini
+      alert(`Error: ${error.message}`);
+    }
   };
-
-  const API_BASE = 'http://localhost:5000/api/trash/';
-
   const fetchTrashLogs = (page = 1, query = '', status = 'all') => {
     setIsLoading(true);
     const params = new URLSearchParams();
     params.append('page', String(page));
-    if (query) {
-      params.append('search', query);
-    }
-    if (status && status !== 'all') {
-      params.append('status', status);
-    }
+    if (query) params.append('search', query);
+    if (status && status !== 'all') params.append('status', status);
 
-    fetch(`${API_BASE}?${params.toString()}`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
-        return res.json();
-      })
+    api(`trash/?${params.toString()}`)
       .then((data) => {
         setTrashLogs(data.results);
         setPaginationInfo({
@@ -98,7 +93,7 @@ export default function TrashPage() {
         setError(null);
       })
       .catch((err: any) => {
-        setError(err.message || 'Gagal memuat data dari tempat sampah.');
+        setError(err.message || 'Gagal memuat data.');
         setTrashLogs([]);
         setPaginationInfo(null);
       })
@@ -145,8 +140,8 @@ export default function TrashPage() {
 
   const handleRestore = async (logId: string) => {
     try {
-      const res = await fetch(`${API_BASE}${logId}/restore/`, { method: 'POST' });
-      if (!res.ok) throw new Error('Gagal memulihkan file');
+      // Cukup panggil `api` dan endpoint-nya. Method dan credentials sudah diurus!
+      await api(`trash/${logId}/restore/`, { method: 'POST' });
       fetchTrashLogs(currentPage, searchQuery);
     } catch (err: any) {
       alert(err.message);
@@ -156,8 +151,7 @@ export default function TrashPage() {
   const handlePermanentDelete = async (logId: string) => {
     if (!window.confirm('Yakin ingin menghapus permanen file ini?')) return;
     try {
-      const res = await fetch(`${API_BASE}${logId}/`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Gagal menghapus permanen');
+      await api(`trash/${logId}/`, { method: 'DELETE' });
       fetchTrashLogs(currentPage, searchQuery);
     } catch (err: any) {
       alert(err.message);
@@ -167,8 +161,7 @@ export default function TrashPage() {
   const handleEmptyTrash = async () => {
     if (!window.confirm('ANDA YAKIN ingin mengosongkan tempat sampah? Aksi ini tidak bisa dibatalkan.')) return;
     try {
-      const res = await fetch(API_BASE, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Gagal mengosongkan tempat sampah');
+      await api(`trash/`, { method: 'DELETE' });
       fetchTrashLogs(1, '');
     } catch (err: any) {
       alert(err.message);

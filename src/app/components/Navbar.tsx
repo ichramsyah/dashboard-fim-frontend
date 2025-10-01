@@ -2,7 +2,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FiMenu, FiRefreshCw } from 'react-icons/fi';
+import { FiLogOut, FiMenu, FiRefreshCw } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
+import api from '../lib/api';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -11,31 +13,44 @@ interface NavbarProps {
 }
 
 export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: NavbarProps) {
+  const router = useRouter();
   const [incronStatus, setIncronStatus] = useState<boolean | null>(null);
 
   const checkIncronStatus = () => {
-    const apiUrl = 'http://localhost:5000/api/incron/control/';
-    fetch(apiUrl)
-      .then((res) => res.json())
+    api('incron/control/')
       .then((data) => setIncronStatus(data.is_running))
       .catch(() => setIncronStatus(false));
   };
 
-  const handleRestartIncron = () => {
+  // 3. Diperbarui menjadi async/await dengan 'api'
+  const handleRestartIncron = async () => {
     if (!window.confirm('Anda yakin ingin me-restart layanan incron?')) return;
-    const apiUrl = 'http://localhost:5000/api/incron/control/';
-    fetch(apiUrl, { method: 'POST' })
-      .then(() => {
-        alert('Perintah restart terkirim. Mohon tunggu beberapa detik lalu cek status lagi.');
-        setIncronStatus(null);
-        setTimeout(checkIncronStatus, 3000);
-      })
-      .catch((error) => alert(`Error: ${error.message}`));
+    try {
+      await api('incron/control/', { method: 'POST' });
+      alert('Perintah restart terkirim. Mohon tunggu beberapa detik lalu cek status lagi.');
+      setIncronStatus(null);
+      setTimeout(checkIncronStatus, 3000);
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    }
   };
 
   useEffect(() => {
     checkIncronStatus();
   }, []);
+
+  // 4. Diperbarui & disederhanakan dengan 'api'
+  const handleLogout = async () => {
+    try {
+      await api('logout/', { method: 'POST' });
+      // Jika berhasil, langsung lanjutkan. Tidak perlu cek res.ok
+      alert('Logout berhasil!');
+      router.push('/login');
+    } catch (error: any) {
+      // Jika gagal, wrapper akan melempar error dan ditangkap di sini
+      alert(`Gagal logout: ${error.message}`);
+    }
+  };
 
   return (
     <header
@@ -70,6 +85,9 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
               </div>
               <button onClick={handleRestartIncron} className="bg-gray-9 text-white px-4 py-2 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-2 duration-300">
                 <FiRefreshCw /> <span>Restart</span>
+              </button>
+              <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded-[5px] hover:bg-red-700 flex items-center space-x-2">
+                <FiLogOut /> <span>Logout</span>
               </button>
             </div>
           </div>
