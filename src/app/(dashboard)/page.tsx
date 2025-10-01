@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiCheckSquare, FiSearch, FiTrash2 } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTimes, FaTrash } from 'react-icons/fa';
+import api from '../lib/api';
 import Pagination from '../components/Pagination';
 
 interface LogEntry {
@@ -52,45 +53,30 @@ export default function Home() {
     }
   };
 
-  const handleMultipleMoveToTrash = () => {
+  const handleMultipleMoveToTrash = async () => {
     if (!window.confirm(`Anda yakin ingin memindahkan ${selectedIds.length} log ini ke tempat sampah?`)) {
       return;
     }
-
-    const apiUrl = 'http://localhost:5000/api/logs/';
-    fetch(apiUrl, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ids: selectedIds }),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Gagal memindahkan log');
-        fetchLogs(currentPage, searchQuery, statusFilter);
-        setSelectedIds([]);
-      })
-      .catch((error) => alert(`Error: ${error.message}`));
+    try {
+      await api('logs/', {
+        method: 'DELETE',
+        body: JSON.stringify({ ids: selectedIds }),
+      });
+      fetchLogs(currentPage, searchQuery, statusFilter);
+      setSelectedIds([]);
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    }
   };
 
   const fetchLogs = (page = 1, query = '', status = 'all') => {
     setIsLoading(true);
     const params = new URLSearchParams();
     params.append('page', String(page));
-    if (query) {
-      params.append('search', query);
-    }
-    if (status && status !== 'all') {
-      params.append('status', status);
-    }
+    if (query) params.append('search', query);
+    if (status && status !== 'all') params.append('status', status);
 
-    const apiUrl = `http://localhost:5000/api/logs/?${params.toString()}`;
-
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
+    api(`logs/?${params.toString()}`)
       .then((data) => {
         setLogs(data.results);
         setPaginationInfo({
@@ -100,35 +86,28 @@ export default function Home() {
         });
         setError(null);
       })
-      .catch(() => {
-        setError('Gagal mengambil data dari API. Pastikan backend berjalan.');
+      .catch((err: any) => {
+        setError(err.message || 'Gagal mengambil data dari API.');
         setLogs([]);
         setPaginationInfo(null);
       })
       .finally(() => setIsLoading(false));
   };
 
-  const handleMoveToTrash = (logId: string) => {
-    const apiUrl = 'http://localhost:5000/api/logs/';
-
+  const handleMoveToTrash = async (logId: string) => {
     if (!window.confirm('Anda yakin ingin memindahkan log ini ke tempat sampah?')) {
       return;
     }
-
-    fetch(apiUrl, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: logId }),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Gagal memindahkan log');
-        fetchLogs(currentPage, searchQuery);
-        return response.json();
-      })
-      .then(() => {
-        setLogs((currentLogs) => currentLogs.filter((log) => log.id !== logId));
-      })
-      .catch((error) => alert(`Error: ${error.message}`));
+    try {
+      await api('logs/', {
+        method: 'DELETE',
+        body: JSON.stringify({ id: logId }),
+      });
+      // Cukup panggil ulang fetchLogs untuk data terbaru
+      fetchLogs(currentPage, searchQuery, statusFilter);
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
+    }
   };
 
   const handlePageChange = (newPage: number) => {
