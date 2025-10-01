@@ -1,16 +1,15 @@
 // src/components/DashboardClientLayout.tsx
 
-'use client'; // <-- Tetap gunakan 'use client' di sini
+'use client';
 import React, { useState, ReactNode, useEffect } from 'react';
-import Sidebar from './Sidebar'; // Pastikan path import ini benar
-import Navbar from './Navbar'; // Pastikan path import ini benar
-import { useMediaQuery } from '../hooks/useMediaQuery'; // Pastikan path import ini benar
+import Sidebar from './Sidebar';
+import Navbar from './Navbar';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-// Ubah nama komponennya
 export default function DashboardClientLayout({ children }: LayoutProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [isSidebarOpen, setSidebarOpen] = useState(isDesktop);
