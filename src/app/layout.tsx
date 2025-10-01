@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
+import { toast, Toaster } from 'react-hot-toast';
 
 const nexaFont = localFont({
   src: './fonts/NexaRegular.otf',
@@ -21,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={nexaFont.variable}>{children}</body>
+      <body className={nexaFont.variable}>
+        <Toaster position="top-right" reverseOrder={false} />
+        {children}
+      </body>
     </html>
   );
 }

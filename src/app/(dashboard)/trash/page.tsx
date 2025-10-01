@@ -5,8 +5,10 @@ import { FiSearch, FiRotateCcw, FiTrash2, FiCheckSquare } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import Pagination from '../../components/Pagination';
 import { FaSliders } from 'react-icons/fa6';
-import { FaPen, FaTimes } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import api from '../../lib/api';
+import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
 
 interface LogEntry {
   id: string;
@@ -55,24 +57,29 @@ export default function TrashPage() {
   };
 
   const handleMultiplePermanentDelete = async () => {
-    // Tambahkan async
-    if (!window.confirm(`Anda yakin ingin menghapus permanen ${selectedIds.length} log ini? Aksi ini tidak bisa dibatalkan.`)) {
-      return;
-    }
+    const result = await Swal.fire({
+      title: 'Hapus Permanen Beberapa Log?',
+      text: `Anda yakin ingin menghapus permanen ${selectedIds.length} log ini? Aksi ini tidak bisa dibatalkan.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'rgba(21, 21, 21, 1)',
+      cancelButtonColor: '#a3a3a3ff',
+      confirmButtonText: 'Ya, hapus semua!',
+      cancelButtonText: 'Batal',
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await api('trash/', {
         method: 'DELETE',
-        // 'headers' tidak perlu lagi, sudah diurus oleh wrapper
         body: JSON.stringify({ ids: selectedIds }),
       });
-
-      // Jika berhasil, kode di bawah ini akan dijalankan
+      toast.success(`${selectedIds.length} log berhasil dihapus permanen.`);
       fetchTrashLogs(currentPage, searchQuery, statusFilter);
       setSelectedIds([]);
     } catch (error: any) {
-      // Jika gagal, error dari wrapper akan ditangkap di sini
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   };
   const fetchTrashLogs = (page = 1, query = '', status = 'all') => {
@@ -140,21 +147,36 @@ export default function TrashPage() {
 
   const handleRestore = async (logId: string) => {
     try {
-      // Cukup panggil `api` dan endpoint-nya. Method dan credentials sudah diurus!
       await api(`trash/${logId}/restore/`, { method: 'POST' });
+
+      toast.success('Log berhasil dipulihkan.');
+
       fetchTrashLogs(currentPage, searchQuery);
     } catch (err: any) {
-      alert(err.message);
+      toast.error(`Gagal memulihkan: ${err.message}`);
     }
   };
 
   const handlePermanentDelete = async (logId: string) => {
-    if (!window.confirm('Yakin ingin menghapus permanen file ini?')) return;
-    try {
-      await api(`trash/${logId}/`, { method: 'DELETE' });
-      fetchTrashLogs(currentPage, searchQuery);
-    } catch (err: any) {
-      alert(err.message);
+    const result = await Swal.fire({
+      title: 'Hapus Permanen?',
+      text: 'Aksi ini tidak bisa dibatalkan!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'rgba(21, 21, 21, 1)',
+      cancelButtonColor: '#a3a3a3ff',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await api(`trash/${logId}/`, { method: 'DELETE' });
+        toast.success('Log berhasil dihapus permanen.');
+        fetchTrashLogs(currentPage, searchQuery);
+      } catch (err: any) {
+        toast.error(`Gagal menghapus: ${err.message}`);
+      }
     }
   };
 
@@ -162,9 +184,10 @@ export default function TrashPage() {
     if (!window.confirm('ANDA YAKIN ingin mengosongkan tempat sampah? Aksi ini tidak bisa dibatalkan.')) return;
     try {
       await api(`trash/`, { method: 'DELETE' });
+      toast.success('Tempat sampah berhasil dikosongkan.');
       fetchTrashLogs(1, '');
     } catch (err: any) {
-      alert(err.message);
+      toast.error(`Error: ${err.message}`);
     }
   };
   const filters = [
@@ -311,7 +334,7 @@ export default function TrashPage() {
                       {log.path_lengkap}
                     </td>
                     <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-none">
-                      {log.tag || '-'}
+                      {log.tag || ''}
                     </td>
                     <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center border-none">
                       <div className="space-x-2 flex">

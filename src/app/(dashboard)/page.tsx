@@ -6,6 +6,8 @@ import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTimes, FaTrash } from 'react-icons/fa';
 import api from '../lib/api';
 import Pagination from '../components/Pagination';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 interface LogEntry {
   id: string;
@@ -54,18 +56,27 @@ export default function Home() {
   };
 
   const handleMultipleMoveToTrash = async () => {
-    if (!window.confirm(`Anda yakin ingin memindahkan ${selectedIds.length} log ini ke tempat sampah?`)) {
-      return;
-    }
+    const result = await Swal.fire({
+      title: 'Pindahkan Beberapa Log?',
+      text: `Anda yakin ingin memindahkan ${selectedIds.length} log ini ke tempat sampah?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'rgba(21, 21, 21, 1)',
+      cancelButtonColor: '#a3a3a3ff',
+      confirmButtonText: 'Ya, pindahkan!',
+      cancelButtonText: 'Batal',
+    });
+    if (!result.isConfirmed) return;
     try {
       await api('logs/', {
         method: 'DELETE',
         body: JSON.stringify({ ids: selectedIds }),
       });
+      toast.success(`${selectedIds.length} log berhasil dipindahkan.`);
       fetchLogs(currentPage, searchQuery, statusFilter);
       setSelectedIds([]);
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
@@ -95,18 +106,15 @@ export default function Home() {
   };
 
   const handleMoveToTrash = async (logId: string) => {
-    if (!window.confirm('Anda yakin ingin memindahkan log ini ke tempat sampah?')) {
-      return;
-    }
     try {
       await api('logs/', {
         method: 'DELETE',
         body: JSON.stringify({ id: logId }),
       });
-      // Cukup panggil ulang fetchLogs untuk data terbaru
+      toast.success('Berhasil dipindahkan ke tempat sampah.');
       fetchLogs(currentPage, searchQuery, statusFilter);
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
