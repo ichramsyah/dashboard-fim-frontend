@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '../lib/api';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import ikon
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State untuk ikon mata
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -31,6 +31,7 @@ export default function LoginPage() {
     <div className="bg-gray-1/70 min-h-screen flex items-center justify-center p-4">
       <form className="bg-white p-8 rounded-lg w-full max-w-sm" onSubmit={handleSubmit}>
         <div className="relative mb-6">
+          {/* Username */}
           <input
             id="username"
             type="text"
@@ -39,6 +40,7 @@ export default function LoginPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            autoComplete="off"
           />
           <label
             htmlFor="username"
@@ -48,7 +50,7 @@ export default function LoginPage() {
           </label>
         </div>
 
-        {/* Input Password dengan Floating Label dan Ikon Mata */}
+        {/* Password */}
         <div className="relative mb-6">
           <input
             id="password"
@@ -58,6 +60,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="off"
           />
           <label
             htmlFor="password"
