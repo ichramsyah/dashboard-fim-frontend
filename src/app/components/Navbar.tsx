@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { FiLogOut, FiMenu, FiRefreshCw } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import api from '../lib/api';
+import toast from 'react-hot-toast';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -29,10 +30,10 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
   const handleLogout = async () => {
     try {
       await api('logout/', { method: 'POST' });
-      alert('Logout berhasil!');
+      toast.success('Logout berhasil');
       router.push('/login');
     } catch (error: any) {
-      alert(`Gagal logout: ${error.message}`);
+      toast.error(`Gagal logout: ${error.message}`);
     }
   };
 

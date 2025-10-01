@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import api from '../lib/api';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -20,6 +21,8 @@ export default function LoginPage() {
         method: 'POST',
         body: JSON.stringify({ username, password }),
       });
+
+      toast.success('Login berhasil');
       router.push('/');
       router.refresh();
     } catch (err: any) {
