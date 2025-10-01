@@ -7,6 +7,7 @@ import Pagination from '../../components/Pagination';
 import { FaSliders } from 'react-icons/fa6';
 import { FaTimes } from 'react-icons/fa';
 import api from '../../lib/api';
+import Swal from 'sweetalert2';
 import toast from 'react-hot-toast';
 
 interface LogEntry {
@@ -56,9 +57,18 @@ export default function TrashPage() {
   };
 
   const handleMultiplePermanentDelete = async () => {
-    if (!window.confirm(`Anda yakin ingin menghapus permanen ${selectedIds.length} log ini? Aksi ini tidak bisa dibatalkan.`)) {
-      return;
-    }
+    const result = await Swal.fire({
+      title: 'Hapus Permanen Beberapa Log?',
+      text: `Anda yakin ingin menghapus permanen ${selectedIds.length} log ini? Aksi ini tidak bisa dibatalkan.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'rgba(21, 21, 21, 1)',
+      cancelButtonColor: '#a3a3a3ff',
+      confirmButtonText: 'Ya, hapus semua!',
+      cancelButtonText: 'Batal',
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await api('trash/', {
@@ -148,13 +158,25 @@ export default function TrashPage() {
   };
 
   const handlePermanentDelete = async (logId: string) => {
-    if (!window.confirm('Yakin ingin menghapus permanen file ini?')) return;
-    try {
-      await api(`trash/${logId}/`, { method: 'DELETE' });
-      toast.success('Log berhasil dihapus permanen.');
-      fetchTrashLogs(currentPage, searchQuery);
-    } catch (err: any) {
-      toast.error(`Error: ${err.message}`);
+    const result = await Swal.fire({
+      title: 'Hapus Permanen?',
+      text: 'Aksi ini tidak bisa dibatalkan!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'rgba(21, 21, 21, 1)',
+      cancelButtonColor: '#a3a3a3ff',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await api(`trash/${logId}/`, { method: 'DELETE' });
+        toast.success('Log berhasil dihapus permanen.');
+        fetchTrashLogs(currentPage, searchQuery);
+      } catch (err: any) {
+        toast.error(`Gagal menghapus: ${err.message}`);
+      }
     }
   };
 
