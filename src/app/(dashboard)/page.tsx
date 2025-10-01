@@ -6,6 +6,7 @@ import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTimes, FaTrash } from 'react-icons/fa';
 import api from '../lib/api';
 import Pagination from '../components/Pagination';
+import toast from 'react-hot-toast';
 
 interface LogEntry {
   id: string;
@@ -62,10 +63,11 @@ export default function Home() {
         method: 'DELETE',
         body: JSON.stringify({ ids: selectedIds }),
       });
+      toast.success(`${selectedIds.length} log berhasil dipindahkan.`);
       fetchLogs(currentPage, searchQuery, statusFilter);
       setSelectedIds([]);
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
@@ -103,10 +105,10 @@ export default function Home() {
         method: 'DELETE',
         body: JSON.stringify({ id: logId }),
       });
-      // Cukup panggil ulang fetchLogs untuk data terbaru
+      toast.success('Berhasil dipindahkan ke tempat sampah.');
       fetchLogs(currentPage, searchQuery, statusFilter);
     } catch (error: any) {
-      alert(`Error: ${error.message}`);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
