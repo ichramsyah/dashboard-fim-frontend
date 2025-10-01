@@ -8,8 +8,8 @@ import api from '../lib/api';
 
 interface NavbarProps {
   toggleSidebar: () => void;
-  isSidebarOpen: boolean; // Prop baru
-  isMobile: boolean; // Prop baru
+  isSidebarOpen: boolean;
+  isMobile: boolean;
 }
 
 export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: NavbarProps) {
@@ -22,7 +22,6 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
       .catch(() => setIncronStatus(false));
   };
 
-  // 3. Diperbarui menjadi async/await dengan 'api'
   const handleRestartIncron = async () => {
     if (!window.confirm('Anda yakin ingin me-restart layanan incron?')) return;
     try {
@@ -39,15 +38,12 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
     checkIncronStatus();
   }, []);
 
-  // 4. Diperbarui & disederhanakan dengan 'api'
   const handleLogout = async () => {
     try {
       await api('logout/', { method: 'POST' });
-      // Jika berhasil, langsung lanjutkan. Tidak perlu cek res.ok
       alert('Logout berhasil!');
       router.push('/login');
     } catch (error: any) {
-      // Jika gagal, wrapper akan melempar error dan ditangkap di sini
       alert(`Gagal logout: ${error.message}`);
     }
   };
@@ -83,10 +79,10 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
                   </div>
                 )}
               </div>
-              <button onClick={handleRestartIncron} className="bg-gray-9 text-white px-4 py-2 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-2 duration-300">
+              <button onClick={handleRestartIncron} className="bg-gray-9 text-white px-4 py-1.5 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-2 duration-300">
                 <FiRefreshCw /> <span>Restart</span>
               </button>
-              <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded-[5px] hover:bg-red-700 flex items-center space-x-2">
+              <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-1.5 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-2 duration-300">
                 <FiLogOut /> <span>Logout</span>
               </button>
             </div>
