@@ -1,6 +1,6 @@
 // lib/api.ts
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-// Fungsi ini akan menjadi pengganti `fetch` Anda
 const api = async (endpoint: string, options: RequestInit = {}) => {
   const defaultOptions: RequestInit = {
     credentials: 'include',
@@ -10,7 +10,7 @@ const api = async (endpoint: string, options: RequestInit = {}) => {
     },
   };
 
-  const response = await fetch(`http://localhost:5000/api/${endpoint}`, {
+  const response = await fetch(`${apiBaseUrl}/${endpoint}`, {
     ...defaultOptions,
     ...options,
   });
