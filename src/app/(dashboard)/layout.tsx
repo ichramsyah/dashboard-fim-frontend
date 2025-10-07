@@ -2,11 +2,8 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import DashboardClientLayout from '../components/DashboardClientLayout';
 
-// 1. Import komponen client yang baru saja kita buat
-import DashboardClientLayout from '../components/DashboardClientLayout'; // Sesuaikan path jika perlu
-
-// Fungsi untuk cek autentikasi di server
 async function checkAuthentication() {
   const cookieStore = await cookies();
   const token = cookieStore.get('token');
@@ -16,8 +13,8 @@ async function checkAuthentication() {
   }
 
   try {
-    const res = await fetch('http://localhost:5000/api/check-auth/', {
-      // Ganti dengan URL backend Anda
+    const apiUrl = process.env.API_BASE_URL_SERVER;
+    const res = await fetch(`${apiUrl}/check-auth/`, {
       headers: {
         Cookie: `token=${token.value}`,
       },
@@ -30,16 +27,10 @@ async function checkAuthentication() {
   }
 }
 
-// Ini adalah Server Component (Layout Shell)
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  // 2. Lakukan pengecekan sebelum me-render apapun
   const isAuthenticated = await checkAuthentication();
-
-  // Jika tidak terautentikasi, lempar ke halaman login
   if (!isAuthenticated) {
     redirect('/login');
   }
-
-  // 3. Jika berhasil, render Client Layout dan teruskan children
   return <DashboardClientLayout>{children}</DashboardClientLayout>;
 }
