@@ -13,8 +13,8 @@ async function checkAuthentication() {
   }
 
   try {
-    const apiUrl = process.env.API_BASE_URL_SERVER;
-    const res = await fetch(`${apiUrl}/check-auth/`, {
+    const apiBaseUrl = process.env.API_BASE_URL_SERVER || 'http://localhost:5000/api';
+    const res = await fetch(`${apiBaseUrl}/check-auth/`, {
       headers: {
         Cookie: `token=${token.value}`,
       },
@@ -28,9 +28,9 @@ async function checkAuthentication() {
 }
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = await checkAuthentication();
-  if (!isAuthenticated) {
-    redirect('/login');
-  }
+  // const isAuthenticated = await checkAuthentication();
+  // if (!isAuthenticated) {
+  //   redirect('/login');
+  // }
   return <DashboardClientLayout>{children}</DashboardClientLayout>;
 }
