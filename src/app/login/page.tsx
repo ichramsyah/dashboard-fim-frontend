@@ -23,8 +23,7 @@ export default function LoginPage() {
       });
 
       toast.success('Login berhasil');
-      router.push('/');
-      router.refresh();
+      window.location.href = '/';
     } catch (err: any) {
       setError('Username atau password salah.');
     }
