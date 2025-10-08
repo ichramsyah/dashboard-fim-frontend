@@ -1,6 +1,7 @@
 // src/app/(dashboard)/layout.tsx
 
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import DashboardClientLayout from '../components/DashboardClientLayout';
 
 async function checkAuthentication() {
@@ -26,11 +27,11 @@ async function checkAuthentication() {
   }
 }
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = await checkAuthentication();
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = checkAuthentication();
   if (!isAuthenticated) {
     console.log('User not authenticated');
-    // redirect('/login');
+    redirect('/login');
   }
   return <DashboardClientLayout>{children}</DashboardClientLayout>;
 }
