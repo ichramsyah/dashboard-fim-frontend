@@ -45,14 +45,14 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
         ${isSidebarOpen && isMobile ? 'opacity-80' : 'bg-whitee'}
       `}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto md:px-4 px-2 sm:px-6 lg:px-8">
         <div className="container mx-auto px-4 md:px-1 py-4 flex items-center justify-between">
           <button onClick={toggleSidebar} className="text-gray-700 md:hidden">
             <FiMenu size={28} />
           </button>
 
           <div className="flex-1 flex justify-end">
-            <div className="flex items-center justify-between space-x-4">
+            <div className="flex items-center justify-between space-x-3 md:space-x-4">
               <div className="flex">
                 {incronStatus === null ? (
                   <p className="text-gray-500">Mengecek...</p>
@@ -67,7 +67,8 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
                 ) : (
                   <div className="flex items-center">
                     <h2 className="font-bold text-gray-700 pr-2">Incron Tidak Aktif</h2>
-                    <span className="flex h-3 w-3">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                     </span>
                   </div>
