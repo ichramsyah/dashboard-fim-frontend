@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiCheckSquare, FiSearch, FiTrash2 } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTimes, FaTrash } from 'react-icons/fa';
-import api from '../lib/api';
-import Pagination from '../components/Pagination';
+import api from '../../lib/api';
+import Pagination from '../../components/Pagination';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 

@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { FiHome, FiTrash2, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
 
 const navItems = [
-  { name: 'Home', href: '/', icon: FiHome },
+  { name: 'Home', href: '/log', icon: FiHome },
   { name: 'Trash', href: '/trash', icon: FiTrash2 },
 ];
 

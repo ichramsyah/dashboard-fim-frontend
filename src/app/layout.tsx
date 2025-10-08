@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
-import { toast, Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 const nexaFont = localFont({
   src: './fonts/NexaRegular.otf',

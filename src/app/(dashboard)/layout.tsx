@@ -28,9 +28,10 @@ async function checkAuthentication() {
 }
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  // const isAuthenticated = await checkAuthentication();
-  // if (!isAuthenticated) {
-  //   redirect('/login');
-  // }
+  const isAuthenticated = await checkAuthentication();
+  if (!isAuthenticated) {
+    console.log('User not authenticated');
+    // redirect('/login');
+  }
   return <DashboardClientLayout>{children}</DashboardClientLayout>;
 }
