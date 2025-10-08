@@ -5,7 +5,7 @@
 // export function middleware(request: NextRequest) {
 //   const token = request.cookies.get('token')?.value;
 //   const { pathname } = request.nextUrl;
-//   const protectedPaths = ['/', '/trash'];
+//   const protectedPaths = ['/log', '/trash'];
 
 //   if (!token && protectedPaths.includes(pathname)) {
 //     return NextResponse.redirect(new URL('/login', request.url));
@@ -17,14 +17,5 @@
 // }
 
 // export const config = {
-//   matcher: [
-//     /*
-//      * Cocokkan semua path request kecuali untuk:
-//      * - api (API routes)
-//      * - _next/static (static files)
-//      * - _next/image (image optimization files)
-//      * - favicon.ico (favicon file)
-//      */
-//     '/((?!api|_next/static|_next/image|favicon.ico).*)',
-//   ],
+//   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 // };
