@@ -1,7 +1,6 @@
 // src/app/(dashboard)/layout.tsx
 
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import DashboardClientLayout from '../components/DashboardClientLayout';
 
 async function checkAuthentication() {
