@@ -4,11 +4,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiHome, FiTrash2, FiChevronsLeft, FiChevronsRight } from 'react-icons/fi';
+import { FiHome, FiTrash2, FiChevronsLeft, FiChevronsRight, FiFileMinus } from 'react-icons/fi';
+import { SiWordpress } from 'react-icons/si';
 
 const navItems = [
-  { name: 'Home', href: '/', icon: FiHome },
+  { name: 'Log', href: '/', icon: FiFileMinus },
   { name: 'Trash', href: '/trash', icon: FiTrash2 },
+  { name: 'WordPress Log', href: '/wp-log', icon: SiWordpress },
 ];
 
 interface SidebarProps {
