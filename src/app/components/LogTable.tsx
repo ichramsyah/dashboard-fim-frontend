@@ -29,7 +29,7 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
 
   return (
     <div className="mb-6">
-      <h3 className={`text-sm text-gray-7 font-semibold mb-2`}>
+      <h3 className={`text-sm text-gray-5 font-semibold mb-2`}>
         {title} ({logs.length})
       </h3>
       <div className="overflow-x-auto rounded-lg">
