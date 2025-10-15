@@ -25,7 +25,7 @@ interface PaginationInfo {
   current_page: number;
 }
 
-export default function Home() {
+export default function Log() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
