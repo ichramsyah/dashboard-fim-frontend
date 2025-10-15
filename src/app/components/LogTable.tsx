@@ -45,10 +45,10 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
           <tbody className="divide-y divide-gray-200 md:divide-y-0">
             {logs.map((log) => (
               <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none bg-white">
-                <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                   <span className="text-gray-500">{log.jam}</span>
                 </td>
-                <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                       log.tag.includes('[BAHAYA]') ? 'bg-red-100 text-red-800' : log.tag.includes('[KEGIATAN MENCURIGAKAN]') ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'
@@ -57,10 +57,10 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
                     {log.metode}
                   </span>
                 </td>
-                <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
                   {log.nama_file}
                 </td>
-                <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-500 border-b md:border-none break-all">
+                <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-500  break-all">
                   {log.path_lengkap}
                 </td>
               </tr>
