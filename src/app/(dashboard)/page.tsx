@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { CgSpinner } from 'react-icons/cg';
 import { FaRegCalendarAlt, FaExclamationTriangle, FaBell, FaShieldAlt } from 'react-icons/fa';
 import api from '../lib/api';
+import LogTable from '../components/LogTable';
 
 interface TodayStats {
   tanggal_analisis: string;
@@ -26,9 +27,24 @@ interface HistoricalDataEntry {
   };
 }
 
+interface LogEntry {
+  id: string;
+  jam: string;
+  metode: string;
+  nama_file: string;
+  path_lengkap: string;
+  tag: string;
+}
+interface TodayLogs {
+  normal: LogEntry[];
+  mencurigakan: LogEntry[];
+  bahaya: LogEntry[];
+}
+
 export default function Home() {
   const [todayStats, setTodayStats] = useState<TodayStats | null>(null);
   const [historicalData, setHistoricalData] = useState<HistoricalDataEntry[]>([]);
+  const [todayLogs, setTodayLogs] = useState<TodayLogs>({ normal: [], mencurigakan: [], bahaya: [] });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [days, setDays] = useState(7);
@@ -38,14 +54,16 @@ export default function Home() {
       setIsLoading(true);
       setError(null);
       try {
-        const [todayResponse, historicalResponse] = await Promise.all([api('logs/analytics/'), api(`logs/analytics/historical/?days=${days}`)]);
+        const [todayResponse, historicalResponse, todayLogsResponse] = await Promise.all([api('logs/analytics/'), api(`logs/analytics/historical/?days=${days}`), api('logs/today/')]);
 
         setTodayStats(todayResponse);
         setHistoricalData(historicalResponse.slice().reverse());
+        setTodayLogs(todayLogsResponse);
       } catch (err: any) {
         setError(err.message || 'Gagal memuat data analisis.');
         setTodayStats(null);
         setHistoricalData([]);
+        setTodayLogs({ normal: [], mencurigakan: [], bahaya: [] });
       } finally {
         setIsLoading(false);
       }
@@ -55,7 +73,7 @@ export default function Home() {
   }, [days]);
 
   const StatCard = ({ icon, title, value, color, bgColor }: any) => (
-    <div className={`flex-1 py-3 rounded-lg flex justify-start md:justify-center items-center ${bgColor}`}>
+    <div className={`flex-1 py-3 rounded-lg flex items-center ${bgColor}`}>
       <div className={` rounded-full mr-4 ${color} bg-white`}>{icon}</div>
       <div>
         <p className="text-sm text-gray-700">{title}</p>
@@ -67,7 +85,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl md:px-4 px-1">
-        <h1 className="text-2xl font-bold mb-4">Analisis Aktivitas</h1>
+        <h1 className="text-2xl font-bold mb-4">Laporan Aktivitas</h1>
 
         {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</p>}
 
@@ -112,14 +130,18 @@ export default function Home() {
 
             {/* Bagian Statistik Hari Ini */}
             <div className="mt-8 px-1 w-full pb-6">
-              <h2 className="text-gray-7 text-lg font-semibold mb-3 flex items-center gap-2">Hari Ini</h2>
+              <h2 className="text-gray-7 text-lg font-semibold mb-3 flex items-center gap-2">Data hari ini</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-3">
                 <StatCard icon={<FaShieldAlt size={22} />} title="Total Perubahan" value={todayStats?.total_perubahan_hari_ini ?? 0} color="text-gray-700/80" bgColor="" />
                 <StatCard icon={<FaBell size={22} />} title="Normal" value={todayStats?.detail.normal ?? 0} color="text-blue-500/80" bgColor="bg-whitee" />
                 <StatCard icon={<FaExclamationTriangle size={22} />} title="Mencurigakan" value={todayStats?.detail.mencurigakan ?? 0} color="text-yellow-500/80" bgColor="bg-whitee" />
                 <StatCard icon={<FaExclamationTriangle size={22} />} title="Bahaya" value={todayStats?.detail.bahaya ?? 0} color="text-red-500/80" bgColor="bg-whitee" />
               </div>
-              {/* Disini */}
+              <div className="mt-8 grid grid-cols-1 lg:grid-cols-1 gap-6">
+                <LogTable title="Bahaya" logs={todayLogs.bahaya} bgColor="bg-red-100/40" />
+                <LogTable title="Mencurigakan" logs={todayLogs.mencurigakan} bgColor="bg-yellow-100/40" />
+                <LogTable title="Normal" logs={todayLogs.normal} bgColor="bg-blue-100/40" />
+              </div>
             </div>
           </div>
         )}
