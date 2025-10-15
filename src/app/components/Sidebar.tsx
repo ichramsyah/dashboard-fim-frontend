@@ -4,11 +4,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiHome, FiTrash2, FiChevronsLeft, FiChevronsRight, FiFileMinus, FiGrid } from 'react-icons/fi';
+import { FiHome, FiTrash2, FiChevronsLeft, FiChevronsRight, FiFileMinus, FiGrid, FiBarChart } from 'react-icons/fi';
 import { SiWordpress } from 'react-icons/si';
 
 const navItems = [
-  { name: 'Home', href: '/', icon: FiGrid },
+  { name: 'Analytics', href: '/', icon: FiBarChart },
   { name: 'Log', href: '/log', icon: FiFileMinus },
   { name: 'Trash', href: '/trash', icon: FiTrash2 },
   { name: 'WordPress Log', href: '/wp-log', icon: SiWordpress },
