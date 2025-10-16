@@ -184,7 +184,8 @@ export default function WpActivityPage() {
             <table className="min-w-full text-sm">
               <thead className="bg-white hidden md:table-header-group">
                 <tr>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Waktu</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Kategori</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Aksi</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Pengguna</th>
@@ -196,10 +197,10 @@ export default function WpActivityPage() {
                 {wpLogs.map((log) => (
                   <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border border-none rounded-lg md:rounded-none bg-white">
                     <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-gray-800">{formatTimestamp(log.timestamp).tanggal}</span>
-                        <span className="text-gray-500 text-xs">{formatTimestamp(log.timestamp).jam}</span>
-                      </div>
+                      <span className="text-xs text-gray-800">{formatTimestamp(log.timestamp).tanggal}</span>
+                    </td>
+                    <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
+                      <span className="text-gray-500 text-xs">{formatTimestamp(log.timestamp).jam}</span>
                     </td>
                     <td data-label="Kategori:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
                       <span
@@ -210,16 +211,16 @@ export default function WpActivityPage() {
                         {log.category}
                       </span>
                     </td>
-                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
+                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none text-gray-700 font-mono">
                       {log.action}
                     </td>
-                    <td data-label="Pengguna:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none">
+                    <td data-label="Pengguna:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none text-gray-700">
                       {log.user}
                     </td>
-                    <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none">
+                    <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none text-gray-700">
                       {log.ip}
                     </td>
-                    <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none break-all">
+                    <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none break-all text-gray-700">
                       {log.details}
                     </td>
                   </tr>

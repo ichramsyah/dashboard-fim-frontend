@@ -113,7 +113,7 @@ export default function Home() {
             <div className="bg-white px-7 pt-6 pb-7 rounded-lg">
               {/* Bagian Grafik */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
-                <h2 className="text-gray-7 text-lg font-semibold mb-2 sm:mb-0">Grafik Aktivitas</h2>
+                <h2 className="text-gray-7 text-lg font-semibold mb-2 sm:mb-0">Grafik</h2>
                 <div className="flex items-center gap-2">
                   {[7, 15, 30].map((d) => (
                     <button key={d} onClick={() => setDays(d)} className={`px-3 py-1 text-sm rounded-md transition-colors ${days === d ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}>
