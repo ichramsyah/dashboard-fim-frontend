@@ -6,6 +6,8 @@ import { CgSpinner } from 'react-icons/cg';
 import { FaExclamationTriangle, FaBell, FaShieldAlt } from 'react-icons/fa';
 import api from '../lib/api';
 import LogTable from '../components/LogTable';
+import { DatePicker } from '../components/DatePicker';
+import { format } from 'date-fns';
 
 interface TodayStats {
   tanggal_analisis: string;
@@ -88,6 +90,11 @@ export default function Home() {
     }
   };
 
+  const availableDatesSet = new Set(historicalData.map((d) => new Date(d.tanggal).setHours(0, 0, 0, 0)));
+  if (todayData?.stats && todayData.stats.total_perubahan_hari_ini > 0) {
+    availableDatesSet.add(new Date().setHours(0, 0, 0, 0));
+  }
+
   const StatCard = ({ icon, title, value, color, bgColor }: any) => (
     <div className={`flex-1 pl-4 py-3.5 rounded-lg flex items-center ${bgColor}`}>
       <div className={`rounded-full mr-4 ${color} p-2 bg-white`}>{icon}</div>
@@ -113,7 +120,7 @@ export default function Home() {
             <div className="bg-white px-7 pt-6 pb-7 rounded-lg">
               {/* Bagian Grafik */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
-                <h2 className="text-gray-7 text-lg font-semibold mb-2 sm:mb-0">Grafik Aktivitas</h2>
+                <h2 className="text-gray-7 text-lg font-semibold mb-2 sm:mb-0">Grafik</h2>
                 <div className="flex items-center gap-2">
                   {[7, 15, 30].map((d) => (
                     <button key={d} onClick={() => setDays(d)} className={`px-3 py-1 text-sm rounded-md transition-colors ${days === d ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}>
@@ -145,32 +152,12 @@ export default function Home() {
               {/* Bagian Laporan */}
               <div className="px-1 w-full pb-6">
                 <div className="mb-6">
-                  <h3 className="text-gray-600 text-md font-semibold mb-3">Pilih Tanggal Laporan</h3>
-                  <div className="flex flex-wrap gap-2">
-                    <button onClick={resetToToday} className={`px-3 py-1.5 text-sm rounded-md transition-colors ${activeReportDate === 'Hari Ini' ? 'bg-gray-8 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}>
-                      Hari Ini
-                    </button>
-
-                    {historicalData
-                      .slice()
-                      .reverse()
-                      .map((data) => (
-                        <button
-                          key={data.tanggal}
-                          onClick={() => handleDateSelect(data.tanggal)}
-                          className={`px-3 py-1.5 text-sm rounded-md transition-colors ${activeReportDate === data.tanggal ? 'bg-gray-8 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
-                        >
-                          {data.tanggal}
-                        </button>
-                      ))}
+                  <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <h3 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">Laporan {activeReportDate}</h3>
+                    <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />
                   </div>
                 </div>
 
-                {/* <div className="flex justify-between items-center md:mb-4 sm:mb-2">
-                  <h2 className="text-gray-7 text-lg font-semibold">
-                    Laporan <span className="text-blue-600 font-bold">{activeReportDate}</span>
-                  </h2>
-                </div> */}
                 {isFetchingDetails ? (
                   <div className="flex justify-center items-center h-64">
                     <CgSpinner className="animate-spin text-gray-500" size={40} />
