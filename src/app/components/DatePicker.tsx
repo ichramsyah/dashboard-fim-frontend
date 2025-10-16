@@ -55,7 +55,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, onDateSele
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-2 bg-white border rounded-md shadow-lg">
+        <div className="absolute px-5 py-2 right-0 z-10 mt-2 bg-white rounded-xl shadow-lg">
           <DayPicker
             mode="single"
             selected={new Date(selectedDate)}
@@ -68,11 +68,24 @@ export const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, onDateSele
                   resetToToday();
                   setIsOpen(false);
                 }}
-                className="w-full text-center py-2 text-sm text-blue-600 hover:bg-gray-100"
+                className="w-full text-center py-2 text-sm cursor-pointer text-gray-600 hover:text-gray-800 hover:underline"
               >
                 Kembali ke Hari Ini
               </button>
             }
+            classNames={{
+              months: 'relative',
+              month: 'space-y-2',
+              caption_label: 'text-base font-medium mt-2',
+              nav: 'absolute right-0 top-0 flex items-center gap-2 ',
+              nav_button: 'text-gray-100 hover:text-gray-800 transition p-1 rounded-full hover:bg-gray-200',
+              table: 'w-full border-collapse',
+              head_row: 'flex justify-between text-gray-500 font-medium mb-2',
+              head_cell: 'w-9 text-center text-xs',
+              row: 'flex justify-between',
+              cell: 'w-9 h-9 flex items-center justify-center rounded-md text-sm cursor-pointer transition-all hover:bg-gray-200',
+              day_selected: 'bg-blue-600 text-white hover:bg-blue-700',
+            }}
           />
         </div>
       )}
