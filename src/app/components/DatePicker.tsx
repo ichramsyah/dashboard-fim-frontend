@@ -55,7 +55,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, onDateSele
       </button>
 
       {isOpen && (
-        <div className="absolute px-5 py-2 right-0 z-10 mt-2 bg-white rounded-xl shadow-lg">
+        <div className="absolute px-5 py-2 md:right-0 right-[-130px] z-10 mt-2 bg-white rounded-xl shadow-lg">
           <DayPicker
             mode="single"
             selected={new Date(selectedDate)}
