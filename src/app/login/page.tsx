@@ -31,9 +31,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-gray-1/70 min-h-screen flex items-center justify-center p-4">
-      <form className="bg-white p-8 rounded-lg w-full max-w-sm" onSubmit={handleSubmit}>
-        <div className="relative mb-6">
+    <div className="bg-gray-1/60 min-h-screen flex items-center justify-center p-4">
+      <form className="bg-white md:px-9 px-6 pt-5 pb-6 rounded-lg w-full max-w-[380px]" onSubmit={handleSubmit}>
+        <h1 className="text-center text-2xl font-bold mb-6">Login</h1>
+        <div className="relative mb-4">
           {/* Username */}
           <input
             id="username"
