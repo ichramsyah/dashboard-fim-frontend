@@ -80,7 +80,26 @@ const TopListTable = ({ title, data, headers }: { title: string; data: [string, 
   </div>
 );
 
-const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
+const getActionBadgeColor = (action: string) => {
+  const lowerAction = action.toLowerCase();
+  switch (lowerAction) {
+    case 'failed':
+    case 'deactivated':
+    case 'deleted':
+      return 'bg-red-100 text-red-700';
+    case 'success':
+    case 'activated':
+    case 'installed':
+      return 'bg-green-100 text-green-700';
+    case 'updated':
+    case 'status changed':
+      return 'bg-blue-100 text-blue-700';
+    default:
+      return 'bg-gray-100 text-gray-700';
+  }
+};
+
+const WpLogTable = ({ title, logs, headerColor }: { title: string; logs: WpLogEntry[]; headerColor: string }) => {
   if (!logs || logs.length === 0) {
     return null;
   }
@@ -92,13 +111,13 @@ const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
       </h3>
       <div className="overflow-x-auto md:bg-white bg-transparent rounded-lg">
         <table className="min-w-full text-sm">
-          <thead className="bg-gray-50 hidden md:table-header-group">
+          <thead className={`${headerColor} hidden md:table-header-group`}>
             <tr>
-              <th className="p-4 text-left text-gray-600 font-semibold">Waktu</th>
-              <th className="p-4 text-left text-gray-600 font-semibold">User</th>
-              <th className="p-4 text-left text-gray-600 font-semibold">Alamat IP</th>
-              <th className="p-4 text-left text-gray-600 font-semibold">Aksi</th>
-              <th className="p-4 text-left text-gray-600 font-semibold">Detail</th>
+              <th className="p-4 text-left text-gray-700 font-semibold">Waktu</th>
+              <th className="p-4 text-left text-gray-700 font-semibold">User</th>
+              <th className="p-4 text-left text-gray-700 font-semibold">Alamat IP</th>
+              <th className="p-4 text-left text-gray-700 font-semibold">Aksi</th>
+              <th className="p-4 text-left text-gray-700 font-semibold">Detail</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 md:divide-y-0">
@@ -114,7 +133,7 @@ const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
                   {log.ip}
                 </td>
                 <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
-                  <span className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">{log.action}</span>
+                  <span className={`px-2 py-1 text-xs rounded-full font-medium ${getActionBadgeColor(log.action)}`}>{log.action}</span>
                 </td>
                 <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-600 border-b md:border-none break-all">
                   {log.details}
@@ -196,13 +215,15 @@ export default function WpAnalyticsPage() {
                 <StatCard icon={<FaFileAlt size={20} />} title="Aktivitas Konten" value={analyticsData.summary_today.content_activity} color="text-blue-500" bgColor="bg-blue-50" />
                 <StatCard icon={<FaPlug size={20} />} title="Aktivitas Plugin" value={analyticsData.summary_today.plugin_activity} color="text-yellow-500" bgColor="bg-yellow-50" />
               </div>
+
+              {/* Tabel */}
               {todayLogs && (
-                <div className="space-y-6">
-                  <WpLogTable title="Aktivitas Login" logs={todayLogs.login} />
-                  <WpLogTable title="Aktivitas Plugin" logs={todayLogs.plugin} />
-                  <WpLogTable title="Aktivitas Konten" logs={todayLogs.content} />
-                  <WpLogTable title="Manajemen Pengguna" logs={todayLogs.user_management} />
-                  <WpLogTable title="Lainnya" logs={todayLogs.lainnya} />
+                <div className="rounded-lg space-y-6 mt-6">
+                  <WpLogTable title="Aktivitas Auth" logs={todayLogs.login} headerColor="bg-green-100" />
+                  <WpLogTable title="Aktivitas Plugin" logs={todayLogs.plugin} headerColor="bg-yellow-100" />
+                  <WpLogTable title="Aktivitas Konten" logs={todayLogs.content} headerColor="bg-blue-100" />
+                  <WpLogTable title="Manajemen Pengguna" logs={todayLogs.user_management} headerColor="bg-purple-100" />
+                  <WpLogTable title="Lainnya" logs={todayLogs.lainnya} headerColor="bg-gray-100" />
                 </div>
               )}
             </div>
