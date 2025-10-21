@@ -6,7 +6,7 @@ import { CgSpinner } from 'react-icons/cg';
 import { FaUserCheck, FaUserTimes, FaFileAlt, FaPlug } from 'react-icons/fa';
 import api from '../../lib/api';
 
-// Interface untuk mencocokkan struktur data dari API
+// --- INTERFACE (Tidak ada perubahan) ---
 interface AnalyticsData {
   summary_today: {
     login_success: number;
@@ -25,8 +25,25 @@ interface AnalyticsData {
     plugin: number;
   }[];
 }
+interface WpLogEntry {
+  id: string;
+  timestamp: string;
+  category: string;
+  action: string;
+  user: string;
+  ip: string;
+  details: string;
+}
+interface WpTodayLogs {
+  login: WpLogEntry[];
+  plugin: WpLogEntry[];
+  content: WpLogEntry[];
+  user_management: WpLogEntry[];
+  lainnya: WpLogEntry[];
+}
 
-// Komponen kecil untuk menampilkan kartu statistik
+// --- KOMPONEN LOKAL (Sudah dirapikan) ---
+
 const StatCard = ({ icon, title, value, color, bgColor }: any) => (
   <div className={`flex-1 pl-4 py-3.5 rounded-lg flex items-center ${bgColor}`}>
     <div className={`rounded-full mr-4 ${color} p-2 bg-white`}>{icon}</div>
@@ -37,52 +54,106 @@ const StatCard = ({ icon, title, value, color, bgColor }: any) => (
   </div>
 );
 
-// Komponen kecil untuk menampilkan tabel Top 5
+// ## PERUBAHAN 1: TopListTable dibuat lebih bersih dan menyatu
 const TopListTable = ({ title, data, headers }: { title: string; data: [string, number][]; headers: [string, string] }) => (
-  <div className="bg-gray-50 p-4 rounded-lg border">
-    <h3 className="font-semibold text-gray-700 mb-2">{title}</h3>
+  <div>
+    <h3 className="font-semibold text-gray-700 mb-3">{title}</h3>
     {data.length > 0 ? (
-      <table className="min-w-full text-sm">
-        <thead>
-          <tr className="text-left text-gray-500">
-            <th className="py-1">{headers[0]}</th>
-            <th className="py-1 text-right">{headers[1]}</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {data.map(([item, count]) => (
-            <tr key={item}>
-              <td className="py-1.5 font-mono">{item}</td>
-              <td className="py-1.5 font-mono text-right">{count}</td>
+      <div className="overflow-x-auto rounded-md border border-gray-200">
+        <table className="min-w-full text-sm bg-white">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="p-3 text-left text-gray-600 font-semibold">{headers[0]}</th>
+              <th className="p-3 text-right text-gray-600 font-semibold">{headers[1]}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {data.map(([item, count]) => (
+              <tr key={item}>
+                <td className="p-3 font-mono text-gray-700">{item}</td>
+                <td className="p-3 font-mono text-right text-gray-500">{count}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     ) : (
-      <p className="text-sm text-gray-400 text-center py-4">Tidak ada data.</p>
+      <div className="text-sm text-gray-400 text-center py-8 border rounded-md">Tidak ada data.</div>
     )}
   </div>
 );
 
-export default function WordPressAnalyticsPage() {
+// ## PERUBAHAN 2: WpLogTable dirombak total menjadi responsif
+const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
+  if (!logs || logs.length === 0) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h3 className="text-md font-semibold mb-2 text-gray-800">
+        {title} ({logs.length})
+      </h3>
+      <div className="overflow-x-auto md:bg-white bg-transparent rounded-lg">
+        <table className="min-w-full text-sm">
+          <thead className="bg-gray-50 hidden md:table-header-group">
+            <tr>
+              <th className="p-4 text-left text-gray-600 font-semibold">Waktu</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">User</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">Alamat IP</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">Aksi</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">Detail</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 md:divide-y-0">
+            {logs.map((log) => (
+              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none bg-white">
+                <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                  <span className="text-gray-500">{log.timestamp.split(' ')[1]}</span>
+                </td>
+                <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                  {log.user}
+                </td>
+                <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-500 border-b md:border-none">
+                  {log.ip}
+                </td>
+                <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                  <span className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-full">{log.action}</span>
+                </td>
+                <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-600 border-b md:border-none break-all">
+                  {log.details}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// --- KOMPONEN UTAMA (Struktur tetap sama, hanya memanggil komponen yang sudah dirapikan) ---
+export default function WpAnalyticsPage() {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+  const [todayLogs, setTodayLogs] = useState<WpTodayLogs | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchAnalyticsData = async () => {
+    const fetchAllData = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await api('wp-logs/analytics/');
-        setAnalyticsData(data);
+        const [analyticsResponse, todayLogsResponse] = await Promise.all([api('wp-logs/analytics/'), api('wp-logs/today/')]);
+        setAnalyticsData(analyticsResponse);
+        setTodayLogs(todayLogsResponse);
       } catch (err: any) {
         setError(err.message || 'Gagal memuat data analytics WordPress.');
       } finally {
         setIsLoading(false);
       }
     };
-    fetchAnalyticsData();
+    fetchAllData();
   }, []);
 
   return (
@@ -139,6 +210,20 @@ export default function WordPressAnalyticsPage() {
                 <TopListTable title="Top IP Penyerang (Login Gagal)" data={analyticsData.top_5_failed_ips} headers={['Alamat IP', 'Percobaan']} />
               </div>
             </div>
+
+            {/* Detail Aktivitas Hari Ini */}
+            {todayLogs && (
+              <div className="bg-white px-7 py-6 rounded-lg">
+                <h2 className="text-gray-7 text-lg font-semibold mb-4">Detail Aktivitas Hari Ini</h2>
+                <div className="space-y-6">
+                  <WpLogTable title="Aktivitas Login" logs={todayLogs.login} />
+                  <WpLogTable title="Aktivitas Plugin" logs={todayLogs.plugin} />
+                  <WpLogTable title="Aktivitas Konten" logs={todayLogs.content} />
+                  <WpLogTable title="Manajemen Pengguna" logs={todayLogs.user_management} />
+                  <WpLogTable title="Lainnya" logs={todayLogs.lainnya} />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
