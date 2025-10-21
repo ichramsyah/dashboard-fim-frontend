@@ -15,8 +15,6 @@ const api = async (endpoint: string, options: RequestInit = {}) => {
     ...options,
   });
 
-  console.log('API Response:', response);
-
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ message: response.statusText }));
     throw new Error(errorData.message || `Error ${response.status}`);
