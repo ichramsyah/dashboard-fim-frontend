@@ -48,7 +48,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({ selectedDate, onDateSele
     <div className="relative" ref={pickerRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-1 bg-gray-8 hover:rounded-[20px] rounded-[6px] focus:rounded-[20px] focus:outline-none transition-all"
+        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-1 bg-gray-8 hover:rounded-[20px] rounded-[6px] focus:rounded-[20px] focus:outline-none transition-all cursor-pointer"
       >
         <FaRegCalendarAlt />
         <span>{selectedDate === 'Hari Ini' ? 'Hari Ini' : format(new Date(selectedDate), 'dd MMMM yyyy', { locale: id })}</span>
