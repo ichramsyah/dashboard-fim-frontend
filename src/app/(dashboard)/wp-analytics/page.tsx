@@ -42,8 +42,6 @@ interface WpTodayLogs {
   lainnya: WpLogEntry[];
 }
 
-// --- KOMPONEN LOKAL (Sudah dirapikan) ---
-
 const StatCard = ({ icon, title, value, color, bgColor }: any) => (
   <div className={`flex-1 pl-4 py-3.5 rounded-lg flex items-center ${bgColor}`}>
     <div className={`rounded-full mr-4 ${color} p-2 bg-white`}>{icon}</div>
@@ -54,7 +52,6 @@ const StatCard = ({ icon, title, value, color, bgColor }: any) => (
   </div>
 );
 
-// ## PERUBAHAN 1: TopListTable dibuat lebih bersih dan menyatu
 const TopListTable = ({ title, data, headers }: { title: string; data: [string, number][]; headers: [string, string] }) => (
   <div>
     <h3 className="font-semibold text-gray-700 mb-3">{title}</h3>
@@ -83,7 +80,6 @@ const TopListTable = ({ title, data, headers }: { title: string; data: [string, 
   </div>
 );
 
-// ## PERUBAHAN 2: WpLogTable dirombak total menjadi responsif
 const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
   if (!logs || logs.length === 0) {
     return null;
@@ -132,7 +128,6 @@ const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
   );
 };
 
-// --- KOMPONEN UTAMA (Struktur tetap sama, hanya memanggil komponen yang sudah dirapikan) ---
 export default function WpAnalyticsPage() {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [todayLogs, setTodayLogs] = useState<WpTodayLogs | null>(null);
@@ -170,20 +165,12 @@ export default function WpAnalyticsPage() {
           <p className="text-center text-gray-500 p-8">Tidak ada data analytics untuk ditampilkan.</p>
         ) : (
           <div className="space-y-7">
-            {/* Bagian Ringkasan Hari Ini */}
-            <div className="bg-white px-7 py-6 rounded-lg">
-              <h2 className="text-gray-7 text-lg font-semibold mb-4">Ringkasan Hari Ini</h2>
-              <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                <StatCard icon={<FaUserCheck size={20} />} title="Login Berhasil" value={analyticsData.summary_today.login_success} color="text-green-500" bgColor="bg-green-50" />
-                <StatCard icon={<FaUserTimes size={20} />} title="Login Gagal" value={analyticsData.summary_today.login_fail} color="text-red-500" bgColor="bg-red-50" />
-                <StatCard icon={<FaFileAlt size={20} />} title="Aktivitas Konten" value={analyticsData.summary_today.content_activity} color="text-blue-500" bgColor="bg-blue-50" />
-                <StatCard icon={<FaPlug size={20} />} title="Aktivitas Plugin" value={analyticsData.summary_today.plugin_activity} color="text-yellow-500" bgColor="bg-yellow-50" />
-              </div>
-            </div>
-
             {/* Bagian Grafik Tren */}
             <div className="bg-white px-7 pt-6 pb-7 rounded-lg">
-              <h2 className="text-gray-7 text-lg font-semibold mb-4">Tren Aktivitas (30 Hari Terakhir)</h2>
+              <div className="flex items-center justify-between  ">
+                <h2 className="text-gray-7 text-lg font-semibold mb-4">Grafik</h2>
+                <p className="text-sm text-gray-500 mb-4"> 30 hari terakhir</p>
+              </div>
               <div style={{ width: '100%', height: 320 }}>
                 <ResponsiveContainer>
                   <LineChart data={analyticsData.trend_analysis} margin={{ top: 5, left: -30, bottom: 5, right: 10 }}>
@@ -201,6 +188,25 @@ export default function WpAnalyticsPage() {
               </div>
             </div>
 
+            <div className="bg-white px-7 py-6 rounded-lg">
+              <h2 className="text-gray-7 text-lg font-semibold mb-4">Laporan Hari Ini</h2>
+              <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                <StatCard icon={<FaUserCheck size={20} />} title="Login Berhasil" value={analyticsData.summary_today.login_success} color="text-green-500" bgColor="bg-green-50" />
+                <StatCard icon={<FaUserTimes size={20} />} title="Login Gagal" value={analyticsData.summary_today.login_fail} color="text-red-500" bgColor="bg-red-50" />
+                <StatCard icon={<FaFileAlt size={20} />} title="Aktivitas Konten" value={analyticsData.summary_today.content_activity} color="text-blue-500" bgColor="bg-blue-50" />
+                <StatCard icon={<FaPlug size={20} />} title="Aktivitas Plugin" value={analyticsData.summary_today.plugin_activity} color="text-yellow-500" bgColor="bg-yellow-50" />
+              </div>
+              {todayLogs && (
+                <div className="space-y-6">
+                  <WpLogTable title="Aktivitas Login" logs={todayLogs.login} />
+                  <WpLogTable title="Aktivitas Plugin" logs={todayLogs.plugin} />
+                  <WpLogTable title="Aktivitas Konten" logs={todayLogs.content} />
+                  <WpLogTable title="Manajemen Pengguna" logs={todayLogs.user_management} />
+                  <WpLogTable title="Lainnya" logs={todayLogs.lainnya} />
+                </div>
+              )}
+            </div>
+
             {/* Bagian Top 5 */}
             <div className="bg-white px-7 py-6 rounded-lg">
               <h2 className="text-gray-7 text-lg font-semibold mb-4">Peringkat Teratas (30 Hari Terakhir)</h2>
@@ -212,18 +218,6 @@ export default function WpAnalyticsPage() {
             </div>
 
             {/* Detail Aktivitas Hari Ini */}
-            {todayLogs && (
-              <div className="bg-white px-7 py-6 rounded-lg">
-                <h2 className="text-gray-7 text-lg font-semibold mb-4">Detail Aktivitas Hari Ini</h2>
-                <div className="space-y-6">
-                  <WpLogTable title="Aktivitas Login" logs={todayLogs.login} />
-                  <WpLogTable title="Aktivitas Plugin" logs={todayLogs.plugin} />
-                  <WpLogTable title="Aktivitas Konten" logs={todayLogs.content} />
-                  <WpLogTable title="Manajemen Pengguna" logs={todayLogs.user_management} />
-                  <WpLogTable title="Lainnya" logs={todayLogs.lainnya} />
-                </div>
-              </div>
-            )}
           </div>
         )}
       </div>
