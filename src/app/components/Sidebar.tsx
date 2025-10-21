@@ -12,6 +12,7 @@ const navItems = [
   { name: 'Log', href: '/log', icon: FiFileMinus },
   { name: 'Trash', href: '/trash', icon: FiTrash2 },
   { name: 'WordPress Log', href: '/wp-log', icon: SiWordpress },
+  { name: 'Analytics', href: '/wp-analytics', icon: SiWordpress },
 ];
 
 interface SidebarProps {
