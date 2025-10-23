@@ -43,7 +43,7 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
     >
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={`flex items-center h-20 ${isOpen ? 'p-5 justify-between pt-6' : 'p-4 justify-center'}`}>
+        <div className={`flex items-center h-18 ${isOpen ? 'p-5 justify-between pt-6' : 'p-4 justify-center'}`}>
           <div className={`flex items-center space-x-1.5 ${!isOpen && 'p-0'} ${isOpen && 'p-3'}`}>
             <img src="https://assets.nsd.co.id/images/kampus/logo/Logo-Paramadina-Universitas-Paramadina-Original-PNG.png" className={`w-7 h-7 ${!isOpen && 'hidden'}`} alt="" />
             <span className={`font-bold text-[22px] text-gray-7 ${!isOpen && 'hidden'}`}>Dashboard</span>
