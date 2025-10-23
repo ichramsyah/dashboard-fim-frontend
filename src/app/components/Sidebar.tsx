@@ -45,8 +45,8 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
         {/* Header */}
         <div className={`flex items-center h-18 ${isOpen ? 'p-5 justify-between pt-6' : 'p-4 justify-center'}`}>
           <div className={`flex items-center space-x-1.5 ${!isOpen && 'p-0'} ${isOpen && 'p-3'}`}>
-            <img src="https://assets.nsd.co.id/images/kampus/logo/Logo-Paramadina-Universitas-Paramadina-Original-PNG.png" className={`w-7 h-7 ${!isOpen && 'hidden'}`} alt="" />
-            <span className={`font-bold text-[22px] text-gray-7 ${!isOpen && 'hidden'}`}>Dashboard</span>
+            <img src="../favicon.ico" className={`w-6 h-6 ${!isOpen && 'hidden'}`} alt="" />
+            <span className={`font-bold text-[22px] text-gray-8 ${!isOpen && 'hidden'}`}>Dashboard</span>
           </div>
           {/* Toggle */}
           <button onClick={toggle} className="hidden md:block p-1 mr-[-8px] rounded-full hover:bg-gray-7/10" title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
@@ -64,7 +64,7 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
               className={`
                 flex items-center py-2.5 rounded-md transition-all duration-300
                 ${isOpen ? 'px-4' : ' justify-center'}
-                ${pathname === item.href ? 'bg-gray-8 text-white' : 'text-gray-6 hover:bg-gray-2/50 hover:text-gray-9 hover:scale-[103%]'}
+                ${pathname === item.href ? 'bg-gray-9 text-white' : 'text-gray-6 hover:bg-gray-2/50 hover:text-gray-9 hover:scale-[103%]'}
               `}
             >
               <item.icon size={20} />
