@@ -43,8 +43,11 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
     >
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={`flex items-center h-16 ${isOpen ? 'p-6 justify-between' : 'p-4 justify-center'}`}>
-          <span className={`font-bold text-2xl text-gray-8 ${!isOpen && 'hidden'}`}>Dashboard</span>
+        <div className={`flex items-center h-18 ${isOpen ? 'p-5 justify-between pt-6' : 'p-4 justify-center'}`}>
+          <div className={`flex items-center space-x-1.5 ${!isOpen && 'p-0'} ${isOpen && 'p-3'}`}>
+            <img src="https://assets.nsd.co.id/images/kampus/logo/Logo-Paramadina-Universitas-Paramadina-Original-PNG.png" className={`w-7 h-7 ${!isOpen && 'hidden'}`} alt="" />
+            <span className={`font-bold text-[22px] text-gray-7 ${!isOpen && 'hidden'}`}>Dashboard</span>
+          </div>
           {/* Toggle */}
           <button onClick={toggle} className="hidden md:block p-1 mr-[-8px] rounded-full hover:bg-gray-7/10" title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
             {isOpen ? <FiChevronsLeft size={24} className="text-gray-4" /> : <FiChevronsRight size={24} className="text-gray-4" />}
@@ -52,14 +55,14 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
         </div>
 
         {/* Navigasi */}
-        <nav className="flex-1 py-4 space-y-2">
+        <nav className="flex-1 py-4 space-y-2 border-t border-gray-3 mx-5">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={handleLinkClick}
               className={`
-                flex items-center mx-4 py-2.5 rounded-md transition-all duration-300
+                flex items-center py-2.5 rounded-md transition-all duration-300
                 ${isOpen ? 'px-4' : ' justify-center'}
                 ${pathname === item.href ? 'bg-gray-9 text-white' : 'text-gray-6 hover:bg-gray-2/50 hover:text-gray-9 hover:scale-[103%]'}
               `}

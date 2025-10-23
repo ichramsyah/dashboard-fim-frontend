@@ -172,7 +172,7 @@ export default function Log() {
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
-          <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas</h1>
+          <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas FIM</h1>
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="relative">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
