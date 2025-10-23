@@ -64,7 +64,7 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
               className={`
                 flex items-center py-2.5 rounded-md transition-all duration-300
                 ${isOpen ? 'px-4' : ' justify-center'}
-                ${pathname === item.href ? 'bg-gray-9 text-white' : 'text-gray-6 hover:bg-gray-2/50 hover:text-gray-9 hover:scale-[103%]'}
+                ${pathname === item.href ? 'bg-gray-8 text-white' : 'text-gray-6 hover:bg-gray-2/50 hover:text-gray-9 hover:scale-[103%]'}
               `}
             >
               <item.icon size={20} />
