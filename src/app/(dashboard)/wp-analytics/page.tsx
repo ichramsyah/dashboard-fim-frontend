@@ -5,8 +5,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { CgSpinner } from 'react-icons/cg';
 import { FaUserCheck, FaUserTimes, FaFileAlt, FaPlug } from 'react-icons/fa';
 import api from '../../lib/api';
+import { DatePicker } from '../../components/DatePicker';
+import { format } from 'date-fns';
 
-// --- INTERFACE (Tidak ada perubahan) ---
 interface AnalyticsData {
   summary_today: {
     login_success: number;
@@ -152,23 +153,76 @@ export default function WpAnalyticsPage() {
   const [todayLogs, setTodayLogs] = useState<WpTodayLogs | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [todayData, setTodayData] = useState<{ stats: AnalyticsData['summary_today'] | null; logs: WpTodayLogs | null } | null>(null);
+  const [reportData, setReportData] = useState<{ stats: AnalyticsData['summary_today'] | null; logs: WpTodayLogs | null } | null>(null);
+  const [activeReportDate, setActiveReportDate] = useState<string>('Hari Ini');
+  const [isFetchingDetails, setIsFetchingDetails] = useState(false);
 
   useEffect(() => {
-    const fetchAllData = async () => {
+    const fetchInitialData = async () => {
       setIsLoading(true);
       setError(null);
       try {
         const [analyticsResponse, todayLogsResponse] = await Promise.all([api('wp-logs/analytics/'), api('wp-logs/today/')]);
         setAnalyticsData(analyticsResponse);
-        setTodayLogs(todayLogsResponse);
+        const initialTodayData = { stats: analyticsResponse.summary_today, logs: todayLogsResponse };
+        setTodayData(initialTodayData);
+        setReportData(initialTodayData);
+        setActiveReportDate('Hari Ini');
       } catch (err: any) {
         setError(err.message || 'Gagal memuat data analytics WordPress.');
       } finally {
         setIsLoading(false);
       }
     };
-    fetchAllData();
+    fetchInitialData();
   }, []);
+
+  const handleDateSelect = async (date: string) => {
+    if (date === format(new Date(), 'yyyy-MM-dd')) {
+      resetToToday();
+      return;
+    }
+    if (activeReportDate === date) return;
+
+    setIsFetchingDetails(true);
+    setActiveReportDate(date);
+    try {
+      const [statsResponse, logsResponse] = await Promise.all([api(`wp-logs/stats-by-date/?date=${date}`), api(`wp-logs/by-date/?date=${date}`)]);
+      setReportData({ stats: statsResponse.detail, logs: logsResponse });
+    } catch (err) {
+      console.error(`Gagal mengambil laporan WP untuk tanggal ${date}:`, err);
+    } finally {
+      setIsFetchingDetails(false);
+    }
+  };
+
+  const resetToToday = async () => {
+    if (activeReportDate === 'Hari Ini') return;
+
+    setIsFetchingDetails(true);
+    setActiveReportDate('Hari Ini');
+    try {
+      const [analyticsResponse, todayLogsResponse] = await Promise.all([api('wp-logs/analytics/'), api('wp-logs/today/')]);
+
+      const freshTodayData = {
+        stats: analyticsResponse.summary_today,
+        logs: todayLogsResponse,
+      };
+
+      setReportData(freshTodayData);
+      setTodayData(freshTodayData);
+    } catch (err) {
+      console.error('Gagal mengambil ulang data hari ini:', err);
+    } finally {
+      setIsFetchingDetails(false);
+    }
+  };
+
+  const availableDatesSet = new Set(analyticsData?.trend_analysis.map((d) => new Date(d.date).setHours(0, 0, 0, 0)) ?? []);
+  if (todayData?.stats) {
+    availableDatesSet.add(new Date().setHours(0, 0, 0, 0));
+  }
 
   return (
     <main className="min-h-screen">
@@ -208,23 +262,36 @@ export default function WpAnalyticsPage() {
             </div>
 
             <div className="bg-white px-7 py-6 rounded-lg">
-              <h2 className="text-gray-7 text-lg font-semibold mb-4">Laporan Hari Ini</h2>
-              <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                <StatCard icon={<FaUserCheck size={20} />} title="Login Berhasil" value={analyticsData.summary_today.login_success} color="text-green-500" bgColor="bg-green-50" />
-                <StatCard icon={<FaUserTimes size={20} />} title="Login Gagal" value={analyticsData.summary_today.login_fail} color="text-red-500" bgColor="bg-red-50" />
-                <StatCard icon={<FaFileAlt size={20} />} title="Aktivitas Konten" value={analyticsData.summary_today.content_activity} color="text-blue-500" bgColor="bg-blue-50" />
-                <StatCard icon={<FaPlug size={20} />} title="Aktivitas Plugin" value={analyticsData.summary_today.plugin_activity} color="text-yellow-500" bgColor="bg-yellow-50" />
+              <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <h2 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">
+                  Laporan untuk: <span className="text-blue-600 font-bold">{activeReportDate}</span>
+                </h2>
+                <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />
               </div>
 
-              {/* Tabel */}
-              {todayLogs && (
-                <div className="rounded-lg space-y-6 mt-6">
-                  <WpLogTable title="Aktivitas Auth" logs={todayLogs.login} headerColor="bg-green-100" />
-                  <WpLogTable title="Aktivitas Plugin" logs={todayLogs.plugin} headerColor="bg-yellow-100" />
-                  <WpLogTable title="Aktivitas Konten" logs={todayLogs.content} headerColor="bg-blue-100" />
-                  <WpLogTable title="Manajemen Pengguna" logs={todayLogs.user_management} headerColor="bg-purple-100" />
-                  <WpLogTable title="Lainnya" logs={todayLogs.lainnya} headerColor="bg-gray-100" />
+              {isFetchingDetails ? (
+                <div className="flex justify-center items-center h-64">
+                  <CgSpinner className="animate-spin text-gray-500" size={40} />
                 </div>
+              ) : (
+                <>
+                  <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-4">
+                    <StatCard icon={<FaUserCheck size={20} />} title="Login Berhasil" value={reportData?.stats?.login_success ?? 0} color="text-green-500" bgColor="bg-green-50" />
+                    <StatCard icon={<FaUserTimes size={20} />} title="Login Gagal" value={reportData?.stats?.login_fail ?? 0} color="text-red-500" bgColor="bg-red-50" />
+                    <StatCard icon={<FaFileAlt size={20} />} title="Aktivitas Konten" value={reportData?.stats?.content_activity ?? 0} color="text-blue-500" bgColor="bg-blue-50" />
+                    <StatCard icon={<FaPlug size={20} />} title="Aktivitas Plugin" value={reportData?.stats?.plugin_activity ?? 0} color="text-yellow-500" bgColor="bg-yellow-50" />
+                  </div>
+
+                  {reportData?.logs && (
+                    <div className="space-y-6 mt-10">
+                      <WpLogTable title="Aktivitas Login" logs={reportData.logs.login} headerColor="bg-blue-100" />
+                      <WpLogTable title="Aktivitas Plugin" logs={reportData.logs.plugin} headerColor="bg-yellow-100" />
+                      <WpLogTable title="Aktivitas Konten" logs={reportData.logs.content} headerColor="bg-green-100" />
+                      <WpLogTable title="Manajemen Pengguna" logs={reportData.logs.user_management} headerColor="bg-purple-100" />
+                      <WpLogTable title="Lainnya" logs={reportData.logs.lainnya} headerColor="bg-gray-100" />
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
@@ -237,8 +304,6 @@ export default function WpAnalyticsPage() {
                 <TopListTable title="Top IP Penyerang (Login Gagal)" data={analyticsData.top_5_failed_ips} headers={['Alamat IP', 'Percobaan']} />
               </div>
             </div>
-
-            {/* Detail Aktivitas Hari Ini */}
           </div>
         )}
       </div>
