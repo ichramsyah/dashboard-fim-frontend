@@ -272,9 +272,7 @@ export default function WpAnalyticsPage() {
 
             <div className="bg-white px-7 py-6 rounded-lg">
               <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <h2 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">
-                  Laporan untuk: <span className="text-blue-600 font-bold">{activeReportDate}</span>
-                </h2>
+                <h2 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">Laporan {activeReportDate}</h2>
                 <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />
               </div>
 
