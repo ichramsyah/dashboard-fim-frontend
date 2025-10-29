@@ -55,21 +55,21 @@ const StatCard = ({ icon, title, value, color, bgColor }: any) => (
 
 const TopListTable = ({ title, data, headers }: { title: string; data: [string, number][]; headers: [string, string] }) => (
   <div>
-    <h3 className="font-semibold text-gray-700 mb-3">{title}</h3>
+    <h3 className="text-sm font-semibold text-gray-600 mb-3">{title}</h3>
     {data.length > 0 ? (
-      <div className="overflow-x-auto rounded-md border border-gray-200">
+      <div className="overflow-x-auto rounded-md">
         <table className="min-w-full text-sm bg-white">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="p-3 text-left text-gray-600 font-semibold">{headers[0]}</th>
-              <th className="p-3 text-right text-gray-600 font-semibold">{headers[1]}</th>
+          <thead className="bg-purple-100/80">
+            <tr className="border-none">
+              <th className="p-3 text-left text-gray-600 font-semibold border-none ">{headers[0]}</th>
+              <th className="p-3 text-right text-gray-600 font-semibold border-none ">{headers[1]}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {data.map(([item, count]) => (
               <tr key={item}>
-                <td className="p-3 font-mono text-gray-700">{item}</td>
-                <td className="p-3 font-mono text-right text-gray-500">{count}</td>
+                <td className="p-3 font-mono text-gray-700 border-none ">{item}</td>
+                <td className="p-3 font-mono text-right text-gray-500 border-none ">{count}</td>
               </tr>
             ))}
           </tbody>
@@ -123,20 +123,20 @@ const WpLogTable = ({ title, logs, headerColor }: { title: string; logs: WpLogEn
           </thead>
           <tbody className="divide-y divide-gray-200 md:divide-y-0">
             {logs.map((log) => (
-              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none bg-white">
-                <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none bg-white">
+                <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
                   <span className="text-gray-500">{log.timestamp.split(' ')[1]}</span>
                 </td>
-                <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border-b md:border-none">
+                <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border border-gray-100 md:border-none">
                   {log.user}
                 </td>
-                <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-500 border-b md:border-none">
+                <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-500 border border-gray-100 md:border-none">
                   {log.ip}
                 </td>
-                <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-b md:border-none">
+                <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
                   <span className={`px-2 py-1 text-xs rounded-full font-medium ${getActionBadgeColor(log.action)}`}>{log.action}</span>
                 </td>
-                <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-600 border-b md:border-none break-all">
+                <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-600 border border-gray-100 md:border-none break-all">
                   {log.details}
                 </td>
               </tr>
@@ -272,9 +272,7 @@ export default function WpAnalyticsPage() {
 
             <div className="bg-white px-7 py-6 rounded-lg">
               <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <h2 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">
-                  Laporan untuk: <span className="text-blue-600 font-bold">{activeReportDate}</span>
-                </h2>
+                <h2 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">Laporan {activeReportDate}</h2>
                 <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />
               </div>
 
@@ -304,13 +302,15 @@ export default function WpAnalyticsPage() {
               )}
             </div>
 
-            {/* Bagian Top 5 (Tidak berubah) */}
+            {/* Bagian Top 5 */}
             <div className="bg-white px-7 py-6 rounded-lg">
-              <h2 className="text-gray-7 text-lg font-semibold mb-4">Peringkat Teratas (30 Hari Terakhir)</h2>
+              <h2 className="text-gray-7 text-lg font-semibold mb-4">
+                Peringkat Teratas <span className="text-gray-500 font-medium text-sm pl-2">(30 Hari Terakhir)</span>
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <TopListTable title="Pengguna Paling Aktif" data={analyticsData.top_5_users} headers={['Username', 'Aktivitas']} />
                 <TopListTable title="Alamat IP Paling Aktif" data={analyticsData.top_5_ips} headers={['Alamat IP', 'Aktivitas']} />
-                <TopListTable title="Top IP Penyerang (Login Gagal)" data={analyticsData.top_5_failed_ips} headers={['Alamat IP', 'Percobaan']} />
+                <TopListTable title="IP Gagal Login" data={analyticsData.top_5_failed_ips} headers={['Alamat IP', 'Percobaan']} />
               </div>
             </div>
           </div>

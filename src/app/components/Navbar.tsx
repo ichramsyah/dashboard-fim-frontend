@@ -6,6 +6,8 @@ import { FiLogOut, FiMenu, FiRefreshCw } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -16,6 +18,7 @@ interface NavbarProps {
 export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: NavbarProps) {
   const router = useRouter();
   const [incronStatus, setIncronStatus] = useState<boolean | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   const checkIncronStatus = () => {
     api('incron/control/')
@@ -25,6 +28,17 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
 
   useEffect(() => {
     checkIncronStatus();
+  }, []);
+
+  useEffect(() => {
+    checkIncronStatus();
+    const timerId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timerId);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -51,7 +65,11 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
             <FiMenu size={28} />
           </button>
 
-          <div className="flex-1 flex justify-end">
+          <div className="flex-1 flex items-center md:justify-between justify-end space-x-4 md:space-x-6">
+            <div className="hidden sm:flex items-center text-[13px]">
+              <p className="text-gray-800 bg-gray-100 px-3 py-1.5 rounded-md space-x-2 ">{format(currentTime, 'EEEE, dd/MM/yyyy', { locale: id })}</p>
+              <p className="pl-3 text-gray-6 text-[13px]"> {format(currentTime, 'HH:mm:ss', { locale: id })} WIB</p>
+            </div>
             <div className="flex items-center justify-between space-x-3 md:space-x-4">
               <div className="flex">
                 {incronStatus === null ? (
@@ -75,7 +93,7 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
                 )}
               </div>
 
-              <button onClick={handleLogout} className="bg-red-600 cursor-pointer text-white px-4 py-1.5 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-2 duration-300">
+              <button onClick={handleLogout} className="bg-red-600 cursor-pointer text-white text-sm  px-4 py-1.5 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-1 duration-300">
                 <FiLogOut /> <span>Logout</span>
               </button>
             </div>
