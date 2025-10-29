@@ -150,33 +150,39 @@ const WpLogTable = ({ title, logs, headerColor }: { title: string; logs: WpLogEn
 
 export default function WpAnalyticsPage() {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
-  const [todayLogs, setTodayLogs] = useState<WpTodayLogs | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [todayData, setTodayData] = useState<{ stats: AnalyticsData['summary_today'] | null; logs: WpTodayLogs | null } | null>(null);
   const [reportData, setReportData] = useState<{ stats: AnalyticsData['summary_today'] | null; logs: WpTodayLogs | null } | null>(null);
   const [activeReportDate, setActiveReportDate] = useState<string>('Hari Ini');
   const [isFetchingDetails, setIsFetchingDetails] = useState(false);
+  const [daysTrend, setDaysTrend] = useState(7);
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-      setIsLoading(true);
+    const fetchAllData = async () => {
+      if (!analyticsData || isFetchingDetails) {
+        setIsLoading(true);
+      }
       setError(null);
       try {
-        const [analyticsResponse, todayLogsResponse] = await Promise.all([api('wp-logs/analytics/'), api('wp-logs/today/')]);
+        const [analyticsResponse, todayLogsResponse] = await Promise.all([api(`wp-logs/analytics/?days=${daysTrend}`), api('wp-logs/today/')]);
         setAnalyticsData(analyticsResponse);
+
         const initialTodayData = { stats: analyticsResponse.summary_today, logs: todayLogsResponse };
         setTodayData(initialTodayData);
-        setReportData(initialTodayData);
-        setActiveReportDate('Hari Ini');
+
+        if (activeReportDate === 'Hari Ini' || !reportData) {
+          setReportData(initialTodayData);
+          setActiveReportDate('Hari Ini');
+        }
       } catch (err: any) {
         setError(err.message || 'Gagal memuat data analytics WordPress.');
       } finally {
         setIsLoading(false);
       }
     };
-    fetchInitialData();
-  }, []);
+    fetchAllData();
+  }, [daysTrend]);
 
   const handleDateSelect = async (date: string) => {
     if (date === format(new Date(), 'yyyy-MM-dd')) {
@@ -203,13 +209,11 @@ export default function WpAnalyticsPage() {
     setIsFetchingDetails(true);
     setActiveReportDate('Hari Ini');
     try {
-      const [analyticsResponse, todayLogsResponse] = await Promise.all([api('wp-logs/analytics/'), api('wp-logs/today/')]);
-
+      const [analyticsResponse, todayLogsResponse] = await Promise.all([api(`wp-logs/analytics/?days=${daysTrend}`), api('wp-logs/today/')]);
       const freshTodayData = {
         stats: analyticsResponse.summary_today,
         logs: todayLogsResponse,
       };
-
       setReportData(freshTodayData);
       setTodayData(freshTodayData);
     } catch (err) {
@@ -238,11 +242,16 @@ export default function WpAnalyticsPage() {
           <p className="text-center text-gray-500 p-8">Tidak ada data analytics untuk ditampilkan.</p>
         ) : (
           <div className="space-y-7">
-            {/* Bagian Grafik Tren */}
             <div className="bg-white px-7 pt-6 pb-7 rounded-lg">
-              <div className="flex items-center justify-between  ">
-                <h2 className="text-gray-7 text-lg font-semibold mb-4">Grafik</h2>
-                <p className="text-sm text-gray-500 mb-4"> 30 hari terakhir</p>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
+                <h2 className="text-gray-7 text-lg font-semibold mb-2 sm:mb-0">Grafik Aktivitas</h2>
+                <div className="flex items-center gap-2">
+                  {[7, 15, 30].map((d) => (
+                    <button key={d} onClick={() => setDaysTrend(d)} className={`px-3 py-1 text-sm rounded-md transition-colors ${daysTrend === d ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}>
+                      {d} Hari
+                    </button>
+                  ))}
+                </div>
               </div>
               <div style={{ width: '100%', height: 320 }}>
                 <ResponsiveContainer>
@@ -295,7 +304,7 @@ export default function WpAnalyticsPage() {
               )}
             </div>
 
-            {/* Bagian Top 5 */}
+            {/* Bagian Top 5 (Tidak berubah) */}
             <div className="bg-white px-7 py-6 rounded-lg">
               <h2 className="text-gray-7 text-lg font-semibold mb-4">Peringkat Teratas (30 Hari Terakhir)</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
