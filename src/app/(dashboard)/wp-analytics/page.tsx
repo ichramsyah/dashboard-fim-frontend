@@ -55,7 +55,7 @@ const StatCard = ({ icon, title, value, color, bgColor }: any) => (
 
 const TopListTable = ({ title, data, headers }: { title: string; data: [string, number][]; headers: [string, string] }) => (
   <div>
-    <h3 className="font-semibold text-gray-700 mb-3">{title}</h3>
+    <h3 className="text-sm font-semibold text-gray-600 mb-3">{title}</h3>
     {data.length > 0 ? (
       <div className="overflow-x-auto rounded-md border border-gray-200">
         <table className="min-w-full text-sm bg-white">
@@ -302,13 +302,15 @@ export default function WpAnalyticsPage() {
               )}
             </div>
 
-            {/* Bagian Top 5 (Tidak berubah) */}
+            {/* Bagian Top 5 */}
             <div className="bg-white px-7 py-6 rounded-lg">
-              <h2 className="text-gray-7 text-lg font-semibold mb-4">Peringkat Teratas (30 Hari Terakhir)</h2>
+              <h2 className="text-gray-7 text-lg font-semibold mb-4">
+                Peringkat Teratas <span className="text-gray-500 font-medium text-sm pl-2">(30 Hari Terakhir)</span>
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <TopListTable title="Pengguna Paling Aktif" data={analyticsData.top_5_users} headers={['Username', 'Aktivitas']} />
                 <TopListTable title="Alamat IP Paling Aktif" data={analyticsData.top_5_ips} headers={['Alamat IP', 'Aktivitas']} />
-                <TopListTable title="Top IP Penyerang (Login Gagal)" data={analyticsData.top_5_failed_ips} headers={['Alamat IP', 'Percobaan']} />
+                <TopListTable title="IP Gagal Login" data={analyticsData.top_5_failed_ips} headers={['Alamat IP', 'Percobaan']} />
               </div>
             </div>
           </div>
