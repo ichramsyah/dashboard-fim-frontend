@@ -71,7 +71,7 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
               <p className="pl-3 text-gray-6 text-[13px]"> {format(currentTime, 'HH:mm:ss', { locale: id })} WIB</p>
             </div>
             <div className="flex items-center justify-between space-x-3 md:space-x-4">
-              <div className="flex">
+              <div className="flex pr-2">
                 {incronStatus === null ? (
                   <p className="text-gray-500">Mengecek...</p>
                 ) : incronStatus ? (
@@ -93,7 +93,7 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
                 )}
               </div>
 
-              <button onClick={handleLogout} className="bg-red-600 cursor-pointer text-white text-sm  px-4 py-1.5 rounded-[5px] hover:rounded-[100px] transition-all flex items-center space-x-1 duration-300">
+              <button onClick={handleLogout} className="bg-red-600 cursor-pointer text-white text-sm  px-3.5 py-1.5 rounded-[7px] hover:rounded-[100px] transition-all flex items-center space-x-1 duration-300">
                 <FiLogOut /> <span>Logout</span>
               </button>
             </div>

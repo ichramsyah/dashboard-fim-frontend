@@ -9,6 +9,9 @@ interface LogEntry {
   nama_file: string;
   path_lengkap: string;
   tag: string;
+  comm: string;
+  exe: string;
+  user: string;
 }
 
 interface LogTableProps {
@@ -37,9 +40,12 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
           <thead className={`${bgColor} hidden md:table-header-group`}>
             <tr>
               <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
-              <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
               <th className="p-4 text-left text-gray-600 font-semibold">Nama File</th>
-              <th className="p-4 text-left text-gray-600 font-semibold">Path Lengkap</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">User</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">Command</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">Eksekusi</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
+              <th className="p-4 text-left text-gray-600 font-semibold">Path File</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 md:divide-y-0">
@@ -47,6 +53,18 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
               <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none bg-white">
                 <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                   <span className="text-gray-500">{log.jam}</span>
+                </td>
+                <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                  {log.nama_file}
+                </td>
+                <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                  {log.user}
+                </td>
+                <td data-label="Command:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                  {log.comm}
+                </td>
+                <td data-label="Eksekusi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                  {log.exe}
                 </td>
                 <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                   <span
@@ -57,9 +75,7 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
                     {log.metode}
                   </span>
                 </td>
-                <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
-                  {log.nama_file}
-                </td>
+
                 <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-500  break-all">
                   {log.path_lengkap}
                 </td>

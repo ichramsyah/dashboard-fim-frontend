@@ -12,11 +12,15 @@ import Swal from 'sweetalert2';
 interface LogEntry {
   id: string;
   tanggal: string;
+
   jam: string;
   metode: string;
   nama_file: string;
   path_lengkap: string;
   tag: string;
+  user: string;
+  comm: string;
+  exe: string;
 }
 
 interface PaginationInfo {
@@ -256,10 +260,13 @@ export default function Log() {
 
                   <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">User</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Nama File</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Path Lengkap</th>
+                  <th className="py-4 px-0 text-left text-gray-600 font-semibold">Nama File</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Command</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Eksekusi</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Kondisi</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Path File</th>
                   <th className="p-4 text-center text-gray-600 font-semibold"></th>
                 </tr>
               </thead>
@@ -279,9 +286,15 @@ export default function Log() {
                       </div>
                     </td>
                     {/* Jam */}
-                    <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
+                    <td data-label="Jam:" className="p-2 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
                         <span className="text-gray-500 text-xs">{log.jam}</span>
+                      </div>
+                    </td>
+                    {/* User */}
+                    <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
+                      <div className="flex flex-col">
+                        <span className="text-gray-700 text-xs">{log.user}</span>
                       </div>
                     </td>
                     {/* Metode */}
@@ -289,16 +302,24 @@ export default function Log() {
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${log.tag.includes('BAHAYA') || log.tag.includes('MENCURIGAKAN') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>{log.metode}</span>
                     </td>
                     {/* Nama File */}
-                    <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                    <td data-label="File:" className="py-4 px-0 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
                       {log.nama_file}
                     </td>
-                    {/* Path Lengkap */}
-                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700  break-all">
-                      {log.path_lengkap}
+                    {/* Command */}
+                    <td data-label="Command:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                      {log.comm}
+                    </td>
+                    {/* Exe */}
+                    <td data-label="Exe:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 break-all">
+                      {log.exe}
                     </td>
                     {/* Kondisi */}
                     <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
                       {log.tag}
+                    </td>
+                    {/* Path Lengkap */}
+                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 break-all">
+                      {log.path_lengkap}
                     </td>
                     {/* Aksi */}
                     <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-center">
