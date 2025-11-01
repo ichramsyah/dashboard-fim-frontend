@@ -266,7 +266,7 @@ export default function Log() {
                   <th className="p-4 text-left text-gray-600 font-semibold">Command</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Eksekusi</th>
                   <th className="p-4 text-left text-gray-600 font-semibold">Kondisi</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Path</th>
+                  <th className="p-4 text-left text-gray-600 font-semibold">Path File</th>
                   <th className="p-4 text-center text-gray-600 font-semibold"></th>
                 </tr>
               </thead>

@@ -26,6 +26,9 @@ interface LogEntry {
   nama_file: string;
   path_lengkap: string;
   tag: string;
+  comm: string;
+  exe: string;
+  user: string;
 }
 interface TodayLogs {
   normal: LogEntry[];
