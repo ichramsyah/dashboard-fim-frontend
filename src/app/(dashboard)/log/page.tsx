@@ -294,7 +294,7 @@ export default function Log() {
                     {/* User */}
                     <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
-                        <span className="text-gray-500 text-xs">{log.user}</span>
+                        <span className="text-gray-700 text-xs">{log.user}</span>
                       </div>
                     </td>
                     {/* Metode */}
