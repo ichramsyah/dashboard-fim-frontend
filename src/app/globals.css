@@ -7,6 +7,7 @@
     font-weight: 600;
     margin-right: 1rem;
     color: #4a5568;
+    color: #1a1919;
   }
 }
 
@@ -27,6 +28,8 @@ body {
   /* Background */
   --color-background-dark: #0f0e0e; /* Dark background */
 
+  /* Main Background */
+  --color-background-main: #1a1919;
   /* 0F0E0E */
 
   /* Gray Scale */

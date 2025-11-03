@@ -4,12 +4,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiHome, FiTrash2, FiChevronsLeft, FiChevronsRight, FiFileMinus, FiGrid, FiBarChart } from 'react-icons/fi';
+import { FiHome, FiTrash2, FiChevronsLeft, FiChevronsRight, FiFileMinus, FiGrid, FiBarChart, FiFileText } from 'react-icons/fi';
 import { SiWordpress } from 'react-icons/si';
 
 const navItems = [
   { name: 'Analytics', href: '/', icon: FiBarChart },
-  { name: 'Log', href: '/log', icon: FiFileMinus },
+  { name: 'Log', href: '/log', icon: FiFileText },
   { name: 'Trash', href: '/trash', icon: FiTrash2 },
   { name: 'Analytics', href: '/wp-analytics', icon: SiWordpress },
   { name: 'WordPress Log', href: '/wp-log', icon: SiWordpress },
@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
   return (
     <aside
       className={`
-        bg-whitee text-gray-9
+        bg-background-dark text-gray-9
         fixed top-0 left-0 h-full z-30
         transition-all duration-300 ease-in-out
         ${isOpen ? 'w-64' : 'w-20'}
@@ -43,19 +43,18 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
     >
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={`flex items-center h-18 ${isOpen ? 'p-5 justify-between pt-6' : 'p-4 justify-center'}`}>
+        <div className={`flex items-center h-24 ${isOpen ? 'p-5 justify-center pt-6' : 'p-4 justify-center'}`}>
           <div className={`flex items-center space-x-1.5 ${!isOpen && 'p-0'} ${isOpen && 'p-3'}`}>
-            <img src="../favicon.ico" className={`w-6 h-6 ${!isOpen && 'hidden'}`} alt="" />
-            <span className={`font-bold text-[22px] text-gray-8 ${!isOpen && 'hidden'}`}>Dashboard</span>
+            <img src="https://catalogue.paramadina.ac.id/template/paramadina/assets/images/logo__.png?v=20251023021109" className={`w-30 object-cover ${!isOpen && 'hidden'}`} alt="" />
           </div>
           {/* Toggle */}
-          <button onClick={toggle} className="hidden md:block p-1 mr-[-8px] rounded-full hover:bg-gray-7/10" title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
-            {isOpen ? <FiChevronsLeft size={24} className="text-gray-4" /> : <FiChevronsRight size={24} className="text-gray-4" />}
+          <button onClick={toggle} className="absolute right-[-20px] top-8 md:block p-2 bg-background-dark rounded-r-full" title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
+            {isOpen ? <FiChevronsLeft size={26} className="text-gray-2" /> : <FiChevronsRight size={26} className="text-gray-2" />}
           </button>
         </div>
 
         {/* Navigasi */}
-        <nav className="flex-1 py-4 space-y-2 border-t border-gray-3 mx-5">
+        <nav className="flex-1 py-4 space-y-2 border-t border-gray-6 mx-5">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -64,7 +63,7 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
               className={`
                 flex items-center py-2.5 rounded-md transition-all duration-300
                 ${isOpen ? 'px-4' : ' justify-center'}
-                ${pathname === item.href ? 'bg-gray-9 text-white' : 'text-gray-6 hover:bg-gray-2/50 hover:text-gray-9 hover:scale-[103%]'}
+                ${pathname === item.href ? 'bg-gray-5/20 text-gray-1' : 'text-gray-2/60 hover:bg-gray-5/20 hover:text-gray-1 hover:scale-[103%]'}
               `}
             >
               <item.icon size={20} />

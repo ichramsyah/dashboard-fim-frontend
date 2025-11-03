@@ -25,7 +25,7 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
     return (
       <div className="mb-6">
         <h3 className={`text-sm text-gray-7 font-semibold mb-2`}>{title} (0)</h3>
-        <div className="text-center text-gray-500 p-8 bg-white rounded-lg border border-gray-200">Tidak ada data log yang tersedia.</div>
+        <div className="text-center text-gray-500 p-8 rounded-lg border border-gray-200">Tidak ada data log yang tersedia.</div>
       </div>
     );
   }
@@ -50,7 +50,7 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
           </thead>
           <tbody className="divide-y divide-gray-200 md:divide-y-0">
             {logs.map((log) => (
-              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none bg-white">
+              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none">
                 <td data-label="Jam:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                   <span className="text-gray-500">{log.jam}</span>
                 </td>

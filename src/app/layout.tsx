@@ -11,7 +11,7 @@ const nexaFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'FIM Dashboard',
+  title: 'FIM - Dashboard',
   description: 'File Integrity Monitoring Dashboard',
 };
 
