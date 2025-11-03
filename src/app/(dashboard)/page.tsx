@@ -98,12 +98,12 @@ export default function Home() {
     availableDatesSet.add(new Date().setHours(0, 0, 0, 0));
   }
 
-  const StatCard = ({ icon, title, value, color, bgColor }: any) => (
-    <div className={`flex-1 pl-4 py-3.5 rounded-lg flex items-center ${bgColor}`}>
-      <div className={`rounded-full mr-4 ${color} p-2 bg-white`}>{icon}</div>
+  const StatCard = ({ icon, title, value, color }: any) => (
+    <div className={`flex-1 pl-4 py-5 rounded-lg flex items-center bg-gray-6/10 border border-gray-6/40`}>
+      <div className={`rounded-full mr-4 ${color} p-4 bg-gray-7/30`}>{icon}</div>
       <div>
-        <p className="text-sm text-gray-700">{title}</p>
-        <p className="text-xl font-bold text-gray-600">{value}</p>
+        <p className="text-[16px] text-gray-400">{title}</p>
+        <p className="mt-1 text-[25px] font-bold text-gray-100">{value}</p>
       </div>
     </div>
   );
@@ -120,7 +120,7 @@ export default function Home() {
           </div>
         ) : (
           <div>
-            <div className=" pt-6 pb-7 rounded-lg">
+            <div className=" pt-6 pb-5 rounded-lg">
               {/* Bagian Grafik */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
                 <h2 className="text-gray-3 text-lg mb-2 sm:mb-0">Grafik</h2>
@@ -145,12 +145,12 @@ export default function Home() {
               )}
             </div>
 
-            <div className="bg-white px-7 py-6 rounded-lg mt-7">
+            <div className=" py-6 rounded-lg">
               {/* Bagian Laporan */}
               <div className="px-1 w-full pb-6">
                 <div className="mb-6">
                   <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                    <h3 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">Laporan {activeReportDate}</h3>
+                    <h3 className="text-gray-3 text-lg mb-3 sm:mb-0">Laporan {activeReportDate}</h3>
                     <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />
                   </div>
                 </div>
@@ -162,10 +162,10 @@ export default function Home() {
                 ) : (
                   <>
                     <div className="gap-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-4">
-                      <StatCard icon={<FaShieldAlt size={22} />} title="Total Perubahan" value={reportData?.stats?.total_perubahan_hari_ini ?? 0} color="text-gray-700/80" bgColor="bg-gray-100" />
-                      <StatCard icon={<FaBell size={22} />} title="Normal" value={reportData?.stats?.detail.normal ?? 0} color="text-blue-500/80" bgColor="bg-blue-100" />
-                      <StatCard icon={<FaExclamationTriangle size={22} />} title="Mencurigakan" value={reportData?.stats?.detail.mencurigakan ?? 0} color="text-yellow-500/80" bgColor="bg-yellow-100" />
-                      <StatCard icon={<FaExclamationTriangle size={22} />} title="Bahaya" value={reportData?.stats?.detail.bahaya ?? 0} color="text-red-500/80" bgColor="bg-red-100" />
+                      <StatCard icon={<FaShieldAlt size={22} />} title="Total Perubahan" value={reportData?.stats?.total_perubahan_hari_ini ?? 0} color="text-gray-200/80" />
+                      <StatCard icon={<FaBell size={22} />} title="Normal" value={reportData?.stats?.detail.normal ?? 0} color="text-blue-500/80" />
+                      <StatCard icon={<FaExclamationTriangle size={22} />} title="Mencurigakan" value={reportData?.stats?.detail.mencurigakan ?? 0} color="text-yellow-500/80" />
+                      <StatCard icon={<FaExclamationTriangle size={22} />} title="Bahaya" value={reportData?.stats?.detail.bahaya ?? 0} color="text-red-500/80" />
                     </div>
                     <div className="mt-8 grid grid-cols-1 lg:grid-cols-1 gap-6">
                       <LogTable title="Normal" logs={reportData?.logs.normal ?? []} bgColor="bg-blue-100" />
