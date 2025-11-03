@@ -108,10 +108,16 @@ export default function CustomAreaChart({ data, width, height, onDateSelect }: C
               return `${date.getDate()}/${date.getMonth() + 1}`;
             }}
           />
-          <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getBahayaValue(d))} yScale={valueScale} fill="url(#grad-bahaya)" stroke="none" curve={curveMonotoneX} />
-          <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getMencurigakanValue(d))} yScale={valueScale} fill="url(#grad-mencurigakan)" stroke="none" curve={curveMonotoneX} />
-          <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getNormalValue(d))} yScale={valueScale} fill="url(#grad-normal)" stroke="none" curve={curveMonotoneX} />
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0 }}>
+            <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getBahayaValue(d))} yScale={valueScale} fill="url(#grad-bahaya)" stroke="none" curve={curveMonotoneX} />
+          </motion.g>
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.1 }}>
+            <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getMencurigakanValue(d))} yScale={valueScale} fill="url(#grad-mencurigakan)" stroke="none" curve={curveMonotoneX} />
+          </motion.g>
 
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}>
+            <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getNormalValue(d))} yScale={valueScale} fill="url(#grad-normal)" stroke="none" curve={curveMonotoneX} />
+          </motion.g>
           <motion.path d={pathBahaya} fill="transparent" stroke="#f48c8c" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.2 }} />
           <motion.path
             d={pathMencurigakan}
