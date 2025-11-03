@@ -76,19 +76,19 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
                   <p className="text-gray-500">Mengecek...</p>
                 ) : incronStatus ? (
                   <div className="flex items-center bg-gray-6/30 px-5 py-1.5 rounded-full">
-                    <h2 className="text-gray-300 pr-2 text-sm">Incron Aktif</h2>
                     <span className="relative flex h-3 w-3">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-green-400"></span>
                     </span>
+                    <h2 className="text-gray-300 pl-2 text-sm">Incron Aktif</h2>
                   </div>
                 ) : (
                   <div className="flex items-center bg-gray-6/30 px-5 py-1.5 rounded-full">
-                    <h2 className="text-gray-300 pr-2 text-sm">Incron Tidak Aktif</h2>
                     <span className="relative flex h-3 w-3">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                     </span>
+                    <h2 className="text-gray-300 pr-2 text-sm">Incron Tidak Aktif</h2>
                   </div>
                 )}
               </div>
