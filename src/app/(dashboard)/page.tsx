@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { CgSpinner } from 'react-icons/cg';
 import { FaExclamationTriangle, FaBell, FaShieldAlt } from 'react-icons/fa';
 import api from '../lib/api';
 import LogTable from '../components/LogTable';
 import { DatePicker } from '../components/DatePicker';
-import { format } from 'date-fns';
+import { ParentSize } from '@visx/responsive';
+import CustomAreaChart from '../components/CustomAreaChart';
 
 interface TodayStats {
   tanggal_analisis: string;
@@ -134,17 +134,7 @@ export default function Home() {
               </div>
               {historicalData.length > 0 ? (
                 <div style={{ width: '100%', height: 320, cursor: 'pointer' }}>
-                  <ResponsiveContainer>
-                    <LineChart data={historicalData} margin={{ top: 5, left: -30, bottom: 5, right: 10 }} onClick={(e: any) => e?.activePayload?.[0]?.payload?.tanggal && handleDateSelect(e.activePayload[0].payload.tanggal)}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="tanggal" fontSize={12} tickFormatter={(tick) => tick.substring(5)} />
-                      <YAxis allowDecimals={false} fontSize={12} />
-                      <Tooltip /> <Legend />
-                      <Line type="monotone" dataKey="detail.bahaya" name="Bahaya" stroke="#f48c8cff" strokeWidth={2} />
-                      <Line type="monotone" dataKey="detail.mencurigakan" name="Mencurigakan" stroke="#f0ce95ff" strokeWidth={2} />
-                      <Line type="monotone" dataKey="detail.normal" name="Normal" stroke="#a3c3f8ff" strokeWidth={2} />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  <ParentSize>{({ width, height }) => <CustomAreaChart data={historicalData} width={width} height={height} onDateSelect={handleDateSelect} />}</ParentSize>
                 </div>
               ) : (
                 <div className="text-center text-gray-500 p-8 bg-white rounded-lg border border-gray-200">Tidak ada data historis yang tersedia.</div>
