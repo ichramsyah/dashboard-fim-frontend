@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { CgSpinner } from 'react-icons/cg';
 import { FaUserCheck, FaUserTimes, FaFileAlt, FaPlug } from 'react-icons/fa';
 import api from '../../lib/api';
 import { DatePicker } from '../../components/DatePicker';
 import { format } from 'date-fns';
+import { ParentSize } from '@visx/responsive';
+import CustomWpAreaChart from '../../components/CustomWpAreaChart';
 
 interface AnalyticsData {
   summary_today: {
@@ -254,19 +255,9 @@ export default function WpAnalyticsPage() {
                 </div>
               </div>
               <div style={{ width: '100%', height: 320 }}>
-                <ResponsiveContainer>
-                  <LineChart data={analyticsData.trend_analysis} margin={{ top: 5, left: -30, bottom: 5, right: 10 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" fontSize={12} tickFormatter={(tick) => tick.substring(5)} />
-                    <YAxis allowDecimals={false} fontSize={12} />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="login_fail" name="Login Gagal" stroke="#ef4444" strokeWidth={2} />
-                    <Line type="monotone" dataKey="login_success" name="Login Sukses" stroke="#22c55e" strokeWidth={2} />
-                    <Line type="monotone" dataKey="content" name="Konten" stroke="#3b82f6" />
-                    <Line type="monotone" dataKey="plugin" name="Plugin" stroke="#f59e0b" />
-                  </LineChart>
-                </ResponsiveContainer>
+                <div style={{ width: '100%', height: 320, cursor: 'pointer' }}>
+                  <ParentSize>{({ width, height }) => <CustomWpAreaChart data={analyticsData.trend_analysis} width={width} height={height} onDateSelect={handleDateSelect} />}</ParentSize>
+                </div>
               </div>
             </div>
 
