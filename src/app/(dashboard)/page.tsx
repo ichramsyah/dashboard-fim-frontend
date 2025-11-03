@@ -120,20 +120,24 @@ export default function Home() {
           </div>
         ) : (
           <div>
-            <div className="bg-white px-7 pt-6 pb-7 rounded-lg">
+            <div className=" pt-6 pb-7 rounded-lg">
               {/* Bagian Grafik */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
-                <h2 className="text-gray-7 text-lg font-semibold mb-2 sm:mb-0">Grafik</h2>
+                <h2 className="text-gray-3 text-lg mb-2 sm:mb-0">Grafik</h2>
                 <div className="flex items-center gap-2">
                   {[7, 15, 30].map((d) => (
-                    <button key={d} onClick={() => setDays(d)} className={`px-3 py-1 text-sm rounded-md transition-colors cursor-pointer ${days === d ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}>
+                    <button
+                      key={d}
+                      onClick={() => setDays(d)}
+                      className={`px-4 py-1 text-sm rounded-md transition-all cursor-pointer ${days === d ? 'bg-gray-5/40 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
+                    >
                       {d} Hari
                     </button>
                   ))}
                 </div>
               </div>
               {historicalData.length > 0 ? (
-                <div style={{ width: '100%', height: 320, cursor: 'pointer' }}>
+                <div style={{ width: '100%', height: 350, cursor: 'pointer' }}>
                   <ParentSize>{({ width, height }) => <CustomAreaChart data={historicalData} width={width} height={height} onDateSelect={handleDateSelect} />}</ParentSize>
                 </div>
               ) : (

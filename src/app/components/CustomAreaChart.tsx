@@ -75,13 +75,13 @@ export default function CustomAreaChart({ data, width, height, onDateSelect }: C
   return (
     <div style={{ position: 'relative' }}>
       <svg width={width} height={height}>
-        <rect x={0} y={0} width={width} height={height} fill="#ffffff" rx={50} />
+        <rect x={0} y={0} width={width} height={height} fill="#0f0e0e" rx={50} />
         <LinearGradient id="grad-bahaya" from="#f48c8c" to="#f48c8c" toOpacity={0} />
         <LinearGradient id="grad-mencurigakan" from="#f0ce95" to="#f0ce95" toOpacity={0} />
         <LinearGradient id="grad-normal" from="#a3c3f8" to="#a3c3f8" toOpacity={0} />
 
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-          <GridRows scale={valueScale} width={innerWidth} stroke="#e0e0e0" strokeDasharray="2,5" />
+          <GridRows scale={valueScale} width={innerWidth} stroke="#676767ff" strokeDasharray="2,5" />
           <AxisLeft
             scale={valueScale}
             stroke="#888"
