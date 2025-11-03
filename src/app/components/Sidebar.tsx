@@ -48,7 +48,7 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
             <img src="./img/logo_paramadina.png" className={`w-34 object-cover ${!isOpen && 'hidden'}`} alt="" />
           </div>
           {/* Toggle */}
-          <button onClick={toggle} className="absolute right-3 top-8 md:block p-2 bg-background-dark rounded-r-full" title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
+          <button onClick={toggle} className={`absolute ${isOpen ? 'right-[-10px]' : 'right-3'} md:block p-2 bg-background-dark rounded-r-full`} title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
             {isOpen ? <FiChevronsLeft size={26} className="text-gray-2" /> : <FiChevronsRight size={26} className="text-gray-2" />}
           </button>
         </div>
