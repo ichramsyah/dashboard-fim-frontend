@@ -23,7 +23,7 @@ export default function DashboardClientLayout({ children }: LayoutProps) {
   }, [isDesktop]);
 
   return (
-    <div className="bg-neutral-2/70 min-h-screen">
+    <div className="bg-background-dark min-h-screen">
       <Sidebar isOpen={isSidebarOpen} toggle={toggleSidebar} isMobile={!isDesktop} />
 
       {isSidebarOpen && (

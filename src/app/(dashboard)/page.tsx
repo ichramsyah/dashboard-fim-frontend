@@ -111,7 +111,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl md:px-4 px-1">
-        <h1 className="text-2xl font-bold mb-5">Analisis Aktivitas FIM</h1>
+        <h1 className="text-2xl mb-5 text-gray-3">Analisis Aktivitas FIM</h1>
         {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</p>}
 
         {isLoading ? (

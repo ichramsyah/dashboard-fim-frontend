@@ -93,10 +93,7 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
                 )}
               </div>
 
-              <button
-                onClick={handleLogout}
-                className="border border-gray-3 cursor-pointer text-white text-sm px-3.5 py-1.5 rounded-[5px] hover:rounded-[100px] hover:bg-red-500 hover:border-red-500 transition-all flex items-center space-x-1 duration-300"
-              >
+              <button onClick={handleLogout} className="cursor-pointer text-white text-sm px-3.5 py-1.5 rounded-[100px] hover:rounded-[5px] bg-red-500 border-red-500 transition-all flex items-center space-x-1 duration-300">
                 <FiLogOut /> <span>Logout</span>
               </button>
             </div>
