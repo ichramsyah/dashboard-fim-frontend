@@ -43,18 +43,18 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
     >
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className={`flex items-center h-24 ${isOpen ? 'p-5 justify-center pt-6' : 'p-4 justify-center'}`}>
+        <div className={`flex items-center h-27 ${isOpen ? 'p-5 justify-center pt-6' : 'p-4 justify-center'}`}>
           <div className={`flex items-center space-x-1.5 ${!isOpen && 'p-0'} ${isOpen && 'p-3'}`}>
-            <img src="https://catalogue.paramadina.ac.id/template/paramadina/assets/images/logo__.png?v=20251023021109" className={`w-30 object-cover ${!isOpen && 'hidden'}`} alt="" />
+            <img src="./img/logo_paramadina.png" className={`w-34 object-cover ${!isOpen && 'hidden'}`} alt="" />
           </div>
           {/* Toggle */}
-          <button onClick={toggle} className="absolute right-[-20px] top-8 md:block p-2 bg-background-dark rounded-r-full" title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
+          <button onClick={toggle} className="absolute right-3 top-8 md:block p-2 bg-background-dark rounded-r-full" title={isOpen ? 'Sembunyikan Sidebar' : 'Tampilkan Sidebar'}>
             {isOpen ? <FiChevronsLeft size={26} className="text-gray-2" /> : <FiChevronsRight size={26} className="text-gray-2" />}
           </button>
         </div>
 
         {/* Navigasi */}
-        <nav className="flex-1 py-4 space-y-2 border-t border-gray-6 mx-5">
+        <nav className="flex-1 py-4 space-y-2 border-t border-gray-6 ml-5 mr-3">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -63,7 +63,7 @@ export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
               className={`
                 flex items-center py-2.5 rounded-md transition-all duration-300
                 ${isOpen ? 'px-4' : ' justify-center'}
-                ${pathname === item.href ? 'bg-gray-5/20 text-gray-1' : 'text-gray-2/60 hover:bg-gray-5/20 hover:text-gray-1 hover:scale-[103%]'}
+                ${pathname === item.href ? 'bg-gray-4/10 text-gray-1' : 'text-gray-2/60 hover:bg-gray-5/20 hover:text-gray-1 hover:scale-[103%]'}
               `}
             >
               <item.icon size={20} />

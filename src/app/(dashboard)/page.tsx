@@ -148,7 +148,7 @@ export default function Home() {
             <div className=" py-6 rounded-lg">
               {/* Bagian Laporan */}
               <div className="px-1 w-full pb-6">
-                <div className="mb-6">
+                <div className="mb-2">
                   <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
                     <h3 className="text-gray-3 text-lg mb-3 sm:mb-0">Laporan {activeReportDate}</h3>
                     <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />

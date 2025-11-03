@@ -24,8 +24,8 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
   if (logs.length === 0) {
     return (
       <div className="mb-6">
-        <h3 className={`text-sm text-gray-7 font-semibold mb-2`}>{title} (0)</h3>
-        <div className="text-center text-gray-500 p-8 rounded-lg border border-gray-200">Tidak ada data log yang tersedia.</div>
+        <h3 className={`text-sm text-gray-3 mb-2`}>{title} (0)</h3>
+        <div className="text-center text-gray-500 p-8 rounded-lg border border-gray-5/70">Tidak ada data log yang tersedia.</div>
       </div>
     );
   }
