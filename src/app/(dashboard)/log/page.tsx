@@ -224,7 +224,7 @@ export default function Log() {
 
               {/* Menu Dropdown */}
               {isFilterOpen && (
-                <div className="absolute md:right-0 sm:right-[-90px] mt-2 w-48 bg-gray-9 rounded-lg shadow-xl z-10">
+                <div className="absolute md:right-0 sm:right-[-90px] mt-2 w-48 bg-background-main rounded-lg shadow-xl z-10">
                   <div className="py-1">
                     {filters.map((filter) => (
                       <button
@@ -242,7 +242,7 @@ export default function Log() {
           </div>
         </div>
 
-        <div className="overflow-x-auto md:bg-gray-6/20 bg-transparent rounded-lg">
+        <div className="overflow-x-auto md:bg-transparent bg-transparent rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <CgSpinner className="animate-spin text-gray-500" size={40} />
@@ -253,7 +253,7 @@ export default function Log() {
             <p className="text-center text-gray-500 p-8">Tidak ada log yang ditemukan.</p>
           ) : (
             <table className="min-w-full text-sm">
-              <thead className="hidden md:table-header-group">
+              <thead className="bg-gray-6/20 hidden md:table-header-group">
                 <tr>
                   {isSelectMode && (
                     <th className="p-4 w-12 text-center">
