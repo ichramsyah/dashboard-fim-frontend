@@ -12,10 +12,9 @@ interface PaginationProps {
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange, totalCount, itemsPerPage }) => {
   const getPageNumbers = () => {
     const pages: (string | number)[] = [];
-    const maxPagesToShow = 3; // Jumlah maksimal angka halaman yang tampil
+    const maxPagesToShow = 3;
     const endPage = totalPages;
 
-    // Tampilkan 1, 2, 3 jika halaman saat ini berada di awal
     if (currentPage <= 2) {
       for (let i = 1; i <= Math.min(maxPagesToShow, endPage); i++) {
         pages.push(i);
@@ -26,17 +25,13 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
       if (endPage > maxPagesToShow) {
         pages.push(endPage);
       }
-    }
-    // Tampilkan halaman terakhir jika halaman saat ini berada di akhir
-    else if (currentPage >= endPage - 1) {
+    } else if (currentPage >= endPage - 1) {
       pages.push(1);
       pages.push('...');
       for (let i = endPage - (maxPagesToShow - 1); i <= endPage; i++) {
         pages.push(i);
       }
-    }
-    // Tampilkan halaman di sekitar halaman saat ini
-    else {
+    } else {
       pages.push(1);
       pages.push('...');
       pages.push(currentPage - 1);
@@ -68,7 +63,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="flex items-center justify-center px-2 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              className="flex items-center justify-center px-2 h-10 ms-0 leading-tight text-gray-500 bg-gray-7/30  rounded-s-lg hover:bg-gray-7/50 hover:text-gray-200 disabled:hover:text-gray-500 disabled:opacity-40 disabled:hover:bg-gray-7/30"
             >
               <FaChevronLeft />
             </button>
@@ -80,14 +75,12 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                 <button
                   onClick={() => onPageChange(page)}
                   aria-current={currentPage === page ? 'page' : undefined}
-                  className={`flex items-center justify-center px-4 h-10 leading-tight border ${
-                    currentPage === page ? 'z-10 text-gray-600 border-gray-300 bg-gray-2' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-700'
-                  }`}
+                  className={`flex items-center justify-center px-4 h-10 leading-tight ${currentPage === page ? 'z-10 text-gray-200  bg-gray-7/40' : 'text-gray-200 bg-gray-7/20 hover:bg-gray-7/30 hover:text-gray-200'}`}
                 >
                   {page}
                 </button>
               ) : (
-                <span className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300">{page}</span>
+                <span className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-gray-7/20 border-transparent">{page}</span>
               )}
             </li>
           ))}
@@ -96,7 +89,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
             <button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-s-0 border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+              className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-gray-7/20  rounded-e-lg hover:bg-gray-7/30 hover:text-gray-200 disabled:text-gray-500 disabled:opacity-50"
             >
               <FaChevronRight />
             </button>
