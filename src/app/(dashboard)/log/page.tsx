@@ -186,7 +186,7 @@ export default function Log() {
                 onChange={handleSearchChange}
                 placeholder="Search..."
                 className="w-full py-2 pl-12 pr-4 rounded-lg border-2 border-gray-5 
-             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors placeholder-gray-400 text-gray-700"
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors placeholder-gray-400 text-gray-300"
               />
             </div>
 
