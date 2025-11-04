@@ -50,7 +50,7 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
           </thead>
           <tbody className="divide-y divide-gray-200 md:divide-y-0">
             {logs.map((log) => (
-              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border md:border-none rounded-lg md:rounded-none">
+              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border-b border-gray-6/30 rounded-lg md:rounded-none">
                 <td data-label="Jam:" className="p-4 pl-3 flex justify-end md:table-cell text-right md:text-left ">
                   <span className="text-gray-400">{log.jam}</span>
                 </td>

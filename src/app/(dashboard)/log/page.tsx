@@ -176,7 +176,7 @@ export default function Log() {
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
-          <h1 className="text-[25px] mb-4 md:mb-0 font-semibold">Log Aktivitas FIM</h1>
+          <h1 className="text-[25px] text-gray-3 mb-4 md:mb-0">Log Aktivitas FIM</h1>
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="relative">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -185,8 +185,8 @@ export default function Log() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search..."
-                className="w-full py-2 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
-             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
+                className="w-full py-2 pl-12 pr-4 rounded-lg border-2 border-gray-5 
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors placeholder-gray-400 text-gray-700"
               />
             </div>
 
@@ -198,7 +198,10 @@ export default function Log() {
                 </button>
               )}
 
-              <button onClick={toggleSelectMode} className={`px-3 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-9 text-white hover:bg-gray-800' : 'text-gray-7 bg-white hover:bg-white/40'}`}>
+              <button
+                onClick={toggleSelectMode}
+                className={`px-3 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-4/50 text-gray-2 hover:bg-gray-4/30' : 'text-gray-2 bg-gray-5/30 hover:bg-gray-5/50'}`}
+              >
                 {isSelectMode ? (
                   <div className="flex items-center gap-1.5">
                     <FaTimes />
@@ -214,20 +217,20 @@ export default function Log() {
             </div>
 
             <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2.5 rounded-lg text-gray-700 flex items-center hover:bg-gray-100 transition-colors " title="Filter">
-                <FaSlidersH size={14} className="mr-2 text-gray-500" />
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-gray-5/30 px-4 py-2.5 rounded-lg text-gray-200 flex items-center hover:bg-gray-5/50 transition-colors " title="Filter">
+                <FaSlidersH size={14} className="mr-2 text-gray-200" />
                 <span className="text-sm">{activeFilterLabel}</span>
               </button>
 
               {/* Menu Dropdown */}
               {isFilterOpen && (
-                <div className="absolute md:right-0 sm:right-[-90px] mt-2 w-48 bg-white rounded-lg shadow-xl z-10">
+                <div className="absolute md:right-0 sm:right-[-90px] mt-2 w-48 bg-gray-9 rounded-lg shadow-xl z-10">
                   <div className="py-1">
                     {filters.map((filter) => (
                       <button
                         key={filter.value}
                         onClick={() => handleFilterChange(filter.value)}
-                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-1 text-gray-9' : 'text-gray-6 hover:bg-gray-1'}`}
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${statusFilter === filter.value ? 'bg-gray-5/30 text-gray-2' : 'text-gray-4 hover:bg-gray-5/30 hover:text-gray-2'}`}
                       >
                         {filter.label}
                       </button>
@@ -239,7 +242,7 @@ export default function Log() {
           </div>
         </div>
 
-        <div className="overflow-x-auto md:bg-white bg-transparent rounded-lg">
+        <div className="overflow-x-auto md:bg-gray-6/20 bg-transparent rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <CgSpinner className="animate-spin text-gray-500" size={40} />
@@ -258,21 +261,21 @@ export default function Log() {
                     </th>
                   )}
 
-                  <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">User</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Metode</th>
-                  <th className="py-4 px-0 text-left text-gray-600 font-semibold">Nama File</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Command</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Eksekusi</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Kondisi</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Path File</th>
-                  <th className="p-4 text-center text-gray-600 font-semibold"></th>
+                  <th className="p-4 text-left text-gray-200 font-medium">Tanggal</th>
+                  <th className="p-4 text-left text-gray-200 font-medium">Jam</th>
+                  <th className="p-4 text-left text-gray-200 font-medium">User</th>
+                  <th className="p-4 text-left text-gray-200 font-medium">Metode</th>
+                  <th className="py-4 px-0 text-left text-gray-200 font-medium">Nama File</th>
+                  <th className="p-4 text-left text-gray-200 font-medium">Command</th>
+                  <th className="p-4 text-left text-gray-200 font-medium">Eksekusi</th>
+                  <th className="p-4 text-left text-gray-200 font-medium">Kondisi</th>
+                  <th className="p-4 text-left text-gray-200 font-medium">Path File</th>
+                  <th className="p-4 text-center text-gray-200 font-medium"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 ">
                 {logs.map((log) => (
-                  <tr key={log.id} className={`block md:table-row mb-6 md:mb-0 border-none rounded-lg md:rounded-none bg-white ${selectedIds.includes(log.id) ? 'bg-blue-50' : ''}`}>
+                  <tr key={log.id} className={`block md:table-row mb-6 md:mb-0 border-b border-gray-6/30 rounded-lg md:rounded-none bg-background-dark ${selectedIds.includes(log.id) ? 'bg-gray-9/10' : ''}`}>
                     {isSelectMode && (
                       <td data-label="Pilih:" className="p-4 flex justify-end md:justify-center md:table-cell text-right md:text-left ">
                         <input type="checkbox" className="rounded" checked={selectedIds.includes(log.id)} onChange={() => handleSelectLog(log.id)} />
@@ -282,43 +285,43 @@ export default function Log() {
                     {/* Tanggal */}
                     <td data-label="Tanggal:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
-                        <span className="text-[12px] text-gray-8">{log.tanggal}</span>
+                        <span className="text-[12px] text-gray-4">{log.tanggal}</span>
                       </div>
                     </td>
                     {/* Jam */}
                     <td data-label="Jam:" className="p-2 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
-                        <span className="text-gray-500 text-xs">{log.jam}</span>
+                        <span className="text-gray-300 text-[13px]">{log.jam}</span>
                       </div>
                     </td>
                     {/* User */}
                     <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
-                        <span className="text-gray-700 text-xs">{log.user}</span>
+                        <span className="text-gray-300 text-[13px]">{log.user}</span>
                       </div>
                     </td>
                     {/* Metode */}
                     <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${log.tag.includes('BAHAYA') || log.tag.includes('MENCURIGAKAN') ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}`}>{log.metode}</span>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${log.tag.includes('BAHAYA') || log.tag.includes('MENCURIGAKAN') ? 'bg-red-900 text-gray-200' : 'bg-blue-900 text-gray-200'}`}>{log.metode}</span>
                     </td>
                     {/* Nama File */}
-                    <td data-label="File:" className="py-4 px-0 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                    <td data-label="File:" className="py-4 px-0 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-200 ">
                       {log.nama_file}
                     </td>
                     {/* Command */}
-                    <td data-label="Command:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                    <td data-label="Command:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-200 ">
                       {log.comm}
                     </td>
                     {/* Exe */}
-                    <td data-label="Exe:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 break-all">
+                    <td data-label="Exe:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-200 break-all">
                       {log.exe}
                     </td>
                     {/* Kondisi */}
-                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 ">
+                    <td data-label="Kondisi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-200 ">
                       {log.tag}
                     </td>
                     {/* Path Lengkap */}
-                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 break-all">
+                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-400 break-all">
                       {log.path_lengkap}
                     </td>
                     {/* Aksi */}
