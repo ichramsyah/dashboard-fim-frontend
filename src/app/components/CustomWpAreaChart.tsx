@@ -101,11 +101,21 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
           <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getLoginSuccessValue(d))} yScale={valueScale} fill="url(#grad-success)" stroke="none" curve={curveMonotoneX} />
           <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getContentValue(d))} yScale={valueScale} fill="url(#grad-content)" stroke="none" curve={curveMonotoneX} />
           <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getPluginValue(d))} yScale={valueScale} fill="url(#grad-plugin)" stroke="none" curve={curveMonotoneX} />
-          <motion.path d={pathLoginFail} fill="transparent" stroke="#ef4444" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.2 }} />
+          <motion.path
+            d={pathLoginFail}
+            fill="transparent"
+            stroke="#f36262ff"
+            strokeWidth={1}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1.5, delay: 0.2 }}
+          />
           <motion.path
             d={pathLoginSuccess}
             fill="transparent"
-            stroke="#22c55e"
+            stroke="#3cd976ff"
             strokeWidth={1}
             strokeLinejoin="round"
             strokeLinecap="round"
@@ -113,8 +123,8 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
             animate={{ pathLength: 1 }}
             transition={{ duration: 1.5, delay: 0.4 }}
           />
-          <motion.path d={pathContent} fill="transparent" stroke="#3b82f6" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.6 }} />
-          <motion.path d={pathPlugin} fill="transparent" stroke="#f59e0b" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.8 }} />
+          <motion.path d={pathContent} fill="transparent" stroke="#6ea3f8ff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.6 }} />
+          <motion.path d={pathPlugin} fill="transparent" stroke="#f5b23eff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.8 }} />
 
           <rect x={0} y={0} width={innerWidth} height={innerHeight} fill="transparent" onClick={handleDateClick} style={{ cursor: 'pointer' }} />
         </g>
