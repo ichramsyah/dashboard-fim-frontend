@@ -44,33 +44,33 @@ interface WpTodayLogs {
   lainnya: WpLogEntry[];
 }
 
-const StatCard = ({ icon, title, value, color, bgColor }: any) => (
-  <div className={`flex-1 pl-4 py-3.5 rounded-lg flex items-center ${bgColor}`}>
-    <div className={`rounded-full mr-4 ${color} p-2 bg-white`}>{icon}</div>
+const StatCard = ({ icon, title, value, color }: any) => (
+  <div className={`flex-1 pl-4 py-5 rounded-lg flex items-center bg-gray-6/10 border border-gray-6/40`}>
+    <div className={`rounded-full mr-4 ${color} p-4 bg-gray-7/30`}>{icon}</div>
     <div>
-      <p className="text-sm text-gray-700">{title}</p>
-      <p className="text-xl font-bold text-gray-600">{value}</p>
+      <p className="text-[15px] text-gray-400">{title}</p>
+      <p className="text-[25px] font-bold text-gray-100">{value}</p>
     </div>
   </div>
 );
 
 const TopListTable = ({ title, data, headers }: { title: string; data: [string, number][]; headers: [string, string] }) => (
   <div>
-    <h3 className="text-sm font-semibold text-gray-600 mb-3">{title}</h3>
+    <h3 className="text-sm text-gray-200 mb-5">{title}</h3>
     {data.length > 0 ? (
       <div className="overflow-x-auto rounded-md">
-        <table className="min-w-full text-sm bg-white">
-          <thead className="bg-purple-100/80">
+        <table className="min-w-full text-sm bg-background-dark">
+          <thead className="bg-gray-6/20">
             <tr className="border-none">
-              <th className="p-3 text-left text-gray-600 font-semibold border-none ">{headers[0]}</th>
-              <th className="p-3 text-right text-gray-600 font-semibold border-none ">{headers[1]}</th>
+              <th className="p-3 text-left text-gray-300 border-none">{headers[0]}</th>
+              <th className="p-3 text-right text-gray-300 border-none">{headers[1]}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-5/30">
             {data.map(([item, count]) => (
               <tr key={item}>
-                <td className="p-3 font-mono text-gray-700 border-none ">{item}</td>
-                <td className="p-3 font-mono text-right text-gray-500 border-none ">{count}</td>
+                <td className="p-3 font-mono text-gray-300 border-none ">{item}</td>
+                <td className="p-3 font-mono text-right text-gray-300 border-none ">{count}</td>
               </tr>
             ))}
           </tbody>
@@ -88,56 +88,56 @@ const getActionBadgeColor = (action: string) => {
     case 'failed':
     case 'deactivated':
     case 'deleted':
-      return 'bg-red-100 text-red-700';
+      return 'bg-red-700 text-gray-100';
     case 'success':
     case 'activated':
     case 'installed':
-      return 'bg-green-100 text-green-700';
+      return 'bg-green-700 text-gray-100';
     case 'updated':
     case 'status changed':
-      return 'bg-blue-100 text-blue-700';
+      return 'bg-blue-700 text-gray-100';
     default:
-      return 'bg-gray-100 text-gray-700';
+      return 'bg-gray-700 text-gray-100';
   }
 };
 
-const WpLogTable = ({ title, logs, headerColor }: { title: string; logs: WpLogEntry[]; headerColor: string }) => {
+const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
   if (!logs || logs.length === 0) {
     return null;
   }
 
   return (
     <div>
-      <h3 className="text-md font-semibold mb-2 text-gray-800">
+      <h3 className="text-sm mb-2 text-gray-200">
         {title} ({logs.length})
       </h3>
-      <div className="overflow-x-auto md:bg-white bg-transparent rounded-lg">
+      <div className="overflow-x-auto bg-transparent rounded-lg">
         <table className="min-w-full text-sm">
-          <thead className={`${headerColor} hidden md:table-header-group`}>
+          <thead className={`bg- hidden md:table-header-group bg-gray-6/20`}>
             <tr>
-              <th className="p-4 text-left text-gray-700 font-semibold">Waktu</th>
-              <th className="p-4 text-left text-gray-700 font-semibold">User</th>
-              <th className="p-4 text-left text-gray-700 font-semibold">Alamat IP</th>
-              <th className="p-4 text-left text-gray-700 font-semibold">Aksi</th>
-              <th className="p-4 text-left text-gray-700 font-semibold">Detail</th>
+              <th className="p-4 text-left text-gray-300">Waktu</th>
+              <th className="p-4 text-left text-gray-300">User</th>
+              <th className="p-4 text-left text-gray-300">Alamat IP</th>
+              <th className="p-4 text-left text-gray-300">Aksi</th>
+              <th className="p-4 text-left text-gray-300">Detail</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 md:divide-y-0">
             {logs.map((log) => (
-              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none bg-white">
+              <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none">
                 <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
-                  <span className="text-gray-500">{log.timestamp.split(' ')[1]}</span>
+                  <span className="text-gray-400">{log.timestamp.split(' ')[1]}</span>
                 </td>
-                <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-700 border border-gray-100 md:border-none">
+                <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-100 md:border-none">
                   {log.user}
                 </td>
-                <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-500 border border-gray-100 md:border-none">
+                <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-100 md:border-none">
                   {log.ip}
                 </td>
                 <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
                   <span className={`px-2 py-1 text-xs rounded-full font-medium ${getActionBadgeColor(log.action)}`}>{log.action}</span>
                 </td>
-                <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-600 border border-gray-100 md:border-none break-all">
+                <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-400 border border-gray-100 md:border-none break-all">
                   {log.details}
                 </td>
               </tr>
@@ -232,7 +232,7 @@ export default function WpAnalyticsPage() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl md:px-4 px-1">
-        <h1 className="text-2xl font-bold mb-5">Laporan Aktivitas WordPress</h1>
+        <h1 className="text-2xl text-gray-2 mb-5">Laporan Aktivitas WordPress</h1>
         {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</p>}
 
         {isLoading ? (
@@ -240,30 +240,34 @@ export default function WpAnalyticsPage() {
             <CgSpinner className="animate-spin text-gray-500" size={40} />
           </div>
         ) : !analyticsData ? (
-          <p className="text-center text-gray-500 p-8">Tidak ada data analytics untuk ditampilkan.</p>
+          <p className="text-center text-gray-200 p-8">Tidak ada data analytics untuk ditampilkan.</p>
         ) : (
           <div className="space-y-7">
-            <div className="bg-white px-7 pt-6 pb-7 rounded-lg">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
-                <h2 className="text-gray-7 text-lg font-semibold mb-2 sm:mb-0">Grafik Aktivitas</h2>
+            <div className="pt-6 rounded-lg">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                <h2 className="text-gray-2 text-lg mb-2 sm:mb-0">Grafik Aktivitas</h2>
                 <div className="flex items-center gap-2">
                   {[7, 15, 30].map((d) => (
-                    <button key={d} onClick={() => setDaysTrend(d)} className={`px-3 py-1 text-sm rounded-md transition-colors ${daysTrend === d ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}>
+                    <button
+                      key={d}
+                      onClick={() => setDaysTrend(d)}
+                      className={`px-3 py-1 text-sm rounded-md transition-colors ${daysTrend === d ? 'bg-gray-5/40 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
+                    >
                       {d} Hari
                     </button>
                   ))}
                 </div>
               </div>
-              <div style={{ width: '100%', height: 320 }}>
-                <div style={{ width: '100%', height: 320, cursor: 'pointer' }}>
+              <div style={{ width: '100%', height: 350 }}>
+                <div style={{ width: '100%', height: 350, cursor: 'pointer' }}>
                   <ParentSize>{({ width, height }) => <CustomWpAreaChart data={analyticsData.trend_analysis} width={width} height={height} onDateSelect={handleDateSelect} />}</ParentSize>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white px-7 py-6 rounded-lg">
+            <div className="rounded-lg">
               <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <h2 className="text-gray-700 text-lg font-semibold mb-3 sm:mb-0">Laporan {activeReportDate}</h2>
+                <h2 className="text-gray-200 text-lg mb-3 sm:mb-0">Laporan {activeReportDate}</h2>
                 <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />
               </div>
 
@@ -273,20 +277,20 @@ export default function WpAnalyticsPage() {
                 </div>
               ) : (
                 <>
-                  <div className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-4">
-                    <StatCard icon={<FaUserCheck size={20} />} title="Login Berhasil" value={reportData?.stats?.login_success ?? 0} color="text-green-500" bgColor="bg-green-50" />
-                    <StatCard icon={<FaUserTimes size={20} />} title="Login Gagal" value={reportData?.stats?.login_fail ?? 0} color="text-red-500" bgColor="bg-red-50" />
-                    <StatCard icon={<FaFileAlt size={20} />} title="Aktivitas Konten" value={reportData?.stats?.content_activity ?? 0} color="text-blue-500" bgColor="bg-blue-50" />
-                    <StatCard icon={<FaPlug size={20} />} title="Aktivitas Plugin" value={reportData?.stats?.plugin_activity ?? 0} color="text-yellow-500" bgColor="bg-yellow-50" />
+                  <div className="gap-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-4">
+                    <StatCard icon={<FaUserCheck size={20} />} title="Login Berhasil" value={reportData?.stats?.login_success ?? 0} color="text-green-500" />
+                    <StatCard icon={<FaUserTimes size={20} />} title="Login Gagal" value={reportData?.stats?.login_fail ?? 0} color="text-red-500" />
+                    <StatCard icon={<FaFileAlt size={20} />} title="Aktivitas Konten" value={reportData?.stats?.content_activity ?? 0} color="text-blue-500" />
+                    <StatCard icon={<FaPlug size={20} />} title="Aktivitas Plugin" value={reportData?.stats?.plugin_activity ?? 0} color="text-yellow-500" />
                   </div>
 
                   {reportData?.logs && (
                     <div className="space-y-6 mt-10">
-                      <WpLogTable title="Aktivitas Login" logs={reportData.logs.login} headerColor="bg-blue-100" />
-                      <WpLogTable title="Aktivitas Plugin" logs={reportData.logs.plugin} headerColor="bg-yellow-100" />
-                      <WpLogTable title="Aktivitas Konten" logs={reportData.logs.content} headerColor="bg-green-100" />
-                      <WpLogTable title="Manajemen Pengguna" logs={reportData.logs.user_management} headerColor="bg-purple-100" />
-                      <WpLogTable title="Lainnya" logs={reportData.logs.lainnya} headerColor="bg-gray-100" />
+                      <WpLogTable title="Aktivitas Login" logs={reportData.logs.login} />
+                      <WpLogTable title="Aktivitas Plugin" logs={reportData.logs.plugin} />
+                      <WpLogTable title="Aktivitas Konten" logs={reportData.logs.content} />
+                      <WpLogTable title="Manajemen Pengguna" logs={reportData.logs.user_management} />
+                      <WpLogTable title="Lainnya" logs={reportData.logs.lainnya} />
                     </div>
                   )}
                 </>
@@ -294,9 +298,9 @@ export default function WpAnalyticsPage() {
             </div>
 
             {/* Bagian Top 5 */}
-            <div className="bg-white px-7 py-6 rounded-lg">
-              <h2 className="text-gray-7 text-lg font-semibold mb-4">
-                Peringkat Teratas <span className="text-gray-500 font-medium text-sm pl-2">(30 Hari Terakhir)</span>
+            <div className="bg-background-dark py-8 rounded-lg">
+              <h2 className="text-gray-2 text-lg mb-7">
+                Peringkat Teratas <span className="text-gray-400 font-medium text-sm pl-2">(30 Hari Terakhir)</span>
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <TopListTable title="Pengguna Paling Aktif" data={analyticsData.top_5_users} headers={['Username', 'Aktivitas']} />

@@ -102,7 +102,7 @@ export default function Home() {
     <div className={`flex-1 pl-4 py-5 rounded-lg flex items-center bg-gray-6/10 border border-gray-6/40`}>
       <div className={`rounded-full mr-4 ${color} p-4 bg-gray-7/30`}>{icon}</div>
       <div>
-        <p className="text-[16px] text-gray-400">{title}</p>
+        <p className="text-[15px] text-gray-400">{title}</p>
         <p className="mt-1 text-[25px] font-bold text-gray-100">{value}</p>
       </div>
     </div>
@@ -145,12 +145,12 @@ export default function Home() {
               )}
             </div>
 
-            <div className=" py-6 rounded-lg">
+            <div className="py-5 rounded-lg">
               {/* Bagian Laporan */}
               <div className="px-1 w-full pb-6">
                 <div className="mb-2">
                   <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                    <h3 className="text-gray-3 text-lg mb-3 sm:mb-0">Laporan {activeReportDate}</h3>
+                    <h3 className="text-gray-2 text-lg mb-3 sm:mb-0">Laporan {activeReportDate}</h3>
                     <DatePicker selectedDate={activeReportDate} onDateSelect={handleDateSelect} resetToToday={resetToToday} availableDates={availableDatesSet} />
                   </div>
                 </div>

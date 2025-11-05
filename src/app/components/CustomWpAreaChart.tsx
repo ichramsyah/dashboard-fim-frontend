@@ -9,9 +9,8 @@ import { LinearGradient } from '@visx/gradient';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { GridRows } from '@visx/grid';
 import { motion } from 'framer-motion';
-import { localPoint } from '@visx/event'; // <-- BARU: Import untuk handler klik
+import { localPoint } from '@visx/event';
 
-// ... (Interface WpTrendData tidak berubah) ...
 interface WpTrendData {
   date: string;
   login_success: number;
@@ -20,30 +19,24 @@ interface WpTrendData {
   plugin: number;
 }
 
-// --- DIUBAH: Tambahkan onDateSelect ke props ---
 type ChartProps = {
   data: WpTrendData[];
   width: number;
   height: number;
-  onDateSelect: (date: string) => void; // <-- BARU: Prop untuk fungsi klik
+  onDateSelect: (date: string) => void;
 };
-// -------------------------------------------
 
 const margin = { top: 20, right: 30, bottom: 40, left: 40 };
 
-// ... (Fungsi aksesor data tidak berubah) ...
 const getDate = (d: WpTrendData) => new Date(d.date);
 const getLoginFailValue = (d: WpTrendData) => d.login_fail;
 const getLoginSuccessValue = (d: WpTrendData) => d.login_success;
 const getContentValue = (d: WpTrendData) => d.content;
 const getPluginValue = (d: WpTrendData) => d.plugin;
 
-// --- DIUBAH: Terima onDateSelect dari props ---
 export default function CustomWpAreaChart({ data, width, height, onDateSelect }: ChartProps) {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-
-  // ... (useMemo untuk skala dan path tidak berubah) ...
   const { timeScale, valueScale, pathLoginFail, pathLoginSuccess, pathContent, pathPlugin } = useMemo(() => {
     const timeScale = scaleTime({
       range: [0, innerWidth],
@@ -67,35 +60,31 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
     return { timeScale, valueScale, pathLoginFail, pathLoginSuccess, pathContent, pathPlugin };
   }, [data, innerWidth, innerHeight]);
 
-  // --- BARU: Tambahkan kembali fungsi handleDateClick ---
   const handleDateClick = (event: React.MouseEvent<SVGRectElement>) => {
     const point = localPoint(event);
     if (!point) return;
     const x = point.x - margin.left;
-    const xDate = timeScale.invert(x); // Konversi koordinat X ke tanggal
-    // Cari data yang paling dekat dengan titik klik
+    const xDate = timeScale.invert(x);
     const closest = data.reduce((prev, curr) => {
       const prevDate = getDate(prev);
       const currDate = getDate(curr);
       return Math.abs(currDate.getTime() - xDate.getTime()) < Math.abs(prevDate.getTime() - xDate.getTime()) ? curr : prev;
     });
-    onDateSelect(closest.date); // Panggil fungsi dari parent
+    onDateSelect(closest.date);
   };
-  // ----------------------------------------------------
 
   if (width < 10) return null;
 
   return (
     <div style={{ position: 'relative' }}>
       <svg width={width} height={height}>
-        {/* ... (rect, gradient, grid, axis, area, motion.path tidak berubah) ... */}
-        <rect x={0} y={0} width={width} height={height} fill="#ffffff" rx={1} />
-        <LinearGradient id="grad-fail" from="#ef4444" to="#ef4444" toOpacity={0} />
-        <LinearGradient id="grad-success" from="#22c55e" to="#22c55e" toOpacity={0} />
-        <LinearGradient id="grad-content" from="#3b82f6" to="#3b82f6" toOpacity={0} />
-        <LinearGradient id="grad-plugin" from="#f59e0b" to="#f59e0b" toOpacity={0} />
+        <rect x={0} y={0} width={width} height={height} fill="#0f0e0e" rx={1} />
+        <LinearGradient id="grad-fail" from="#f36262ff" to="#f36262ff" toOpacity={0} />
+        <LinearGradient id="grad-success" from="#3cd976ff" to="#3cd976ff" toOpacity={0} />
+        <LinearGradient id="grad-content" from="#6ea3f8ff" to="#6ea3f8ff" toOpacity={0} />
+        <LinearGradient id="grad-plugin" from="#f5b23eff" to="#f5b23eff" toOpacity={0} />
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-          <GridRows scale={valueScale} width={innerWidth} stroke="#e0e0e0" strokeDasharray="2,5" />
+          <GridRows scale={valueScale} width={innerWidth} stroke="#676767ff" strokeDasharray="2,5" />
           <AxisLeft scale={valueScale} stroke="#888" tickStroke="#888" tickLabelProps={() => ({ fill: '#888', fontSize: 11, textAnchor: 'end', dy: '0.33em' })} />
           <AxisBottom
             top={innerHeight}
@@ -112,34 +101,22 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
           <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getLoginSuccessValue(d))} yScale={valueScale} fill="url(#grad-success)" stroke="none" curve={curveMonotoneX} />
           <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getContentValue(d))} yScale={valueScale} fill="url(#grad-content)" stroke="none" curve={curveMonotoneX} />
           <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getPluginValue(d))} yScale={valueScale} fill="url(#grad-plugin)" stroke="none" curve={curveMonotoneX} />
-          <motion.path
-            d={pathLoginFail}
-            fill="transparent"
-            stroke="#ef4444"
-            strokeWidth={2.5}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1.5, delay: 0.2 }}
-          />
+          <motion.path d={pathLoginFail} fill="transparent" stroke="#ef4444" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.2 }} />
           <motion.path
             d={pathLoginSuccess}
             fill="transparent"
             stroke="#22c55e"
-            strokeWidth={2.5}
+            strokeWidth={1}
             strokeLinejoin="round"
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{ duration: 1.5, delay: 0.4 }}
           />
-          <motion.path d={pathContent} fill="transparent" stroke="#3b82f6" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.6 }} />
-          <motion.path d={pathPlugin} fill="transparent" stroke="#f59e0b" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.8 }} />
+          <motion.path d={pathContent} fill="transparent" stroke="#3b82f6" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.6 }} />
+          <motion.path d={pathPlugin} fill="transparent" stroke="#f59e0b" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.8 }} />
 
-          {/* --- BARU: Tambahkan kembali area klik transparan --- */}
           <rect x={0} y={0} width={innerWidth} height={innerHeight} fill="transparent" onClick={handleDateClick} style={{ cursor: 'pointer' }} />
-          {/* ------------------------------------------------ */}
         </g>
       </svg>
     </div>
