@@ -8,7 +8,6 @@ import { FaSliders } from 'react-icons/fa6';
 import { FaTimes } from 'react-icons/fa';
 import api from '../../lib/api';
 
-// Interface baru untuk data log WordPress
 interface WpLogEntry {
   id: string;
   timestamp: string;
@@ -32,8 +31,6 @@ export default function WpActivityPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo | null>(null);
-
-  // State baru untuk filter spesifik WordPress
   const [categoryFilter, setCategoryFilter] = useState('');
   const [userFilter, setUserFilter] = useState('');
   const [ipFilter, setIpFilter] = useState('');
@@ -114,7 +111,6 @@ export default function WpActivityPage() {
     setIsFilterOpen(false);
   };
 
-  // Helper untuk memisahkan timestamp
   const formatTimestamp = (ts: string) => {
     const [tanggal, jam] = ts.split(' ');
     return { tanggal, jam };
@@ -128,7 +124,7 @@ export default function WpActivityPage() {
         {/* Konten */}
         <div className="mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold">Aktivitas WordPress</h1>
+            <h1 className="text-2xl text-gray-2">Aktivitas WordPress</h1>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             {/* Search Bar */}
@@ -139,30 +135,36 @@ export default function WpActivityPage() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search..."
-                className="w-full md:w-64 py-1.5 pl-12 pr-4 bg-white rounded-lg border-2 border-transparent 
-              hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors"
+                className="w-full py-2 pl-12 pr-4 rounded-lg border-2 border-gray-5 
+             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors placeholder-gray-400 text-gray-300"
               />
             </div>
 
             {/* Filter */}
             <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-white px-4 py-2 rounded-lg flex items-center hover:bg-gray-100 transition-colors w-full justify-center" title="Filter">
-                <FaSliders size={14} className="mr-2 text-gray-700" />
-                <span className="text-sm text-gray-700">Filter</span>
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-gray-5/30 px-4 py-2.5 rounded-lg flex items-center hover:bg-gray-5/50 transition-colors w-full justify-center" title="Filter">
+                <FaSliders size={14} className="mr-2 text-gray-200" />
+                <span className="text-sm text-gray-200">Filter</span>
               </button>
               {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl z-10 p-4">
-                  <h3 className="font-semibold mb-3">Filter Aktivitas</h3>
+                <div className="absolute right-0 mt-2 w-72 bg-neutral-900 rounded-lg shadow-xl z-10 p-4">
+                  <h3 className="text-gray-2 mb-3">Filter Aktivitas</h3>
                   <div className="space-y-3">
-                    <input type="text" placeholder="Kategori (e.g., Plugin, Content)" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="w-full border p-2 rounded text-sm" />
-                    <input type="text" placeholder="User (e.g., webadm1)" value={userFilter} onChange={(e) => setUserFilter(e.target.value)} className="w-full border p-2 rounded text-sm" />
-                    <input type="text" placeholder="Alamat IP" value={ipFilter} onChange={(e) => setIpFilter(e.target.value)} className="w-full border p-2 rounded text-sm" />
+                    <input
+                      type="text"
+                      placeholder="Kategori (e.g., Plugin, Content)"
+                      value={categoryFilter}
+                      onChange={(e) => setCategoryFilter(e.target.value)}
+                      className="w-full border border-gray-4 p-2 rounded text-sm text-gray-2 focus:outline-none"
+                    />
+                    <input type="text" placeholder="User (e.g., webadm1)" value={userFilter} onChange={(e) => setUserFilter(e.target.value)} className="w-full border border-gray-4 p-2 rounded text-sm text-gray-2 focus:outline-none" />
+                    <input type="text" placeholder="Alamat IP" value={ipFilter} onChange={(e) => setIpFilter(e.target.value)} className="w-full border border-gray-4 p-2 rounded text-sm text-gray-2 focus:outline-none" />
                   </div>
                   <div className="flex justify-end gap-2 mt-4">
                     <button onClick={resetFilters} className="text-sm px-3 py-1 rounded hover:bg-gray-100">
                       Reset
                     </button>
-                    <button onClick={applyFilters} className="text-sm bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-900">
+                    <button onClick={applyFilters} className="text-sm bg-neutral-700 text-white px-3 py-1 rounded hover:bg-neutral-700">
                       Terapkan
                     </button>
                   </div>
@@ -173,7 +175,7 @@ export default function WpActivityPage() {
         </div>
 
         {/* Tabel */}
-        <div className="overflow-x-auto md:bg-white bg-transparent rounded-lg">
+        <div className="overflow-x-auto rounded-lg">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <CgSpinner className="animate-spin text-gray-500" size={40} />
@@ -182,45 +184,45 @@ export default function WpActivityPage() {
             <p className="text-center text-gray-500 p-8">Tidak ada aktivitas yang tercatat atau cocok dengan filter.</p>
           ) : (
             <table className="min-w-full text-sm">
-              <thead className="bg-white hidden md:table-header-group">
+              <thead className="bg-gray-6/20 hidden md:table-header-group">
                 <tr>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Tanggal</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Jam</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Kategori</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Aksi</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Pengguna</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Alamat IP</th>
-                  <th className="p-4 text-left text-gray-600 font-semibold">Detail</th>
+                  <th className="p-4 text-left text-gray-300 font-medium">Tanggal</th>
+                  <th className="p-4 text-left text-gray-300 font-medium">Jam</th>
+                  <th className="p-4 text-left text-gray-300 font-medium">Kategori</th>
+                  <th className="p-4 text-left text-gray-300 font-medium">Aksi</th>
+                  <th className="p-4 text-left text-gray-300 font-medium">Pengguna</th>
+                  <th className="p-4 text-left text-gray-300 font-medium">Alamat IP</th>
+                  <th className="p-4 text-left text-gray-300 font-medium">Detail</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 md:divide-y-0">
                 {wpLogs.map((log) => (
-                  <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border border-none rounded-lg md:rounded-none bg-white">
+                  <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border border-none rounded-lg md:rounded-none bg-background-dark">
                     <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
-                      <span className="text-xs text-gray-800">{formatTimestamp(log.timestamp).tanggal}</span>
+                      <span className="text-xs text-gray-400">{formatTimestamp(log.timestamp).tanggal}</span>
                     </td>
                     <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
-                      <span className="text-gray-500 text-xs">{formatTimestamp(log.timestamp).jam}</span>
+                      <span className="text-gray-300 text-xs">{formatTimestamp(log.timestamp).jam}</span>
                     </td>
                     <td data-label="Kategori:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none">
                       <span
                         className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          log.category === 'Login' ? 'bg-green-100 text-green-800' : log.category === 'Plugin' ? 'bg-blue-100 text-blue-800' : log.category === 'Content' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800'
+                          log.category === 'Login' ? 'bg-green-700 text-gray-200' : log.category === 'Plugin' ? 'bg-blue-700 text-gray-200' : log.category === 'Content' ? 'bg-yellow-700 text-gray-200' : 'bg-gray-700 text-gray-200'
                         }`}
                       >
                         {log.category}
                       </span>
                     </td>
-                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none text-gray-700 font-mono">
+                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none text-gray-300 font-mono">
                       {log.action}
                     </td>
-                    <td data-label="Pengguna:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none text-gray-700">
+                    <td data-label="Pengguna:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none text-gray-300">
                       {log.user}
                     </td>
-                    <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none text-gray-700">
+                    <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono border-none text-gray-300">
                       {log.ip}
                     </td>
-                    <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none break-all text-gray-700">
+                    <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left border-none break-all text-gray-400">
                       {log.details}
                     </td>
                   </tr>
