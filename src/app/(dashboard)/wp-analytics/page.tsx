@@ -161,12 +161,12 @@ export default function WpAnalyticsPage() {
 
   useEffect(() => {
     const fetchAllData = async () => {
-      if (!analyticsData || isFetchingDetails) {
-        setIsLoading(true);
-      }
+      setIsLoading(true);
       setError(null);
+
       try {
         const [analyticsResponse, todayLogsResponse] = await Promise.all([api(`wp-logs/analytics/?days=${daysTrend}`), api('wp-logs/today/')]);
+
         setAnalyticsData(analyticsResponse);
 
         const initialTodayData = { stats: analyticsResponse.summary_today, logs: todayLogsResponse };
@@ -232,10 +232,10 @@ export default function WpAnalyticsPage() {
   return (
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl md:px-4 px-1">
-        <h1 className="text-2xl text-gray-2 mb-5">Laporan Aktivitas WordPress</h1>
+        <h1 className="text-2xl text-gray-2 mb-5">Analisis Aktivitas WordPress</h1>
         {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</p>}
 
-        {isLoading ? (
+        {isLoading && !analyticsData ? (
           <div className="flex justify-center items-center h-96">
             <CgSpinner className="animate-spin text-gray-500" size={40} />
           </div>
@@ -243,9 +243,9 @@ export default function WpAnalyticsPage() {
           <p className="text-center text-gray-200 p-8">Tidak ada data analytics untuk ditampilkan.</p>
         ) : (
           <div className="space-y-7">
-            <div className="pt-6 rounded-lg">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                <h2 className="text-gray-2 text-lg mb-2 sm:mb-0">Grafik Aktivitas</h2>
+            <div className=" pt-6 pb-7 rounded-lg">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
+                <h2 className="text-gray-2 text-lg mb-2 sm:mb-0">Grafik</h2>
                 <div className="flex items-center gap-2">
                   {[7, 15, 30].map((d) => (
                     <button
@@ -258,10 +258,17 @@ export default function WpAnalyticsPage() {
                   ))}
                 </div>
               </div>
+
               <div style={{ width: '100%', height: 350 }}>
-                <div style={{ width: '100%', height: 350, cursor: 'pointer' }}>
-                  <ParentSize>{({ width, height }) => <CustomWpAreaChart data={analyticsData.trend_analysis} width={width} height={height} onDateSelect={handleDateSelect} />}</ParentSize>
-                </div>
+                {isLoading ? (
+                  <div className="flex justify-center items-center h-full">
+                    <CgSpinner className="animate-spin text-gray-500" size={40} />
+                  </div>
+                ) : (
+                  <div style={{ width: '100%', height: 350, cursor: 'pointer' }}>
+                    <ParentSize>{({ width, height }) => <CustomWpAreaChart data={analyticsData.trend_analysis} width={width} height={height} onDateSelect={handleDateSelect} />}</ParentSize>
+                  </div>
+                )}
               </div>
             </div>
 

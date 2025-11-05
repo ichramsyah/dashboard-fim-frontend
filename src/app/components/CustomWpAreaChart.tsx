@@ -78,7 +78,7 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
   return (
     <div style={{ position: 'relative' }}>
       <svg width={width} height={height}>
-        <rect x={0} y={0} width={width} height={height} fill="#0f0e0e" rx={1} />
+        <rect x={0} y={0} width={width} height={height} fill="#0f0e0e" rx={50} />
         <LinearGradient id="grad-fail" from="#f36262ff" to="#f36262ff" toOpacity={0} />
         <LinearGradient id="grad-success" from="#3cd976ff" to="#3cd976ff" toOpacity={0} />
         <LinearGradient id="grad-content" from="#6ea3f8ff" to="#6ea3f8ff" toOpacity={0} />
@@ -97,21 +97,19 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
               return `${date.getDate()}/${date.getMonth() + 1}`;
             }}
           />
-          <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getLoginFailValue(d))} yScale={valueScale} fill="url(#grad-fail)" stroke="none" curve={curveMonotoneX} />
-          <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getLoginSuccessValue(d))} yScale={valueScale} fill="url(#grad-success)" stroke="none" curve={curveMonotoneX} />
-          <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getContentValue(d))} yScale={valueScale} fill="url(#grad-content)" stroke="none" curve={curveMonotoneX} />
-          <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getPluginValue(d))} yScale={valueScale} fill="url(#grad-plugin)" stroke="none" curve={curveMonotoneX} />
-          <motion.path
-            d={pathLoginFail}
-            fill="transparent"
-            stroke="#f36262ff"
-            strokeWidth={1}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1.5, delay: 0.2 }}
-          />
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, delay: 0.2 }}>
+            <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getLoginFailValue(d))} yScale={valueScale} fill="url(#grad-fail)" stroke="none" curve={curveMonotoneX} />
+          </motion.g>
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, delay: 0.4 }}>
+            <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getLoginSuccessValue(d))} yScale={valueScale} fill="url(#grad-success)" stroke="none" curve={curveMonotoneX} />
+          </motion.g>
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, delay: 0.6 }}>
+            <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getContentValue(d))} yScale={valueScale} fill="url(#grad-content)" stroke="none" curve={curveMonotoneX} />
+          </motion.g>
+          <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5, delay: 0.8 }}>
+            <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getPluginValue(d))} yScale={valueScale} fill="url(#grad-plugin)" stroke="none" curve={curveMonotoneX} />
+          </motion.g>
+          <motion.path d={pathLoginFail} fill="transparent" stroke="#f36262ff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0 }} />
           <motion.path
             d={pathLoginSuccess}
             fill="transparent"
@@ -121,10 +119,10 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
-            transition={{ duration: 1.5, delay: 0.4 }}
+            transition={{ duration: 1.5, delay: 0.1 }}
           />
-          <motion.path d={pathContent} fill="transparent" stroke="#6ea3f8ff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.6 }} />
-          <motion.path d={pathPlugin} fill="transparent" stroke="#f5b23eff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.8 }} />
+          <motion.path d={pathContent} fill="transparent" stroke="#6ea3f8ff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.2 }} />
+          <motion.path d={pathPlugin} fill="transparent" stroke="#f5b23eff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.3 }} />
 
           <rect x={0} y={0} width={innerWidth} height={innerHeight} fill="transparent" onClick={handleDateClick} style={{ cursor: 'pointer' }} />
         </g>
