@@ -4,15 +4,7 @@ import React from 'react';
 export default function SkeletonLoader() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background-dark" role="status">
-      {/* Container Relatif untuk menumpuk spinner.
-        Kita buat spinner luar lebih lambat dan berputar terbalik.
-      */}
       <div className="relative h-16 w-16">
-        {/* Spinner LUAR:
-          - Warna: sky-500
-          - Durasi: 2 detik
-          - Arah: Putaran terbalik (reverse)
-        */}
         <div
           className="
             absolute h-full w-full rounded-full
@@ -21,11 +13,6 @@ export default function SkeletonLoader() {
           "
         ></div>
 
-        {/* Spinner DALAM:
-          - Warna: gray-400 (lebih redup)
-          - Durasi: 1.2 detik
-          - Arah: Putaran normal
-        */}
         <div
           className="
             absolute h-full w-full rounded-full
