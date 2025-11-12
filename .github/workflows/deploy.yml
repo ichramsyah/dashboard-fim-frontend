@@ -29,6 +29,6 @@ jobs:
 
             git pull origin master
 
-            sudo /usr/local/bin/docker-compose up -d --build
+            sudo /usr/bin/docker-compose up -d --build
 
             sudo docker system prune -f
