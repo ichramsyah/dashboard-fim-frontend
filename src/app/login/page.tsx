@@ -32,7 +32,7 @@ export default function LoginPage() {
 
   return (
     <div className="bg-background-dark min-h-screen flex items-center justify-center p-4">
-      <form className="bg-neutral-900 border border-gray-8/20 md:px-9 px-6 pt-6 pb-8 rounded-lg w-full max-w-[380px]" onSubmit={handleSubmit}>
+      <form className="bg-neutral-900 border border-gray-8/20 md:px-9 px-6 pt-6 pb-8 rounded-lg w-full max-w-[380px]" onSubmit={handleSubmit} autoComplete="off">
         <h1 className="text-center text-gray-2 text-2xl mb-6">Login</h1>
         <div className="relative mb-4">
           {/* Username */}
