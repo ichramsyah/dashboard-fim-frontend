@@ -42,3 +42,5 @@ next-env.d.ts
 
 nano.5653.save
 /data
+
+.env
