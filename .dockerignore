@@ -1,12 +1,8 @@
-# Abaikan semua file/folder yang dibuat oleh Certbot
 data/
 
-# Abaikan folder yang dibuat Next.js secara lokal (jika ada)
 .next/
 
-# Abaikan node_modules (ini akan di-install di dalam container)
 node_modules/
 
-# Abaikan file .env (ini akan disalin terpisah)
 .env
 .env.local
