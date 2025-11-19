@@ -129,7 +129,7 @@ export default function Home() {
                     <button
                       key={d}
                       onClick={() => setDays(d)}
-                      className={`px-4 py-1 text-sm rounded-md transition-all cursor-pointer ${days === d ? 'bg-gray-5/40 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
+                      className={`px-4 py-1 text-sm rounded-md transition-all cursor-pointer ${days === d ? 'bg-gray-5/30 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
                     >
                       {d} Hari
                     </button>
