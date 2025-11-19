@@ -1,6 +1,7 @@
 // components/LogTable.tsx
 
 import React from 'react';
+import { FaBell } from 'react-icons/fa';
 
 interface LogEntry {
   id: string;
@@ -18,13 +19,14 @@ interface LogTableProps {
   title: string;
   logs: LogEntry[];
   bgColor?: string;
+  icon?: string | React.ReactNode;
 }
 
-const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
+const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor, icon }) => {
   if (logs.length === 0) {
     return (
       <div className="mb-6">
-        <h3 className={`text-sm text-gray-3 mb-2`}>{title} (0)</h3>
+        <h3 className={`text-md text-gray-3 mb-2`}>{title} (0)</h3>
         <div className="text-center text-gray-500 p-8 rounded-lg border border-gray-5/70">Tidak ada data log yang tersedia.</div>
       </div>
     );
@@ -32,9 +34,12 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor }) => {
 
   return (
     <div className="mb-6">
-      <h3 className={`text-sm text-gray-3 mb-2`}>
-        {title} ({logs.length})
-      </h3>
+      <div className="mb-3 flex items-center gap-2">
+        <h3 className={`text-md text-gray-3`}>
+          {title} ({logs.length})
+        </h3>
+        {icon}
+      </div>
       <div className="overflow-x-auto rounded-lg">
         <table className="min-w-full text-sm">
           <thead className={`${bgColor} hidden md:table-header-group`}>

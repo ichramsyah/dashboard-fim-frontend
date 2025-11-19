@@ -168,9 +168,9 @@ export default function Home() {
                       <StatCard icon={<FaExclamationTriangle size={22} />} title="Bahaya" value={reportData?.stats?.detail.bahaya ?? 0} color="text-red-500/80" />
                     </div>
                     <div className="mt-8 grid grid-cols-1 lg:grid-cols-1 gap-6">
-                      <LogTable title="Normal" logs={reportData?.logs.normal ?? []} bgColor="bg-gray-6/20" />
-                      <LogTable title="Mencurigakan" logs={reportData?.logs.mencurigakan ?? []} bgColor="bg-gray-6/20" />
-                      <LogTable title="Bahaya" logs={reportData?.logs.bahaya ?? []} bgColor="bg-gray-6/20" />
+                      <LogTable title="Normal" icon={<FaBell size={16} className="text-blue-500/80" />} logs={reportData?.logs.normal ?? []} bgColor="bg-gray-6/20" />
+                      <LogTable title="Mencurigakan" icon={<FaExclamationTriangle size={16} className="text-yellow-500/80" />} logs={reportData?.logs.mencurigakan ?? []} bgColor="bg-gray-6/20" />
+                      <LogTable title="Bahaya" icon={<FaExclamationTriangle size={16} className="text-red-500/80" />} logs={reportData?.logs.bahaya ?? []} bgColor="bg-gray-6/20" />
                     </div>
                   </>
                 )}
