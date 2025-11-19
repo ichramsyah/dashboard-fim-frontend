@@ -129,7 +129,7 @@ export default function Home() {
                     <button
                       key={d}
                       onClick={() => setDays(d)}
-                      className={`px-4 py-1 text-sm rounded-md transition-all cursor-pointer ${days === d ? 'bg-gray-5/40 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
+                      className={`px-4 py-1 text-sm rounded-md transition-all cursor-pointer ${days === d ? 'bg-gray-5/30 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
                     >
                       {d} Hari
                     </button>
@@ -168,9 +168,9 @@ export default function Home() {
                       <StatCard icon={<FaExclamationTriangle size={22} />} title="Bahaya" value={reportData?.stats?.detail.bahaya ?? 0} color="text-red-500/80" />
                     </div>
                     <div className="mt-8 grid grid-cols-1 lg:grid-cols-1 gap-6">
-                      <LogTable title="Normal" logs={reportData?.logs.normal ?? []} bgColor="bg-gray-6/20" />
-                      <LogTable title="Mencurigakan" logs={reportData?.logs.mencurigakan ?? []} bgColor="bg-gray-6/20" />
-                      <LogTable title="Bahaya" logs={reportData?.logs.bahaya ?? []} bgColor="bg-gray-6/20" />
+                      <LogTable title="Normal" icon={<FaBell size={16} className="text-blue-500/80" />} logs={reportData?.logs.normal ?? []} bgColor="bg-gray-6/20" />
+                      <LogTable title="Mencurigakan" icon={<FaExclamationTriangle size={16} className="text-yellow-500/80" />} logs={reportData?.logs.mencurigakan ?? []} bgColor="bg-gray-6/20" />
+                      <LogTable title="Bahaya" icon={<FaExclamationTriangle size={16} className="text-red-500/80" />} logs={reportData?.logs.bahaya ?? []} bgColor="bg-gray-6/20" />
                     </div>
                   </>
                 )}

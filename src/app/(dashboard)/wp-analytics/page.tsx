@@ -7,6 +7,7 @@ import api from '../../lib/api';
 import { DatePicker } from '../../components/DatePicker';
 import { format } from 'date-fns';
 import { ParentSize } from '@visx/responsive';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import CustomWpAreaChart from '../../components/CustomWpAreaChart';
 
 interface AnalyticsData {
@@ -102,52 +103,67 @@ const getActionBadgeColor = (action: string) => {
 };
 
 const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
   if (!logs || logs.length === 0) {
     return null;
   }
 
   return (
-    <div>
-      <h3 className="text-sm mb-2 text-gray-200">
-        {title} ({logs.length})
-      </h3>
-      <div className="overflow-x-auto bg-transparent rounded-lg">
-        <table className="min-w-full text-sm">
-          <thead className={`bg- hidden md:table-header-group bg-gray-6/20`}>
-            <tr>
-              <th className="p-4 text-left text-gray-300">Waktu</th>
-              <th className="p-4 text-left text-gray-300">User</th>
-              <th className="p-4 text-left text-gray-300">Alamat IP</th>
-              <th className="p-4 text-left text-gray-300">Aksi</th>
-              <th className="p-4 text-left text-gray-300">Detail</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 md:divide-y-0">
-            {logs
-              .slice()
-              .reverse()
-              .map((log) => (
-                <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none">
-                  <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
-                    <span className="text-gray-400">{log.timestamp.split(' ')[1]}</span>
-                  </td>
-                  <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-100 md:border-none">
-                    {log.user}
-                  </td>
-                  <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-100 md:border-none">
-                    {log.ip}
-                  </td>
-                  <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
-                    <span className={`px-2 py-1 text-xs rounded-full font-medium ${getActionBadgeColor(log.action)}`}>{log.action}</span>
-                  </td>
-                  <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-400 border border-gray-100 md:border-none break-all">
-                    {log.details}
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+    <div className="mb-6">
+      <div className="mb-3 flex justify-between items-center">
+        <h3 className="text-md text-gray-200">
+          {title} ({logs.length})
+        </h3>
+
+        <button
+          onClick={() => setIsVisible(!isVisible)}
+          className="text-gray-300 px-2 py-2 bg-gray-5/30 rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-6/40 transition-colors"
+          title={isVisible ? 'Sembunyikan Tabel' : 'Tampilkan Tabel'}
+        >
+          {isVisible ? <FaEye size={16} /> : <FaEyeSlash size={16} />}
+        </button>
       </div>
+
+      {isVisible && (
+        <div className="overflow-x-auto bg-transparent rounded-lg transition-all duration-300 ease-in-out">
+          <table className="min-w-full text-sm">
+            <thead className="bg-gray-6/20 hidden md:table-header-group">
+              <tr>
+                <th className="p-4 text-left text-gray-300 font-semibold">Waktu</th>
+                <th className="p-4 text-left text-gray-300 font-semibold">User</th>
+                <th className="p-4 text-left text-gray-300 font-semibold">Alamat IP</th>
+                <th className="p-4 text-left text-gray-300 font-semibold">Aksi</th>
+                <th className="p-4 text-left text-gray-300 font-semibold">Detail</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 md:divide-y-0">
+              {logs
+                .slice()
+                .reverse()
+                .map((log) => (
+                  <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none">
+                    <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-800 md:border-none">
+                      <span className="text-gray-400">{log.timestamp.split(' ')[1]}</span>
+                    </td>
+                    <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-800 md:border-none">
+                      {log.user}
+                    </td>
+                    <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-800 md:border-none">
+                      {log.ip}
+                    </td>
+                    <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-800 md:border-none">
+                      <span className={`px-2 py-1 text-xs rounded-full font-medium ${getActionBadgeColor(log.action)}`}>{log.action}</span>
+                    </td>
+                    <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-400 border border-gray-800 md:border-none break-all">
+                      {log.details}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
@@ -254,7 +270,7 @@ export default function WpAnalyticsPage() {
                     <button
                       key={d}
                       onClick={() => setDaysTrend(d)}
-                      className={`px-3 py-1 text-sm rounded-md transition-colors ${daysTrend === d ? 'bg-gray-5/40 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
+                      className={`px-3 py-1 text-sm rounded-md cursor-pointer transition-colors ${daysTrend === d ? 'bg-gray-5/40 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
                     >
                       {d} Hari
                     </button>
