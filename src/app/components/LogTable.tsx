@@ -64,41 +64,38 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor, icon }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 md:divide-y-0">
-              {logs
-                .slice()
-                .reverse()
-                .map((log) => (
-                  <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border-b border-gray-6/30 rounded-lg md:rounded-none">
-                    <td data-label="Jam:" className="p-4 pl-3 flex justify-end md:table-cell text-right md:text-left ">
-                      <span className="text-gray-400">{log.jam}</span>
-                    </td>
-                    <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-200 ">
-                      {log.nama_file}
-                    </td>
-                    <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-200 ">
-                      {log.user}
-                    </td>
-                    <td data-label="Command:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 ">
-                      {log.comm}
-                    </td>
-                    <td data-label="Eksekusi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 ">
-                      {log.exe}
-                    </td>
-                    <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
-                      <span
-                        className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          log.tag.includes('[BAHAYA]') ? 'bg-red-900 text-gray-1' : log.tag.includes('[KEGIATAN MENCURIGAKAN]') ? 'bg-yellow-600 text-gray-1' : 'bg-blue-900 text-gray-1'
-                        }`}
-                      >
-                        {log.metode}
-                      </span>
-                    </td>
+              {logs.slice().map((log) => (
+                <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border-b border-gray-6/30 rounded-lg md:rounded-none">
+                  <td data-label="Jam:" className="p-4 pl-3 flex justify-end md:table-cell text-right md:text-left ">
+                    <span className="text-gray-400">{log.jam}</span>
+                  </td>
+                  <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-200 ">
+                    {log.nama_file}
+                  </td>
+                  <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-200 ">
+                    {log.user}
+                  </td>
+                  <td data-label="Command:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 ">
+                    {log.comm}
+                  </td>
+                  <td data-label="Eksekusi:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 ">
+                    {log.exe}
+                  </td>
+                  <td data-label="Metode:" className="p-4 flex justify-end md:table-cell text-right md:text-left ">
+                    <span
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        log.tag.includes('[BAHAYA]') ? 'bg-red-900 text-gray-1' : log.tag.includes('[KEGIATAN MENCURIGAKAN]') ? 'bg-yellow-600 text-gray-1' : 'bg-blue-900 text-gray-1'
+                      }`}
+                    >
+                      {log.metode}
+                    </span>
+                  </td>
 
-                    <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-400  break-all">
-                      {log.path_lengkap}
-                    </td>
-                  </tr>
-                ))}
+                  <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-400  break-all">
+                    {log.path_lengkap}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

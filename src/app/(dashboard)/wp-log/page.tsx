@@ -22,6 +22,8 @@ interface PaginationInfo {
   count: number;
   total_pages: number;
   current_page: number;
+  // next: string | null;     // Bisa ditambahkan jika butuh
+  // previous: string | null; // Bisa ditambahkan jika butuh
 }
 
 export default function WpActivityPage() {
@@ -50,10 +52,15 @@ export default function WpActivityPage() {
     api(`wp-logs/?${params.toString()}`)
       .then((data) => {
         setWpLogs(data.results);
+
+        const pageSize = 10;
+        const totalCount = data.count;
+        const totalPages = Math.ceil(totalCount / pageSize);
+
         setPaginationInfo({
-          count: data.count,
-          total_pages: data.total_pages,
-          current_page: data.current_page,
+          count: totalCount,
+          total_pages: totalPages,
+          current_page: page,
         });
         setError(null);
       })

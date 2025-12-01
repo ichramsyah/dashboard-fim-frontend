@@ -10,7 +10,7 @@ import { SiWordpress } from 'react-icons/si';
 const navItems = [
   { name: 'Analytics', href: '/', icon: FiBarChart },
   { name: 'Log', href: '/log', icon: FiFileText },
-  { name: 'Trash', href: '/trash', icon: FiTrash2 },
+  // { name: 'Trash', href: '/trash', icon: FiTrash2 },
   { name: 'Analytics', href: '/wp-analytics', icon: SiWordpress },
   { name: 'WordPress Log', href: '/wp-log', icon: SiWordpress },
 ];

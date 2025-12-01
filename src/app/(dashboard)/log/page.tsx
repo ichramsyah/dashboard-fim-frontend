@@ -61,14 +61,16 @@ export default function Log() {
 
   const handleMultipleMoveToTrash = async () => {
     const result = await Swal.fire({
-      title: 'Pindahkan Beberapa Log?',
-      text: `Anda yakin ingin memindahkan ${selectedIds.length} log ini ke tempat sampah?`,
+      title: 'Hapus Log?',
+      text: `Anda yakin ingin menghapus ${selectedIds.length} log ini secara permanen?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: 'rgba(21, 21, 21, 1)',
-      cancelButtonColor: '#a3a3a3ff',
-      confirmButtonText: 'Ya, pindahkan!',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, hapus!',
       cancelButtonText: 'Batal',
+      background: '#1f2937', // Dark background for Swal
+      color: '#fff',
     });
     if (!result.isConfirmed) return;
     try {
@@ -76,7 +78,7 @@ export default function Log() {
         method: 'DELETE',
         body: JSON.stringify({ ids: selectedIds }),
       });
-      toast.success(`${selectedIds.length} log berhasil dipindahkan.`);
+      toast.success(`${selectedIds.length} log berhasil dihapus.`);
       fetchLogs(currentPage, searchQuery, statusFilter);
       setSelectedIds([]);
     } catch (error: any) {
@@ -96,8 +98,8 @@ export default function Log() {
         setLogs(data.results);
         setPaginationInfo({
           count: data.count,
-          total_pages: data.total_pages,
-          current_page: data.current_page,
+          total_pages: Math.ceil(data.count / 10), // Hitung manual jika API pagination berbeda
+          current_page: page,
         });
         setError(null);
       })
@@ -115,7 +117,7 @@ export default function Log() {
         method: 'DELETE',
         body: JSON.stringify({ id: logId }),
       });
-      toast.success('Berhasil dipindahkan ke tempat sampah.');
+      toast.success('Log berhasil dihapus.');
       fetchLogs(currentPage, searchQuery, statusFilter);
     } catch (error: any) {
       toast.error(`Error: ${error.message}`);
@@ -125,6 +127,7 @@ export default function Log() {
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= (paginationInfo?.total_pages || 1)) {
       setCurrentPage(newPage);
+      fetchLogs(newPage, searchQuery, statusFilter); // Langsung fetch saat page berubah
     }
   };
 
@@ -136,7 +139,7 @@ export default function Log() {
     return () => {
       clearTimeout(handler);
     };
-  }, [searchQuery, currentPage, statusFilter]);
+  }, [searchQuery, statusFilter]); // Hapus currentPage dari sini agar tidak double fetch
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
