@@ -60,7 +60,7 @@ export default function Home() {
         const initialTodayData = { stats: todayStats, logs: todayLogs };
         setTodayData(initialTodayData);
         setReportData(initialTodayData);
-        setHistoricalData(historicalResponse.slice().reverse());
+        setHistoricalData(historicalResponse.slice());
         setActiveReportDate('Hari Ini');
       } catch (err: any) {
         setError(err.message || 'Gagal memuat data analisis.');
