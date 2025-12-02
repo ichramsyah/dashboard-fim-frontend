@@ -40,7 +40,7 @@ interface ReportData {
   logs: TodayLogs;
 }
 
-export default function analytics() {
+export default function Analytics() {
   const [historicalData, setHistoricalData] = useState<HistoricalDataEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
