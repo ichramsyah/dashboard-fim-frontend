@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Pagination from './Pagination';
 
 interface LogEntry {
   id: string;
@@ -24,15 +25,24 @@ interface LogTableProps {
 
 const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor, icon }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   if (logs.length === 0) {
     return (
       <div className="mb-6">
-        <h3 className={`text-md text-gray-3 mb-2`}>{title} (0)</h3>
+        <h3 className={`text-sm text-gray-3 mb-2`}>{title} (0)</h3>
         <div className="text-center text-gray-500 p-8 rounded-lg border border-gray-5/70">Tidak ada data log yang tersedia.</div>
       </div>
     );
   }
+
+  const totalPages = Math.ceil(logs.length / itemsPerPage);
+  const currentLogs = logs.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="mb-6">
@@ -64,7 +74,7 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor, icon }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 md:divide-y-0">
-              {logs.slice().map((log) => (
+              {currentLogs.map((log) => (
                 <tr key={log.id} className="block md:table-row mb-4 md:mb-0 border-b border-gray-6/30 rounded-lg md:rounded-none">
                   <td data-label="Jam:" className="p-4 pl-3 flex justify-end md:table-cell text-right md:text-left ">
                     <span className="text-gray-400">{log.jam}</span>
@@ -90,7 +100,6 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor, icon }) => {
                       {log.metode}
                     </span>
                   </td>
-
                   <td data-label="Path:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-400  break-all">
                     {log.path_lengkap}
                   </td>
@@ -98,6 +107,12 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor, icon }) => {
               ))}
             </tbody>
           </table>
+
+          {logs.length > itemsPerPage && (
+            <div className="p-4 border-t border-gray-6/30">
+              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} totalCount={logs.length} itemsPerPage={itemsPerPage} />
+            </div>
+          )}
         </div>
       )}
     </div>
