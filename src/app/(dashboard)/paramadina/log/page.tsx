@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiCheckSquare, FiSearch, FiTrash2 } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
 import { FaSlidersH, FaTimes, FaTrash } from 'react-icons/fa';
-import api from '../../lib/api';
-import Pagination from '../../components/Pagination';
+import api from '../../../lib/api';
+import Pagination from '../../../components/Pagination';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 
@@ -69,7 +69,7 @@ export default function Log() {
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Ya, hapus!',
       cancelButtonText: 'Batal',
-      background: '#1f2937', // Dark background for Swal
+      background: '#1f2937',
       color: '#fff',
     });
     if (!result.isConfirmed) return;
@@ -98,7 +98,7 @@ export default function Log() {
         setLogs(data.results);
         setPaginationInfo({
           count: data.count,
-          total_pages: Math.ceil(data.count / 10), // Hitung manual jika API pagination berbeda
+          total_pages: Math.ceil(data.count / 10),
           current_page: page,
         });
         setError(null);
@@ -127,7 +127,7 @@ export default function Log() {
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= (paginationInfo?.total_pages || 1)) {
       setCurrentPage(newPage);
-      fetchLogs(newPage, searchQuery, statusFilter); // Langsung fetch saat page berubah
+      fetchLogs(newPage, searchQuery, statusFilter);
     }
   };
 
@@ -139,7 +139,7 @@ export default function Log() {
     return () => {
       clearTimeout(handler);
     };
-  }, [searchQuery, statusFilter]); // Hapus currentPage dari sini agar tidak double fetch
+  }, [searchQuery, statusFilter]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -177,9 +177,9 @@ export default function Log() {
 
   return (
     <main className="min-h-screen">
-      <div className="container mx-auto max-w-7xl px-4">
+      <div className="container mx-auto max-w-7xl px-2">
         <div className="mb-4 flex flex-col md:flex-row md:justify-between">
-          <h1 className="text-[25px] text-gray-3 mb-4 md:mb-0">Log Aktivitas FIM</h1>
+          <h1 className="text-[24px] text-gray-2 mb-4 md:mb-0">Log Perubahan</h1>
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
             <div className="relative">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -188,8 +188,7 @@ export default function Log() {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search..."
-                className="w-full py-2 pl-12 pr-4 rounded-lg border-2 border-gray-5 
-             hover:border-gray-6 focus:border-gray-6 focus:outline-none transition-colors placeholder-gray-400 text-gray-300"
+                className="w-full py-2 pl-12 pr-4 rounded-[6px] hover:rounded-[50px] focus:rounded-[50px] border border-gray-4 focus:outline-none transition-all duration-300 placeholder:text-gray-500 text-gray-300 placeholder:text-md"
               />
             </div>
 
@@ -203,7 +202,7 @@ export default function Log() {
 
               <button
                 onClick={toggleSelectMode}
-                className={`px-3 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-4/50 text-gray-2 hover:bg-gray-4/30' : 'text-gray-2 bg-gray-5/30 hover:bg-gray-5/50'}`}
+                className={`px-3 py-2.5 pb-3 rounded-lg text-sm flex items-center gap-2 transition-colors ${isSelectMode ? 'bg-gray-4/50 text-gray-2 hover:bg-gray-4/30' : 'text-gray-2 bg-gray-5/30 hover:bg-gray-5/50'}`}
               >
                 {isSelectMode ? (
                   <div className="flex items-center gap-1.5">
@@ -220,7 +219,7 @@ export default function Log() {
             </div>
 
             <div ref={filterRef} className="relative">
-              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-gray-5/30 px-4 py-2.5 rounded-lg text-gray-200 flex items-center hover:bg-gray-5/50 transition-colors " title="Filter">
+              <button onClick={() => setIsFilterOpen(!isFilterOpen)} className="bg-gray-5/30 px-4 py-2.5 pb-3 rounded-lg text-gray-200 flex items-center hover:bg-gray-5/50 transition-colors " title="Filter">
                 <FaSlidersH size={14} className="mr-2 text-gray-200" />
                 <span className="text-sm">{activeFilterLabel}</span>
               </button>

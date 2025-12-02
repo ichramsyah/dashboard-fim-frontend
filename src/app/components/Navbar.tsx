@@ -55,6 +55,7 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
     <header
       className={`
         sticky top-0 z-20 
+        border-b border-gray-6/30
         transition-colors duration-300
         ${isSidebarOpen && isMobile ? 'opacity-80' : 'bg-background-dark'}
       `}

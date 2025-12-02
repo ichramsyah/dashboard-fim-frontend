@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { CgSpinner } from 'react-icons/cg';
 import { FaUserCheck, FaUserTimes, FaFileAlt, FaPlug } from 'react-icons/fa';
-import api from '../../lib/api';
-import { DatePicker } from '../../components/DatePicker';
+import api from '../../../lib/api';
+import { DatePicker } from '../../../components/DatePicker';
 import { format } from 'date-fns';
 import { ParentSize } from '@visx/responsive';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import CustomWpAreaChart from '../../components/CustomWpAreaChart';
+import CustomWpAreaChart from '../../../components/CustomWpAreaChart';
 import Pagination from '@/app/components/Pagination';
 
 interface AnalyticsData {
@@ -47,7 +47,7 @@ interface WpTodayLogs {
 }
 
 const StatCard = ({ icon, title, value, color }: any) => (
-  <div className={`flex-1 pl-4 py-5 rounded-lg flex items-center bg-gray-6/10 border border-gray-6/40`}>
+  <div className={`flex-1 pl-4 py-5 rounded-lg flex items-center bg-gray-4/10 border border-gray-6/40`}>
     <div className={`rounded-full mr-4 ${color} p-4 bg-gray-7/30`}>{icon}</div>
     <div>
       <p className="text-[15px] text-gray-400">{title}</p>
@@ -62,13 +62,13 @@ const TopListTable = ({ title, data, headers }: { title: string; data: [string, 
     {data.length > 0 ? (
       <div className="overflow-x-auto rounded-md">
         <table className="min-w-full text-sm bg-background-dark">
-          <thead className="bg-gray-6/20">
+          <thead className="bg-gray-4/10">
             <tr className="border-none">
               <th className="p-3 text-left text-gray-300 border-none">{headers[0]}</th>
               <th className="p-3 text-right text-gray-300 border-none">{headers[1]}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-5/30">
+          <tbody className="divide-y divide-gray-4/10">
             {data.map(([item, count]) => (
               <tr key={item}>
                 <td className="p-3 font-mono text-gray-300 border-none ">{item}</td>
@@ -265,8 +265,7 @@ export default function WpAnalyticsPage() {
 
   return (
     <main className="min-h-screen">
-      <div className="container mx-auto max-w-7xl md:px-4 px-1">
-        <h1 className="text-2xl text-gray-2 mb-5">Analisis Aktivitas WordPress</h1>
+      <div className="container mx-auto max-w-7xl md:px-2 px-2">
         {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</p>}
 
         {isLoading && !analyticsData ? (
@@ -277,15 +276,15 @@ export default function WpAnalyticsPage() {
           <p className="text-center text-gray-200 p-8">Tidak ada data analytics untuk ditampilkan.</p>
         ) : (
           <div className="space-y-7">
-            <div className=" pt-6 pb-7 rounded-lg">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-1">
-                <h2 className="text-gray-2 text-lg mb-2 sm:mb-0">Grafik</h2>
+            <div className=" pb-7 rounded-lg">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 px-2">
+                <h2 className="text-gray-2 text-xl mb-2 sm:mb-0">Grafik Perubahan</h2>
                 <div className="flex items-center gap-2">
                   {[7, 15, 30].map((d) => (
                     <button
                       key={d}
                       onClick={() => setDaysTrend(d)}
-                      className={`px-3 py-1 text-sm rounded-md cursor-pointer transition-colors ${daysTrend === d ? 'bg-gray-5/40 text-gray-2' : 'text-gray-4 bg-gray-8/30 hover:bg-gray-5/30 hover:text-gray-2'}`}
+                      className={`px-4 py-1 pb-2 text-sm rounded-md cursor-pointer transition-colors ${daysTrend === d ? 'bg-gray-4/20 text-gray-2' : 'text-gray-4 hover:bg-gray-4/20 hover:text-gray-2'}`}
                     >
                       {d} Hari
                     </button>

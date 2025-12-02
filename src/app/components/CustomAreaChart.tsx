@@ -75,13 +75,13 @@ export default function CustomAreaChart({ data, width, height, onDateSelect }: C
   return (
     <div style={{ position: 'relative' }}>
       <svg width={width} height={height}>
-        <rect x={0} y={0} width={width} height={height} fill="#0f0e0e" rx={50} />
-        <LinearGradient id="grad-bahaya" from="#f48c8c" to="#f48c8c" toOpacity={0} />
-        <LinearGradient id="grad-mencurigakan" from="#f0ce95" to="#f0ce95" toOpacity={0} />
-        <LinearGradient id="grad-normal" from="#a3c3f8" to="#a3c3f8" toOpacity={0} />
+        <rect x={0} y={0} width={width} height={height} fill="#000000ff" rx={50} />
+        <LinearGradient id="grad-bahaya" from="#ff3a3aff" to="#ff3a3aff" toOpacity={0} />
+        <LinearGradient id="grad-mencurigakan" from="#ffb32fff" to="#ffb32fff" toOpacity={0} />
+        <LinearGradient id="grad-normal" from="#3381ffff" to="#3381ffff" toOpacity={0} />
 
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-          <GridRows scale={valueScale} width={innerWidth} stroke="#676767ff" strokeDasharray="2,5" />
+          <GridRows scale={valueScale} width={innerWidth} stroke="#ffffff28" />
           <AxisLeft
             scale={valueScale}
             stroke="#888"
@@ -118,11 +118,11 @@ export default function CustomAreaChart({ data, width, height, onDateSelect }: C
           <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.2 }}>
             <AreaClosed data={data} x={(d) => timeScale(getDate(d))} y={(d) => valueScale(getNormalValue(d))} yScale={valueScale} fill="url(#grad-normal)" stroke="none" curve={curveMonotoneX} />
           </motion.g>
-          <motion.path d={pathBahaya} fill="transparent" stroke="#f48c8c" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.2 }} />
+          <motion.path d={pathBahaya} fill="transparent" stroke="#ff3a3aff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.2 }} />
           <motion.path
             d={pathMencurigakan}
             fill="transparent"
-            stroke="#f0ce95"
+            stroke="#ffb32fff"
             strokeWidth={1}
             strokeLinejoin="round"
             strokeLinecap="round"
@@ -130,7 +130,7 @@ export default function CustomAreaChart({ data, width, height, onDateSelect }: C
             animate={{ pathLength: 1 }}
             transition={{ duration: 1.5, delay: 0.4 }}
           />
-          <motion.path d={pathNormal} fill="transparent" stroke="#a3c3f8" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.6 }} />
+          <motion.path d={pathNormal} fill="transparent" stroke="#3381ffff" strokeWidth={1} strokeLinejoin="round" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.5, delay: 0.6 }} />
           <rect x={0} y={0} width={innerWidth} height={innerHeight} fill="transparent" onClick={handleDateClick} />
         </g>
       </svg>

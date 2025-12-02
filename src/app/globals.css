@@ -26,10 +26,10 @@ body {
   --color-spotlight-card: #f8f8f8;
 
   /* Background */
-  --color-background-dark: #0f0e0e; /* Dark background */
+  --color-background-dark: #000000; /* Dark background */
 
   /* Main Background */
-  --color-background-main: #1a1919;
+  --color-background-main: #0d0d0d;
   --color-login: #131313;
   /* 0F0E0E */
 
@@ -110,4 +110,37 @@ body {
   --color-neutral-7: #475569; /* neutral-700 */
   --color-neutral-8: #334155; /* neutral-800 */
   --color-neutral-9: #1e293b; /* neutral-900 */
+}
+
+/* Custom Scrollbar Styling */
+
+/* 1. Mengatur lebar scrollbar */
+::-webkit-scrollbar {
+  width: 3px; /* Lebar untuk scrollbar vertikal */
+  height: 3px; /* Tinggi untuk scrollbar horizontal */
+}
+
+/* 2. Mengatur Track (Jalur Scrollbar) */
+::-webkit-scrollbar-track {
+  background: var(--color-background-dark);
+}
+
+/* 3. Mengatur Thumb (Pegangan Scrollbar) */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-background-dark);
+  border-radius: 10px;
+  scrollbar-width: thin;
+}
+
+/* 4. Hover State (Opsional: Agar lebih interaktif) */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-background-dark);
+  border-radius: 10px;
+  scrollbar-width: thin; /* Sedikit lebih terang saat dihover */
+}
+
+/* Optional: Untuk mode gelap yang sangat gelap */
+body {
+  scrollbar-color: var(--color-background-dark) var(--color-background-dark); /* Dukungan untuk Firefox */
+  scrollbar-width: thin; /* Dukungan untuk Firefox */
 }

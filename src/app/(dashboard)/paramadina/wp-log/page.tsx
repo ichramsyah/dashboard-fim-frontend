@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiRotateCcw } from 'react-icons/fi';
 import { CgSpinner } from 'react-icons/cg';
-import Pagination from '../../components/Pagination';
+import Pagination from '../../../components/Pagination';
 import { FaSliders } from 'react-icons/fa6';
 import { FaTimes } from 'react-icons/fa';
-import api from '../../lib/api';
+import api from '../../../lib/api';
 
 interface WpLogEntry {
   id: string;
@@ -125,13 +125,13 @@ export default function WpActivityPage() {
 
   return (
     <main className="min-h-screen">
-      <div className="container mx-auto max-w-7xl px-4">
+      <div className="container mx-auto max-w-7xl px-2">
         {error && <p className="text-center text-red-600 bg-red-100 p-4 rounded-md mb-4">{error}</p>}
 
         {/* Konten */}
         <div className="mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl text-gray-2">Aktivitas WordPress</h1>
+            <h1 className="text-[24px] text-gray-2">Log WordPress</h1>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             {/* Search Bar */}

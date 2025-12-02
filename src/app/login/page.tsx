@@ -32,7 +32,7 @@ export default function LoginPage() {
 
   return (
     <div className="bg-background-dark min-h-screen flex items-center justify-center p-4">
-      <form className="bg-neutral-900 border border-gray-8/20 md:px-9 px-6 pt-6 pb-8 rounded-lg w-full max-w-[380px]" onSubmit={handleSubmit} autoComplete="off">
+      <form className="bg-background-main border border-gray-8/20 md:px-9 px-6 pt-6 pb-8 rounded-lg w-full max-w-[380px]" onSubmit={handleSubmit} autoComplete="off">
         <h1 className="text-center text-gray-2 text-2xl mb-6">Login</h1>
         <div className="relative mb-4">
           {/* Username */}
@@ -48,7 +48,7 @@ export default function LoginPage() {
           />
           <label
             htmlFor="username"
-            className="absolute text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-900 px-2 left-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:text-gray-300"
+            className="absolute text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-background-main px-2 left-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:text-gray-300"
           >
             Username
           </label>
@@ -68,7 +68,7 @@ export default function LoginPage() {
           />
           <label
             htmlFor="password"
-            className="absolute text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-neutral-900 px-2 left-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:text-gray-300"
+            className="absolute text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-background-main px-2 left-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:text-gray-300"
           >
             Password
           </label>
