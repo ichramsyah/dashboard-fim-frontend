@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import { ParentSize } from '@visx/responsive';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import CustomWpAreaChart from '../../components/CustomWpAreaChart';
+import Pagination from '@/app/components/Pagination';
 
 interface AnalyticsData {
   summary_today: {
@@ -104,10 +105,20 @@ const getActionBadgeColor = (action: string) => {
 
 const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   if (!logs || logs.length === 0) {
     return null;
   }
+
+  const totalPages = Math.ceil(logs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentLogs = logs.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="mb-6">
@@ -138,27 +149,34 @@ const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 md:divide-y-0">
-              {logs.slice().map((log) => (
+              {/* --- 3. RENDER currentLogs (DATA YANG SUDAH DIPOTONG) --- */}
+              {currentLogs.map((log) => (
                 <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none">
-                  <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-800 md:border-none">
+                  <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
                     <span className="text-gray-400">{log.timestamp.split(' ')[1]}</span>
                   </td>
-                  <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-800 md:border-none">
+                  <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-100 md:border-none">
                     {log.user}
                   </td>
-                  <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-800 md:border-none">
+                  <td data-label="Alamat IP:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-100 md:border-none">
                     {log.ip}
                   </td>
-                  <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-800 md:border-none">
+                  <td data-label="Aksi:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
                     <span className={`px-2 py-1 text-xs rounded-full font-medium ${getActionBadgeColor(log.action)}`}>{log.action}</span>
                   </td>
-                  <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-400 border border-gray-800 md:border-none break-all">
+                  <td data-label="Detail:" className="p-4 flex justify-end md:table-cell text-right md:text-left text-gray-400 border border-gray-100 md:border-none break-all">
                     {log.details}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {logs.length > itemsPerPage && (
+            <div className="mt-4 px-4">
+              <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} totalCount={logs.length} itemsPerPage={itemsPerPage} />
+            </div>
+          )}
         </div>
       )}
     </div>
