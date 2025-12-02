@@ -78,13 +78,13 @@ export default function CustomWpAreaChart({ data, width, height, onDateSelect }:
   return (
     <div style={{ position: 'relative' }}>
       <svg width={width} height={height}>
-        <rect x={0} y={0} width={width} height={height} fill="#0f0e0e" rx={50} />
+        <rect x={0} y={0} width={width} height={height} fill="#000000ff" rx={50} />
         <LinearGradient id="grad-fail" from="#f36262ff" to="#f36262ff" toOpacity={0} />
         <LinearGradient id="grad-success" from="#3cd976ff" to="#3cd976ff" toOpacity={0} />
         <LinearGradient id="grad-content" from="#6ea3f8ff" to="#6ea3f8ff" toOpacity={0} />
         <LinearGradient id="grad-plugin" from="#f5b23eff" to="#f5b23eff" toOpacity={0} />
         <g transform={`translate(${margin.left}, ${margin.top})`}>
-          <GridRows scale={valueScale} width={innerWidth} stroke="#676767ff" strokeDasharray="2,5" />
+          <GridRows scale={valueScale} width={innerWidth} stroke="#ffffff28" />
           <AxisLeft scale={valueScale} stroke="#888" tickStroke="#888" tickLabelProps={() => ({ fill: '#888', fontSize: 11, textAnchor: 'end', dy: '0.33em' })} />
           <AxisBottom
             top={innerHeight}
