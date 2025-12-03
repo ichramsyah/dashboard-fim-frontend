@@ -44,7 +44,7 @@ export default function Analytics() {
   const [historicalData, setHistoricalData] = useState<HistoricalDataEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [days, setDays] = useState(7);
+  const [days, setDays] = useState(30);
   const [todayData, setTodayData] = useState<ReportData | null>(null);
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [activeReportDate, setActiveReportDate] = useState<string>('Hari Ini');
