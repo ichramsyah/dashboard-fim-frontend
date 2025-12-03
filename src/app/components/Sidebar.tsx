@@ -59,7 +59,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, toggle, isMobile }: SidebarProps) {
   const pathname = usePathname();
-  const [expandedGroups, setExpandedGroups] = useState<string[]>(['paramadina']);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
 
   const toggleGroup = (groupId: string) => {
     if (!isOpen) {

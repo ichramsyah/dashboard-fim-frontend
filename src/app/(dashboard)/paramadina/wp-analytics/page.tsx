@@ -191,7 +191,7 @@ export default function WpAnalyticsPage() {
   const [reportData, setReportData] = useState<{ stats: AnalyticsData['summary_today'] | null; logs: WpTodayLogs | null } | null>(null);
   const [activeReportDate, setActiveReportDate] = useState<string>('Hari Ini');
   const [isFetchingDetails, setIsFetchingDetails] = useState(false);
-  const [daysTrend, setDaysTrend] = useState(7);
+  const [daysTrend, setDaysTrend] = useState(30);
 
   useEffect(() => {
     const fetchAllData = async () => {
