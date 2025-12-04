@@ -1,7 +1,21 @@
 // lib/api.ts
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-const api = async (endpoint: string, options: RequestInit = {}) => {
+const API_SERVERS = {
+  main: process.env.NEXT_PUBLIC_API_MAIN,
+  library: process.env.NEXT_PUBLIC_API_LIBRARY,
+  simpul: process.env.NEXT_PUBLIC_API_SIMPUL,
+  admission: process.env.NEXT_PUBLIC_API_ADMISSION,
+};
+
+export type ApiServerKey = keyof typeof API_SERVERS;
+
+const api = async (endpoint: string, options: RequestInit = {}, server: ApiServerKey = 'main') => {
+  const baseUrl = API_SERVERS[server];
+
+  if (!baseUrl) {
+    throw new Error(`API Base URL untuk server "${server}" belum dikonfigurasi.`);
+  }
+
   const defaultOptions: RequestInit = {
     credentials: 'include',
     headers: {
@@ -10,7 +24,7 @@ const api = async (endpoint: string, options: RequestInit = {}) => {
     },
   };
 
-  const response = await fetch(`${apiBaseUrl}/${endpoint}`, {
+  const response = await fetch(`${baseUrl}/${endpoint}`, {
     ...defaultOptions,
     ...options,
   });

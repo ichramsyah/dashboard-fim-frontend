@@ -149,11 +149,10 @@ const WpLogTable = ({ title, logs }: { title: string; logs: WpLogEntry[] }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 md:divide-y-0">
-              {/* --- 3. RENDER currentLogs (DATA YANG SUDAH DIPOTONG) --- */}
               {currentLogs.map((log) => (
                 <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none">
                   <td data-label="Waktu:" className="p-4 flex justify-end md:table-cell text-right md:text-left border border-gray-100 md:border-none">
-                    <span className="text-gray-400">{log.timestamp.split(' ')[1]}</span>
+                    <span className="text-gray-400">{log.timestamp.split(' ')[1]?.slice(0, 5)}</span>
                   </td>
                   <td data-label="User:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-300 border border-gray-100 md:border-none">
                     {log.user}

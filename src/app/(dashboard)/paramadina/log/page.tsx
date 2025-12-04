@@ -293,7 +293,7 @@ export default function Log() {
                     {/* Jam */}
                     <td data-label="Jam:" className="p-2 flex justify-end md:table-cell text-right md:text-left ">
                       <div className="flex flex-col">
-                        <span className="text-gray-300 text-[13px]">{log.jam}</span>
+                        <span className="text-gray-300 text-[13px]">{log.jam ? log.jam.slice(0, 5) : '-'}</span>
                       </div>
                     </td>
                     {/* User */}
