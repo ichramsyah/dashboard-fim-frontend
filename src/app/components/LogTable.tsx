@@ -77,7 +77,7 @@ const LogTable: React.FC<LogTableProps> = ({ title, logs, bgColor, icon }) => {
               {currentLogs.map((log) => (
                 <tr key={log.id} className="block md:table-row mb-4 md:mb-0 rounded-lg md:rounded-none">
                   <td data-label="Jam:" className="p-4 pl-3 flex justify-end md:table-cell text-right md:text-left ">
-                    <span className="text-gray-400">{log.jam}</span>
+                    <span className="text-gray-400">{log.jam ? log.jam.slice(0, 5) : '-'}</span>
                   </td>
                   <td data-label="File:" className="p-4 flex justify-end md:table-cell text-right md:text-left font-mono text-gray-200 ">
                     {log.nama_file}

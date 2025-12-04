@@ -119,7 +119,9 @@ export default function WpActivityPage() {
   };
 
   const formatTimestamp = (ts: string) => {
-    const [tanggal, jam] = ts.split(' ');
+    const [tanggal, jamFull] = ts.split(' ');
+    const jam = jamFull ? jamFull.slice(0, 5) : '-';
+
     return { tanggal, jam };
   };
 

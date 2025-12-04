@@ -69,31 +69,15 @@ export default function DashboardHome() {
     return () => clearInterval(interval);
   }, []);
 
-  const totalActiveServers = servers.filter((s) => s.incronStatus === 'running').length;
-
   return (
     <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-100">Security Command Center</h1>
+        {/* <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-100">Security Center</h1>
           <p className="text-gray-500 text-sm mt-1">Monitoring infrastruktur Universitas Paramadina</p>
-        </div>
+        </div> */}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
-          <div className="bg-gray-4/10 border border-gray-6/40 p-6 rounded-xl flex items-center gap-5">
-            <div className="p-4 bg-blue-900/20 rounded-full text-blue-500">
-              <FiServer size={28} />
-            </div>
-            <div>
-              <p className="text-gray-400 text-sm font-medium">FIM Service Aktif</p>
-              <h3 className="text-3xl font-bold text-gray-100 mt-1">
-                {totalActiveServers} <span className="text-sm text-gray-500 font-normal">/ {servers.length}</span>
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        <h2 className="text-lg  text-gray-200 mb-4">Status Service</h2>
+        {/* <h2 className="text-xl text-gray-200 mb-5">Status Service</h2> */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
           {servers.map((server) => (
             <Link
