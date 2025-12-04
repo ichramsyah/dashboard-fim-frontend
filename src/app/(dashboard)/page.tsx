@@ -1,22 +1,144 @@
 'use client';
 
-import React from 'react';
-import { FiServer } from 'react-icons/fi';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { FiServer, FiPower } from 'react-icons/fi';
+import { SiWordpress, SiLinux } from 'react-icons/si';
+import api from '../lib/api';
+
+interface ServerInfo {
+  id: string;
+  name: string;
+  url: string;
+  ip: string;
+  incronStatus: 'running' | 'inactive';
+  services: string[];
+}
 
 export default function DashboardHome() {
+  const [servers, setServers] = useState<ServerInfo[]>([
+    {
+      id: 'paramadina',
+      name: 'Paramadina',
+      url: '/paramadina/analytics',
+      ip: 'paramadina.ac.id',
+      incronStatus: 'inactive',
+      services: ['WP', 'FIM'],
+    },
+    {
+      id: 'library',
+      name: 'Library',
+      url: '#',
+      ip: 'library.paramadina.ac.id',
+      incronStatus: 'inactive',
+      services: ['FIM'],
+    },
+    {
+      id: 'simpul',
+      name: 'Simpul',
+      url: '#',
+      ip: 'simpul.paramadina.ac.id',
+      incronStatus: 'inactive',
+      services: ['FIM'],
+    },
+    {
+      id: 'admission',
+      name: 'Admission',
+      url: '#',
+      ip: 'admission.paramadina.ac.id',
+      incronStatus: 'inactive',
+      services: ['WP', 'FIM'],
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const response = await api('incron/control/');
+        const status = response.is_running ? 'running' : 'inactive';
+
+        setServers((prevServers) => prevServers.map((s) => (s.id === 'paramadina' ? { ...s, incronStatus: status } : s)));
+      } catch (error) {
+        console.error('Gagal mengambil status incron:', error);
+        setServers((prevServers) => prevServers.map((s) => (s.id === 'paramadina' ? { ...s, incronStatus: 'inactive' } : s)));
+      }
+    };
+
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const totalActiveServers = servers.filter((s) => s.incronStatus === 'running').length;
+
   return (
-    <main className="min-h-screen p-4">
+    <main className="min-h-screen">
       <div className="container mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-gray-4/10 border border-gray-6/40 p-5 rounded-lg flex items-center gap-4">
-            <div className="p-3 bg-blue-900/30 rounded-full text-blue-400">
-              <FiServer size={24} />
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-100">Security Command Center</h1>
+          <p className="text-gray-500 text-sm mt-1">Monitoring infrastruktur Universitas Paramadina</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
+          <div className="bg-gray-4/10 border border-gray-6/40 p-6 rounded-xl flex items-center gap-5">
+            <div className="p-4 bg-blue-900/20 rounded-full text-blue-500">
+              <FiServer size={28} />
             </div>
             <div>
-              <p className="text-gray-400 text-sm">Total Server Dipantau</p>
-              <p className="text-2xl font-bold text-gray-100">4</p>
+              <p className="text-gray-400 text-sm font-medium">FIM Service Aktif</p>
+              <h3 className="text-3xl font-bold text-gray-100 mt-1">
+                {totalActiveServers} <span className="text-sm text-gray-500 font-normal">/ {servers.length}</span>
+              </h3>
             </div>
           </div>
+        </div>
+
+        <h2 className="text-lg font-semibold text-gray-200 mb-4">Status Service</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          {servers.map((server) => (
+            <Link
+              href={server.incronStatus === 'running' ? server.url : '#'}
+              key={server.id}
+              className={`
+      relative group rounded-xl overflow-hidden transition-all duration-300
+      ${server.incronStatus === 'inactive' ? 'cursor-not-allowed opacity-60 border border-gray-800' : ' border border-gray-6/40'}
+    `}
+            >
+              {server.incronStatus === 'running' && <div className="absolute inset-[-200%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#0000_0%,#22c55e_50%,#0000_100%)]" />}
+
+              <div
+                className={`
+        absolute inset-[1.5px] rounded-[10px] z-0 h-full w-full
+        ${server.incronStatus === 'running' ? 'bg-background-dark border' : 'bg-gray-900/30'}
+      `}
+              />
+
+              <div className="relative z-10 p-5 h-full">
+                <div className="flex justify-between items-start mb-4">
+                  <div className={`p-2 rounded-lg ${server.incronStatus === 'inactive' ? 'bg-gray-800 text-gray-600' : 'bg-gray-800 text-gray-200'}`}>
+                    <FiServer size={20} />
+                  </div>
+
+                  <div
+                    className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1
+          ${server.incronStatus === 'running' ? 'bg-green-900/30 text-green-400' : 'bg-gray-800 text-gray-500'}
+        `}
+                  >
+                    {server.incronStatus === 'running' && <FiPower className="animate-pulse" />}
+                    {server.incronStatus === 'inactive' ? 'OFFLINE' : 'RUNNING'}
+                  </div>
+                </div>
+                <h3 className={`font-bold text-lg ${server.incronStatus === 'inactive' ? 'text-gray-500' : 'text-gray-100'}`}>{server.name}</h3>
+                <p className="text-xs text-gray-500 font-mono mt-1">{server.ip}</p>
+                <div className="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between">
+                  <div className="flex gap-2">
+                    {server.services.includes('WP') && <SiWordpress size={14} className={server.incronStatus === 'inactive' ? 'text-gray-600' : 'text-blue-400'} />}
+                    {server.services.includes('FIM') && <SiLinux size={14} className={server.incronStatus === 'inactive' ? 'text-gray-600' : 'text-yellow-500'} />}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </main>
