@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DashboardClientLayout from '../components/DashboardClientLayout';
 import SkeletonLoader from '../components/SkeletonLoader';
+import api from '../lib/api';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -10,15 +11,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     const checkAuth = async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/check-auth/`, {
-        credentials: 'include',
-      });
-      if (!res.ok) {
-        router.push('/login');
-      } else {
+      try {
+        await api('check-auth/');
         setIsChecking(false);
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        router.push('/login');
       }
     };
+
     checkAuth();
   }, [router]);
 
