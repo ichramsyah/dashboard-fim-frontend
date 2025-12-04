@@ -93,7 +93,7 @@ export default function DashboardHome() {
           </div>
         </div>
 
-        <h2 className="text-lg font-semibold text-gray-200 mb-4">Status Service</h2>
+        <h2 className="text-lg  text-gray-200 mb-4">Status Service</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
           {servers.map((server) => (
             <Link
@@ -115,7 +115,7 @@ export default function DashboardHome() {
 
               <div className="relative z-10 p-5 h-full">
                 <div className="flex justify-between items-start mb-4">
-                  <div className={`p-2 rounded-lg ${server.incronStatus === 'inactive' ? 'bg-gray-800 text-gray-600' : 'bg-gray-800 text-gray-200'}`}>
+                  <div className={`p-2 rounded-lg ${server.incronStatus === 'inactive' ? ' text-gray-600' : ' text-gray-200'}`}>
                     <FiServer size={20} />
                   </div>
 
@@ -128,7 +128,7 @@ export default function DashboardHome() {
                     {server.incronStatus === 'inactive' ? 'OFFLINE' : 'RUNNING'}
                   </div>
                 </div>
-                <h3 className={`font-bold text-lg ${server.incronStatus === 'inactive' ? 'text-gray-500' : 'text-gray-100'}`}>{server.name}</h3>
+                <h3 className={`text-lg ${server.incronStatus === 'inactive' ? 'text-gray-500' : 'text-gray-100'}`}>{server.name}</h3>
                 <p className="text-xs text-gray-500 font-mono mt-1">{server.ip}</p>
                 <div className="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between">
                   <div className="flex gap-2">

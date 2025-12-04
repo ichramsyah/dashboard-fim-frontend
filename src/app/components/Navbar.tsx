@@ -56,7 +56,7 @@ export default function Navbar({ toggleSidebar, isSidebarOpen, isMobile }: Navba
 
           <div className="flex-1 flex items-center md:justify-between justify-end space-x-4 md:space-x-6">
             <div className="hidden sm:flex items-center text-[13px]">
-              <p className="bg-gray-4/30 text-gray-3 px-3 py-1.5 rounded-md space-x-2 ">{format(currentTime, 'EEEE, dd/MM/yyyy', { locale: id })}</p>
+              <p className="bg-gray-4/20 text-gray-3 px-3 py-1.5 rounded-md space-x-2 ">{format(currentTime, 'EEEE, dd/MM/yyyy', { locale: id })}</p>
               <p className="pl-3 text-gray-4 text-[13px]"> {format(currentTime, 'HH:mm:ss', { locale: id })} WIB</p>
             </div>
             <div className="flex items-center justify-between space-x-3 md:space-x-4">
