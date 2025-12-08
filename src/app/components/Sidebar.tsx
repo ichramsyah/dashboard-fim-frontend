@@ -6,7 +6,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiChevronsLeft, FiChevronsRight, FiBarChart, FiFileText, FiServer, FiChevronDown, FiGrid } from 'react-icons/fi';
-import { SiWordpress } from 'react-icons/si';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const mainMenu = [{ name: 'Dashboard', href: '/', icon: FiGrid }];
@@ -18,8 +17,6 @@ const serverGroups = [
     items: [
       { name: 'Server Analytics', href: '/paramadina/analytics', icon: FiBarChart },
       { name: 'Server Log', href: '/paramadina/log', icon: FiFileText },
-      { name: 'WP Analytics', href: '/paramadina/wp-analytics', icon: SiWordpress },
-      { name: 'WP Log', href: '/paramadina/wp-log', icon: SiWordpress },
     ],
   },
   {
