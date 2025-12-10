@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FiServer, FiPower } from 'react-icons/fi';
-import { SiWordpress, SiLinux } from 'react-icons/si';
+import { SiLinux } from 'react-icons/si';
 import api from '../lib/api';
 
 interface ServerInfo {
@@ -23,7 +23,7 @@ export default function DashboardHome() {
       url: '/paramadina/analytics',
       ip: 'paramadina.ac.id',
       incronStatus: 'inactive',
-      services: ['WP', 'FIM'],
+      services: ['FIM'],
     },
     {
       id: 'library',
@@ -115,10 +115,7 @@ export default function DashboardHome() {
                 <h3 className={`text-lg ${server.incronStatus === 'inactive' ? 'text-gray-500' : 'text-gray-100'}`}>{server.name}</h3>
                 <p className="text-xs text-gray-500 font-mono mt-1">{server.ip}</p>
                 <div className="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between">
-                  <div className="flex gap-2">
-                    {server.services.includes('WP') && <SiWordpress size={14} className={server.incronStatus === 'inactive' ? 'text-gray-600' : 'text-blue-400'} />}
-                    {server.services.includes('FIM') && <SiLinux size={14} className={server.incronStatus === 'inactive' ? 'text-gray-600' : 'text-yellow-500'} />}
-                  </div>
+                  <div className="flex gap-2">{server.services.includes('FIM') && <SiLinux size={14} className={server.incronStatus === 'inactive' ? 'text-gray-600' : 'text-yellow-500'} />}</div>
                 </div>
               </div>
             </Link>
